@@ -1,0 +1,25 @@
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+    <env:Header>
+        <wsse:Security env:mustUnderstand="true" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken wsu:Id="UsernameToken-8" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+                <wsse:Username>Exchange4Free</wsse:Username>
+                <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">Q2mNP8QxKj3Y</wsse:Password>
+            </wsse:UsernameToken>
+            <wsu:Timestamp wsu:Id="Timestamp-7" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+                <wsu:Created>2018-08-15T07:47:03.107Z</wsu:Created>
+                <wsu:Expires>2018-08-15T07:52:03.107Z</wsu:Expires>
+            </wsu:Timestamp>
+        </wsse:Security>
+    </env:Header>
+    <env:Body>
+        <ns3:submitDocument xmlns:ns3="http://customer.endpoint.earthport.com/api/merchant/v1" xmlns:ns4="http://customer.endpoint.earthport.com/api/merchant/v1/services/createOrUpdateUser" xmlns:ns5="http://customer.endpoint.earthport.com/api/merchant/v2/components/identityBase">
+            <parameters>
+                <ns4:createOrUpdateUser>
+                    <ns4:merchantUserIdentity>MUIAUJSGG</ns4:merchantUserIdentity>
+                    <ns4:accountCurrency>GBP</ns4:accountCurrency>
+                </ns4:createOrUpdateUser>
+            </parameters>
+        </ns3:submitDocument>
+    </env:Body>
+</env:Envelope>
+
