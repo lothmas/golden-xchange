@@ -1,0 +1,166 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
+package com.golden_xchange.controller.createuser;
+
+import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
+import com.golden_xchange.domain.users.model.GoldenRichesUsers;
+import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
+import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
+import com.golden_xchange.domain.utilities.GeneralDomainFunctions;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.ws.server.endpoint.annotation.Endpoint;
+import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
+import org.springframework.ws.server.endpoint.annotation.RequestPayload;
+import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+
+@Controller
+public class CreateGoldenRichesUsersWebserviceEndpoint {
+    private static final String NAMESPACE_URI = "createUser.webservice.golden_xchange.com";
+    Logger GoldenRichesUsersLogger = Logger.getLogger(this.getClass().getName());
+    @Autowired
+    GoldenRichesUsersService goldenRichesUsersService;
+
+    public CreateGoldenRichesUsersWebserviceEndpoint() {
+    }
+
+    @PayloadRoot(
+        namespace = "createUser.webservice.golden_xchange.com",
+        localPart = "CreateGoldenRichesUserRequest"
+    )
+    @ResponsePayload
+    public CreateGoldenRichesUserResponse handleCreateGoldenRichesRequest(@RequestPayload CreateGoldenRichesUserRequest request) throws Exception {
+        CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
+        GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
+
+        try {
+            GoldenRichesUsers goldenUsers = this.goldenRichesUsersService.getUserByBankDetails(request.getAccountNumber());
+            if(null != goldenUsers) {
+                response.setMessage("AccountNumber Already Registered");
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return response;
+            }
+        } catch (Exception var5) {
+            ;
+        }
+
+        try {
+            if(null != request.getUserName() && !request.getUserName().equals("")) {
+                this.goldenRichesUsersService.findUserByMemberId(request.getUserName());
+                response.setMessage("Username: " + request.getUserName() + " Already Exists");
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return response;
+            } else {
+                response.setMessage("Username Can't be Left Empty");
+                response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                return response;
+            }
+        } catch (GoldenRichesUsersNotFoundException var6) {
+            if(this.inputValidation(request, response)) {
+                return response;
+            } else {
+                goldenRichesUsers.setAccountNumber(request.getAccountNumber());
+                goldenRichesUsers.setBankName(request.getBankName());
+                goldenRichesUsers.setBranchNumber(request.getBranchNumber());
+                goldenRichesUsers.setEmailAddress(request.getEmailAddress());
+                goldenRichesUsers.setFirstName(request.getFirstName());
+                goldenRichesUsers.setPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(request.getPassword()));
+                goldenRichesUsers.setSurname(request.getSurname());
+                goldenRichesUsers.setTelephoneNumber(request.getTelephone());
+                goldenRichesUsers.setUserName(request.getUserName());
+                goldenRichesUsers.setEnabled((byte) 1);
+                goldenRichesUsers.setAccountHoldername(request.getAccountHolderName());
+                goldenRichesUsers.setGender(request.getGender());
+                this.goldenRichesUsersService.saveUser(goldenRichesUsers);
+                response.setMessage("User " + request.getUserName() + " Was Successfully Created");
+                response.setStatusCode(StatusCodeEnum.CREATED.getStatusCode());
+                return response;
+            }
+        }
+    }
+
+    public boolean inputValidation(@RequestPayload CreateGoldenRichesUserRequest request, CreateGoldenRichesUserResponse response) throws GoldenRichesUsersNotFoundException {
+        if(null != request.getFirstName() && !request.getFirstName().equals("")) {
+            if(null != request.getSurname() && !request.getSurname().equals("")) {
+                if(null != request.getAccountHolderName() && !request.getAccountHolderName().equals("")) {
+                    if(null != request.getBankName() && !request.getBankName().equals("")) {
+                        if(null != request.getBranchNumber() && !request.getBranchNumber().equals("")) {
+                            if(null != request.getAccountNumber() && !request.getAccountNumber().equals("")) {
+                                if(null != request.getTelephone() && !request.getTelephone().equals("")) {
+                                    if(null != request.getPassword() && !request.getPassword().equals("")) {
+                                        if(!request.getPassword().equals(request.getPassword2())) {
+                                            response.setStatusCode(StatusCodeEnum.INVALIDSYNTAX.getStatusCode());
+                                            response.setMessage("Your passwords do not match!!");
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    } else {
+                                        response.setMessage("Password Can't be Left Empty");
+                                        response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                                        return true;
+                                    }
+                                } else {
+                                    response.setMessage("Telephone Can't be Left Empty");
+                                    response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                                    return true;
+                                }
+                            } else {
+                                response.setMessage("AccountNumber Can't be Left Empty");
+                                response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                                return true;
+                            }
+                        } else {
+                            response.setMessage("BranchNumber Can't be Left Empty");
+                            response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                            return true;
+                        }
+                    } else {
+                        response.setMessage("BankName Can't be Left Empty");
+                        response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                        return true;
+                    }
+                } else {
+                    response.setMessage("AccountHolderName Can't be Left Empty");
+                    response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                    return true;
+                }
+            } else {
+                response.setMessage("Surname Can't be Left Empty");
+                response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                return true;
+            }
+        } else {
+            response.setMessage("FirstName Can't be Left Empty");
+            response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+            return true;
+        }
+    }
+
+    public boolean emailAddressValidation(@RequestPayload CreateGoldenRichesUserRequest request, CreateGoldenRichesUserResponse response) throws GoldenRichesUsersNotFoundException, GoldenRichesUsersNotFoundException {
+        if(null != request.getEmailAddress() && !request.getEmailAddress().equals("")) {
+            if(!GeneralDomainFunctions.isEmailValid(request.getEmailAddress())) {
+                response.setMessage("Provided EmailAddress is Invalid");
+                response.setStatusCode(StatusCodeEnum.INVALIDSYNTAX.getStatusCode());
+                return true;
+            } else if(this.goldenRichesUsersService.suppliedEmailExists(request.getEmailAddress())) {
+                response.setMessage("EmailAddress: " + request.getEmailAddress() + " Already Exists");
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            response.setMessage("EmailAddress Can't be Left Empty");
+            response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
+            return true;
+        }
+    }
+}
+

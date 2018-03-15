@@ -34,9 +34,9 @@ spring:
 
   datasource:
     driver: com.mysql.jdbc.Driver
-    url: jdbc:mysql://sql2.freemysqlhosting.net:3306/sql2222050?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Europe/London
-    username: sql2222050
-    password: yP7!wA5*
+    url: jdbc:mysql://localhost:3306/golden-xchange?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Europe/London
+    username: root
+    password: l0u1srutendo
 
 # Keep the connection alive if idle for a long time (needed in production)
     testWhileIdle: true
@@ -48,7 +48,6 @@ spring:
 
 # Hibernate ddl auto (create, create-drop, update)
     hibernate:
-      
 #
 ### Naming strategy
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
