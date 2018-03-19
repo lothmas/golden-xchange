@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 
 import javax.servlet.http.HttpSession;
@@ -34,11 +35,13 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
 
     @RequestMapping(value = {"/register"})
     public String handleCreateGoldenRichesRequest(Model model){
+        CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
+        model.addAttribute("response",response);
         return "register";
     }
 
     @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
-    public String handleCreateGoldenRichesRequest(@Valid CreateGoldenRichesUserRequest request, Model model, HttpSession session) throws Exception {
+    public String handleCreateGoldenRichesRequest(@Valid CreateGoldenRichesUserRequest request, Model model, HttpSession session, @RequestParam(value = "diallingCode", required = false) String diallingCode) throws Exception {
         CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
         GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
 
@@ -75,7 +78,7 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 goldenRichesUsers.setFirstName(request.getFirstName());
                 goldenRichesUsers.setPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(request.getPassword()));
                 goldenRichesUsers.setSurname(request.getSurname());
-                goldenRichesUsers.setTelephoneNumber(request.getTelephone());
+                goldenRichesUsers.setTelephoneNumber("+"+diallingCode+request.getTelephone());
                 goldenRichesUsers.setUserName(request.getUserName());
                 goldenRichesUsers.setEnabled((byte) 1);
                 goldenRichesUsers.setAccountHoldername(request.getAccountHolderName());

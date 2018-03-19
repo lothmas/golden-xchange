@@ -58,10 +58,13 @@
             <div class="register-content">
                 <form action="#" data-th-action="@{./register}" th:object="${register}" method="post"
                       enctype="multipart/form-data" class="margin-bottom-0">
+                    <div class="alert alert-danger" th:if="${response.message!=null}">
+                        <strong>Danger!</strong> <span th:text="${response.message}"></span>
+                    </div>
                     <label class="control-label">Profile Details <span class="text-danger">*</span></label>
                     <div class="row row-space-10">
                         <div class="col-md-6 m-b-15">
-                            <input type="text" name="username" class="form-control" placeholder="username"
+                            <input type="text" name="userName" class="form-control" placeholder="username"
                                    required="true"/>
                         </div>
                     </div>
@@ -81,7 +84,8 @@
                         </div>
                     </div>
 
-                    <hr style="min-width:100%; background-color:#a1a1a1 !important; height:1px;"/>                    <label class="control-label">User Details <span
+                    <hr style="min-width:100%; background-color:#a1a1a1 !important; height:1px;"/>
+                    <label class="control-label">User Details <span
                             class="text-danger">*</span></label>
                     <div class="row row-space-10">
                         <div class="col-md-6 m-b-15">
@@ -107,8 +111,8 @@
                                    placeholder="Email Address" required="true"/>
                         </div>
                         <div class="col-md-6 m-b-15">
-                            <select class="form-control" name="userType">
-                                <option selected="true" th:disabled="true" >Select Gender</option>
+                            <select class="form-control" name="gender">
+                                <option selected="true" th:disabled="true">Select Gender</option>
                                 <option value="1">Male</option>
                                 <option value="2">Female</option>
                             </select>
@@ -120,8 +124,8 @@
                             class="text-danger">*</span></label>
                     <div class="row row-space-10">
                         <div class="col-md-6 m-b-15">
-                            <select class="form-control" name="userType">
-                                <option selected="true" th:disabled="true" >Select Your Bank</option>
+                            <select class="form-control" name="bankName">
+                                <option selected="true" th:disabled="true">Select Your Bank</option>
                                 <option value="1">Absa</option>
                                 <option value="2">African Bank</option>
                                 <option value="3">Bidvest</option>
@@ -134,15 +138,15 @@
                         </div>
                         <div class="col-md-6 m-b-15">
                             <input type="text" name="branchNumber" class="form-control" placeholder="Branch Number"
-                                  />
+                            />
                         </div>
                         <div class="col-md-12 m-b-15">
-                            <input type="text"  name="accountHolderName" class="form-control"
+                            <input type="text" name="accountHolderName" class="form-control"
                                    placeholder="Account Holder Name" required="true"/>
                         </div>
 
                         <div class="col-md-12 m-b-15">
-                            <input type="text"  name="accountNumber" class="form-control"
+                            <input type="text" name="accountNumber" class="form-control"
                                    placeholder="Account Number" required="true"/>
                         </div>
 
