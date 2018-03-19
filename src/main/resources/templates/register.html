@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <title>Golden-Xchange | Register</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"/>
+    <link href="../assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/font-awesome/5.0/css/fontawesome-all.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/animate/animate.min.css" rel="stylesheet"/>
+    <link href="../assets/css/default/style.min.css" rel="stylesheet"/>
+    <link href="../assets/css/default/style-responsive.min.css" rel="stylesheet"/>
+    <link href="../assets/css/default/theme/default.css" rel="stylesheet" id="theme"/>
+    <link rel="stylesheet" href="assets/country/build/css/intlTelInput.css"/>
+    <link rel="stylesheet" href="assets/country/build/css/demo.css"/>
+    <!-- ================== END BASE CSS STYLE ================== -->
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="../assets/plugins/pace/pace.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+</head>
+<body class="pace-top bg-white">
+<!-- begin #page-loader -->
+<div id="page-loader" class="fade show"><span class="spinner"></span></div>
+<!-- end #page-loader -->
+
+<!-- begin #page-container -->
+<div id="page-container" class="fade">
+    <!-- begin register -->
+    <div class="register register-with-news-feed">
+        <!-- begin news-feed -->
+        <div class="news-feed">
+            <div class="news-image" style="background-image: url(../assets/img/login-bg/login-bg-9.jpg)"></div>
+            <div class="news-caption">
+                <!--<h4 class="caption-title"><b>Color</b> Admin App</h4>-->
+                <p>
+                    <!--As a Color Admin app administrator, you use the Color Admin console to manage your organization’s account, such as add new users, manage security settings, and turn on the services you want your team to access.-->
+                </p>
+            </div>
+        </div>
+        <!-- end news-feed -->
+        <!-- begin right-content -->
+        <div class="right-content">
+            <!-- begin register-header -->
+            <h1 class="register-header">
+                Sign Up
+                <small>Create your Golden-Xchange Account</small>
+            </h1>
+            <div class="register-content">
+                <form action="#" data-th-action="@{./register}" th:object="${register}" method="post"
+                      enctype="multipart/form-data" class="margin-bottom-0">
+                    <label class="control-label">Profile Details <span class="text-danger">*</span></label>
+                    <div class="row row-space-10">
+                        <div class="col-md-6 m-b-15">
+                            <input type="text" name="username" class="form-control" placeholder="username"
+                                   required="true"/>
+                        </div>
+                    </div>
+                    <div class="row row-space-10">
+                        <div class="col-md-6 m-b-15">
+                            <input name="password" required="required" type="password" class="form-control"
+                                   title="Password must contain at least 6 characters, including UPPER/lowercase and numbers"
+                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="
+  this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
+  if(this.checkValidity()) form.pwd2.pattern = RegExp.escape(this.value);
+" id="password" placeholder="password"/>
+                            <!--<input type="password" name="password" class="form-control" placeholder="password" required="true"/>-->
+                        </div>
+                        <div class="col-md-6 m-b-15">
+                            <input name="password2" required="required" placeholder="confirm password"
+                                   type="password" id="password2" oninput="check(this)"/>
+                        </div>
+                    </div>
+
+                    <hr style="min-width:100%; background-color:#a1a1a1 !important; height:1px;"/>                    <label class="control-label">User Details <span
+                            class="text-danger">*</span></label>
+                    <div class="row row-space-10">
+                        <div class="col-md-6 m-b-15">
+                            <input type="text" name="firstName" class="form-control" placeholder="First name"
+                                   required="true"/>
+                        </div>
+                        <div class="col-md-6 m-b-15">
+                            <input type="text" name="surname" class="form-control" placeholder="Last name"
+                                   required="true"/>
+                        </div>
+
+                        <div class="col-md-12 m-b-15">
+
+                            <div class="input-group my-group">
+                                <input id="phone" type="tel" name="telephone" placeholder="Phone Number"
+                                       title="Don't Put leading Zeros OR CountryDialCode &amp; Only Numbers Allowed"
+                                       pattern="[0-9]*" minlength="6" maxlength="14" required="true"/>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 m-b-15">
+                            <input type="email" pattern="[^ @]*@[^ @]*" name="emailAddress" class="form-control"
+                                   placeholder="Email Address" required="true"/>
+                        </div>
+                        <div class="col-md-6 m-b-15">
+                            <select class="form-control" name="userType">
+                                <option selected="true" th:disabled="true" >Select Gender</option>
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr style="min-width:85%; background-color:#a1a1a1 !important; height:1px;"/>
+                    <label class="control-label">Your Bank Details <span
+                            class="text-danger">*</span></label>
+                    <div class="row row-space-10">
+                        <div class="col-md-6 m-b-15">
+                            <select class="form-control" name="userType">
+                                <option selected="true" th:disabled="true" >Select Your Bank</option>
+                                <option value="1">Absa</option>
+                                <option value="2">African Bank</option>
+                                <option value="3">Bidvest</option>
+                                <option value="4">Capitec</option>
+                                <option value="5">Discovery</option>
+                                <option value="6">FNB</option>
+                                <option value="7">Nedbank</option>
+                                <option value="8">Standard Bank</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 m-b-15">
+                            <input type="text" name="branchNumber" class="form-control" placeholder="Branch Number"
+                                  />
+                        </div>
+                        <div class="col-md-12 m-b-15">
+                            <input type="text"  name="accountHolderName" class="form-control"
+                                   placeholder="Account Holder Name" required="true"/>
+                        </div>
+
+                        <div class="col-md-12 m-b-15">
+                            <input type="text"  name="accountNumber" class="form-control"
+                                   placeholder="Account Number" required="true"/>
+                        </div>
+
+
+                    </div>
+                    <hr style="min-width:85%; background-color:#a1a1a1 !important; height:1px;"/>
+                    <div class="row row-space-10">
+                        <div class="col-md-12 m-b-15 ">
+                            <span class="btn btn-file badge badge-info">
+                                Upload Profile Pic
+                             <input type="file" id="pic" name="pic" accept="image/*" class="inputfile"/>
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="checkbox checkbox-css m-b-30">
+                        <div class="checkbox checkbox-css m-b-30">
+                            <input type="checkbox" id="agreement_checkbox"/>
+                            <label for="agreement_checkbox">
+                                By clicking Sign Up, you agree to our <a href="javascript:;">Terms</a> and that you have
+                                read our <a href="javascript:;">Data Policy</a>, including our <a href="javascript:;">Cookie
+                                Use</a>.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="register-buttons">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
+                    </div>
+                    <div class="m-t-20 m-b-40 p-b-40 text-inverse">
+                        Already a member? Click <a href="login_v3.html">here</a> to login.
+                    </div>
+                    <hr/>
+                    <p class="text-center">
+                        &copy; Lothmas All Right Reserved 2018
+                    </p>
+                </form>
+            </div>
+            <!-- end register-content -->
+        </div>
+        <!-- end right-content -->
+    </div>
+    <!-- end register -->
+
+
+</div>
+<!-- end page container -->
+
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="../assets/plugins/jquery/jquery-3.2.1.min.js"></script>
+<script src="../assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="../assets/plugins/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<!--[if lt IE 9]>
+<script src="../assets/crossbrowserjs/html5shiv.js"></script>
+<script src="../assets/crossbrowserjs/respond.min.js"></script>
+<script src="../assets/crossbrowserjs/excanvas.min.js"></script>
+<![endif]-->
+<script src="../assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="../assets/plugins/js-cookie/js.cookie.js"></script>
+<script src="../assets/js/theme/default.min.js"></script>
+<script src="../assets/js/apps.min.js"></script>
+<script src="assets/country/build/js/intlTelInput.js"></script>
+<!-- ================== END BASE JS ================== -->
+
+<script>
+    $(document).ready(function () {
+        App.init();
+    });
+</script>
+<script>
+    // <![CDATA[
+    $("#phone").intlTelInput({
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: "body",
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        // placeholderNumberType: "MOBILE",
+        // preferredCountries: ['cn', 'jp'],
+        // separateDialCode: true,
+        utilsScript: "build/js/utils.js"
+    });
+    // ]]>
+</script>
+<script type="text/javascript">
+    // <![CDATA[
+    function checkPassword(str) {
+        var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+        return re.test(str);
+    }
+
+    function checkForm(form) {
+        if (form.username.value == "") {
+            alert("Error: Username cannot be blank!");
+            form.username.focus();
+            return false;
+        }
+        re = /^\w+$/;
+        if (!re.test(form.username.value)) {
+            alert("Error: Username must contain only letters, numbers and underscores!");
+            form.username.focus();
+            return false;
+        }
+        if (form.pwd1.value != "" && form.pwd1.value == form.pwd2.value) {
+            if (!checkPassword(form.pwd1.value)) {
+                alert("The password you have entered is not valid!");
+                form.pwd1.focus();
+                return false;
+            }
+        } else {
+            alert("Error: Please check that you've entered and confirmed your password!");
+            form.pwd1.focus();
+            return false;
+        }
+        return true;
+    }
+
+    // ]]>
+</script>
+<script>
+    $('#choose-file').inputFileText({
+        text: 'Upload Profile Image'
+    });
+</script>
+</body>
+</html>

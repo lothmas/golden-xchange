@@ -12,17 +12,19 @@ import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
 import com.golden_xchange.domain.utilities.GeneralDomainFunctions;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.ws.server.endpoint.annotation.Endpoint;
-import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
-import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+@ControllerAdvice
 @Controller
 public class CreateGoldenRichesUsersWebserviceEndpoint {
-    private static final String NAMESPACE_URI = "createUser.webservice.golden_xchange.com";
     Logger GoldenRichesUsersLogger = Logger.getLogger(this.getClass().getName());
     @Autowired
     GoldenRichesUsersService goldenRichesUsersService;
@@ -30,12 +32,13 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
     public CreateGoldenRichesUsersWebserviceEndpoint() {
     }
 
-    @PayloadRoot(
-        namespace = "createUser.webservice.golden_xchange.com",
-        localPart = "CreateGoldenRichesUserRequest"
-    )
-    @ResponsePayload
-    public CreateGoldenRichesUserResponse handleCreateGoldenRichesRequest(@RequestPayload CreateGoldenRichesUserRequest request) throws Exception {
+    @RequestMapping(value = {"/register"})
+    public String handleCreateGoldenRichesRequest(Model model){
+        return "register";
+    }
+
+    @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
+    public String handleCreateGoldenRichesRequest(@Valid CreateGoldenRichesUserRequest request, Model model, HttpSession session) throws Exception {
         CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
         GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
 
@@ -44,10 +47,10 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
             if(null != goldenUsers) {
                 response.setMessage("AccountNumber Already Registered");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                return response;
+                return registerResponse(model, response);
             }
         } catch (Exception var5) {
-            ;
+            //do nothing
         }
 
         try {
@@ -55,15 +58,15 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 this.goldenRichesUsersService.findUserByMemberId(request.getUserName());
                 response.setMessage("Username: " + request.getUserName() + " Already Exists");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                return response;
+                return registerResponse(model, response);
             } else {
                 response.setMessage("Username Can't be Left Empty");
                 response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
-                return response;
+                return registerResponse(model, response);
             }
         } catch (GoldenRichesUsersNotFoundException var6) {
             if(this.inputValidation(request, response)) {
-                return response;
+                return registerResponse(model, response);
             } else {
                 goldenRichesUsers.setAccountNumber(request.getAccountNumber());
                 goldenRichesUsers.setBankName(request.getBankName());
@@ -80,9 +83,15 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 this.goldenRichesUsersService.saveUser(goldenRichesUsers);
                 response.setMessage("User " + request.getUserName() + " Was Successfully Created");
                 response.setStatusCode(StatusCodeEnum.CREATED.getStatusCode());
-                return response;
+                model.addAttribute("profile",goldenRichesUsers);
+                return "dashboard";
             }
         }
+    }
+
+    private String registerResponse(Model model, CreateGoldenRichesUserResponse response) {
+        model.addAttribute("response",response);
+        return "register";
     }
 
     public boolean inputValidation(@RequestPayload CreateGoldenRichesUserRequest request, CreateGoldenRichesUserResponse response) throws GoldenRichesUsersNotFoundException {
