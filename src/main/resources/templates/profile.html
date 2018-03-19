@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 8]>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="ie8"> <![endif]-->
 <!--[if !IE]><!-->
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-	<title>Color Admin | Profile Page</title>
+	<title>Golden-Xchange | Donation</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -214,9 +215,9 @@
 						<ul class="sub-menu">
 							<li><a href="ui_general.html">General</a></li>
 							<li><a href="ui_typography.html">Typography</a></li>
-							<li><a href="ui_tabs_accordions.html">Tabs & Accordions</a></li>
+							<li><a href="ui_tabs_accordions.html">Tabs &amp; Accordions</a></li>
 							<li><a href="ui_unlimited_tabs.html">Unlimited Nav Tabs</a></li>
-							<li><a href="ui_modal_notification.html">Modal & Notification <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
+							<li><a href="ui_modal_notification.html">Modal &amp; Notification <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
 							<li><a href="ui_widget_boxes.html">Widget Boxes</a></li>
 							<li><a href="ui_media_object.html">Media Object</a></li>
 							<li><a href="ui_buttons.html">Buttons</a></li>
@@ -224,7 +225,7 @@
 							<li><a href="ui_simple_line_icons.html">Simple Line Icons</a></li>
 							<li><a href="ui_ionicons.html">Ionicons</a></li>
 							<li><a href="ui_tree.html">Tree View</a></li>
-							<li><a href="ui_language_bar_icon.html">Language Bar & Icon</a></li>
+							<li><a href="ui_language_bar_icon.html">Language Bar &amp; Icon</a></li>
 							<li><a href="ui_social_buttons.html">Social Buttons</a></li>
 							<li><a href="ui_tour.html">Intro JS</a></li>
 						</ul>
@@ -382,14 +383,14 @@
 							<li><a href="extra_search_results.html">Search Results</a></li>
 							<li><a href="extra_invoice.html">Invoice</a></li>
 							<li><a href="extra_404_error.html">404 Error Page</a></li>
-							<li class="active"><a href="extra_profile.html">Profile Page</a></li>
+							<li class="active"><a href="profile.html">Profile Page</a></li>
 						</ul>
 					</li>
 					<li class="has-sub">
 					    <a href="javascript:;">
 					        <b class="caret"></b>
 					        <i class="fa fa-key"></i>
-					        <span>Login & Register</span>
+					        <span>Login &amp; Register</span>
 					    </a>
 					    <ul class="sub-menu">
 							<li><a href="login.html">Login</a></li>
@@ -469,6 +470,7 @@
 		
 		<!-- begin #content -->
 		<div id="content" class="content content-full-width">
+
 			<!-- begin profile -->
 			<div class="profile">
 				<div class="profile-header">
@@ -479,7 +481,7 @@
 					<div class="profile-header-content">
 						<!-- BEGIN profile-header-img -->
 						<div class="profile-header-img">
-							<img src="../assets/img/user/user-13.jpg" alt="">
+							<img src="../assets/img/user/user-13.jpg" alt=""/>
 						</div>
 						<!-- END profile-header-img -->
 						<!-- BEGIN profile-header-info -->
@@ -493,11 +495,11 @@
 					<!-- END profile-header-content -->
 					<!-- BEGIN profile-header-tab -->
 					<ul class="profile-header-tab nav nav-tabs">
-						<li class="nav-item"><a href="#profile-post" class="nav-link active" data-toggle="tab">POSTS</a></li>
+						<!--<li class="nav-item"><a href="#profile-post" class="nav-link active" data-toggle="tab">POSTS</a></li>-->
 						<li class="nav-item"><a href="#profile-about" class="nav-link" data-toggle="tab">ABOUT</a></li>
-						<li class="nav-item"><a href="#profile-photos" class="nav-link" data-toggle="tab">PHOTOS</a></li>
-						<li class="nav-item"><a href="#profile-videos" class="nav-link" data-toggle="tab">VIDEOS</a></li>
-						<li class="nav-item"><a href="#profile-friends" class="nav-link" data-toggle="tab">FRIENDS</a></li>
+						<!--<li class="nav-item"><a href="#profile-photos" class="nav-link" data-toggle="tab">PHOTOS</a></li>-->
+						<!--<li class="nav-item"><a href="#profile-videos" class="nav-link" data-toggle="tab">VIDEOS</a></li>-->
+						<!--<li class="nav-item"><a href="#profile-friends" class="nav-link" data-toggle="tab">FRIENDS</a></li>-->
 					</ul>
 					<!-- END profile-header-tab -->
 				</div>
@@ -508,7 +510,7 @@
             	<!-- begin tab-content -->
             	<div class="tab-content p-0">
             		<!-- begin #profile-post tab -->
-            		<div class="tab-pane fade show active" id="profile-post">
+            		<div class="tab-pane fade " id="profile-post">
 						<!-- begin timeline -->
 						<ul class="timeline">
 							<li>
@@ -693,7 +695,7 @@
             		</div>
             		<!-- end #profile-post tab -->
             		<!-- begin #profile-about tab -->
-            		<div class="tab-pane fade in" id="profile-about">
+            		<div class="tab-pane fade in show active" id="profile-about">
 						<!-- begin table -->
 						<div class="table-responsive">
 							<table class="table table-profile">
@@ -707,39 +709,40 @@
 								</thead>
 								<tbody>
 									<tr class="highlight">
-										<td class="field">Mood</td>
+										<td class="field">username</td>
 										<td><a href="javascript:;">Add Mood Message</a></td>
 									</tr>
 									<tr class="divider">
 										<td colspan="2"></td>
 									</tr>
 									<tr>
+										<td class="field">firstname</td>
+										<td><a href="javascript:;">Add Number</a></td>
+									</tr>
+									<tr>
+										<td class="field">surname</td>
+										<td><a href="javascript:;">Add Number</a></td>
+									</tr>
+									<tr>
 										<td class="field">Mobile</td>
 										<td><i class="fa fa-mobile fa-lg m-r-5"></i> +1-(847)- 367-8924 <a href="javascript:;" class="m-l-5">Edit</a></td>
 									</tr>
-									<tr>
-										<td class="field">Home</td>
-										<td><a href="javascript:;">Add Number</a></td>
-									</tr>
-									<tr>
-										<td class="field">Office</td>
-										<td><a href="javascript:;">Add Number</a></td>
-									</tr>
+
 									<tr class="divider">
 										<td colspan="2"></td>
 									</tr>
-									<tr class="highlight">
-										<td class="field">About Me</td>
+									<tr >
+										<td class="field">email-address</td>
 										<td><a href="javascript:;">Add Description</a></td>
 									</tr>
 									<tr class="divider">
 										<td colspan="2"></td>
 									</tr>
-									<tr>
+									<tr class="highlight">
 										<td class="field">Country/Region</td>
 										<td>
 											<select class="form-control input-inline input-xs" name="region">
-												<option value="US" selected>United State</option>
+												<option value="US" selected="selected">United State</option>
 												<option value="AF">Afghanistan</option>
 												<option value="AL">Albania</option>
 												<option value="DZ">Algeria</option>
@@ -753,18 +756,27 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="field">City</td>
+										<td class="field">Bank Name</td>
 										<td>Los Angeles</td>
 									</tr>
 									<tr>
-										<td class="field">State</td>
-										<td><a href="javascript:;">Add State</a></td>
-									</tr>
-									<tr>
-										<td class="field">Website</td>
+										<td class="field">Branch Code</td>
 										<td><a href="javascript:;">Add Webpage</a></td>
 									</tr>
 									<tr>
+										<td class="field">Account Number</td>
+										<td><a href="javascript:;">Add State</a></td>
+									</tr>
+									<tr>
+										<td class="field">Account Holder Name</td>
+										<td><a href="javascript:;">Add Webpage</a></td>
+									</tr>
+									<tr>
+										<td class="field">Account Type</td>
+										<td><a href="javascript:;">Add Webpage</a></td>
+									</tr>
+
+									<tr class="highlight">
 										<td class="field">Gender</td>
 										<td>
 											<select class="form-control input-inline input-xs" name="gender">
@@ -777,15 +789,15 @@
 										<td class="field">Birthdate</td>
 										<td>
 											<select class="form-control input-inline input-xs" name="day">
-												<option value="04" selected>04</option>
+												<option value="04" selected="selected">04</option>
 											</select>
 											-
 											<select class="form-control input-inline input-xs" name="month">
-												<option value="11" selected>11</option>
+												<option value="11" selected="selected">11</option>
 											</select>
 											-
 											<select class="form-control input-inline input-xs" name="year">
-												<option value="1989" selected>1989</option>
+												<option value="1989" selected="selected">1989</option>
 											</select>
 										</td>
 									</tr>
@@ -793,7 +805,7 @@
 										<td class="field">Language</td>
 										<td>
 											<select class="form-control input-inline input-xs" name="language">
-												<option value="" selected>English</option>
+												<option value="" selected="selected">English</option>
 											</select>
 										</td>
 									</tr>
@@ -1249,112 +1261,112 @@
             			<div class="row row-space-2">
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=RQ5ljyGg-ig" data-lity>
+            					<a href="https://www.youtube.com/watch?v=RQ5ljyGg-ig" data-lity="true">
             						<img src="https://img.youtube.com/vi/RQ5ljyGg-ig/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=5lWkZ-JaEOc" data-lity>
+            					<a href="https://www.youtube.com/watch?v=5lWkZ-JaEOc" data-lity="true">
             						<img src="https://img.youtube.com/vi/5lWkZ-JaEOc/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=9ZfN87gSjvI" data-lity>
+            					<a href="https://www.youtube.com/watch?v=9ZfN87gSjvI" data-lity="true">
             						<img src="https://img.youtube.com/vi/9ZfN87gSjvI/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=w2H07DRv2_M" data-lity>
+            					<a href="https://www.youtube.com/watch?v=w2H07DRv2_M" data-lity="true">
             						<img src="https://img.youtube.com/vi/w2H07DRv2_M/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=PntG8KEVjR8" data-lity>
+            					<a href="https://www.youtube.com/watch?v=PntG8KEVjR8" data-lity="true">
             						<img src="https://img.youtube.com/vi/PntG8KEVjR8/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=q8kxKvSQ7MI" data-lity>
+            					<a href="https://www.youtube.com/watch?v=q8kxKvSQ7MI" data-lity="true">
             						<img src="https://img.youtube.com/vi/q8kxKvSQ7MI/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=cutu3Bw4ep4" data-lity>
+            					<a href="https://www.youtube.com/watch?v=cutu3Bw4ep4" data-lity="true">
             						<img src="https://img.youtube.com/vi/cutu3Bw4ep4/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=gCspUXGrraM" data-lity>
+            					<a href="https://www.youtube.com/watch?v=gCspUXGrraM" data-lity="true">
             						<img src="https://img.youtube.com/vi/gCspUXGrraM/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=COtpTM1MpAA" data-lity>
+            					<a href="https://www.youtube.com/watch?v=COtpTM1MpAA" data-lity="true">
             						<img src="https://img.youtube.com/vi/COtpTM1MpAA/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=8NVkGHVOazc" data-lity>
+            					<a href="https://www.youtube.com/watch?v=8NVkGHVOazc" data-lity="true">
             						<img src="https://img.youtube.com/vi/8NVkGHVOazc/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=QgQ7MWLsw1w" data-lity>
+            					<a href="https://www.youtube.com/watch?v=QgQ7MWLsw1w" data-lity="true">
             						<img src="https://img.youtube.com/vi/QgQ7MWLsw1w/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=Dmw0ucCv8aQ" data-lity>
+            					<a href="https://www.youtube.com/watch?v=Dmw0ucCv8aQ" data-lity="true">
             						<img src="https://img.youtube.com/vi/Dmw0ucCv8aQ/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=r1d7ST2TG2U" data-lity>
+            					<a href="https://www.youtube.com/watch?v=r1d7ST2TG2U" data-lity="true">
             						<img src="https://img.youtube.com/vi/r1d7ST2TG2U/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=WUR-XWBcHvs" data-lity>
+            					<a href="https://www.youtube.com/watch?v=WUR-XWBcHvs" data-lity="true">
             						<img src="https://img.youtube.com/vi/WUR-XWBcHvs/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=A7sQ8RWj0Cw" data-lity>
+            					<a href="https://www.youtube.com/watch?v=A7sQ8RWj0Cw" data-lity="true">
             						<img src="https://img.youtube.com/vi/A7sQ8RWj0Cw/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
             				<!-- end col-3 -->
             				<!-- begin col-3 -->
             				<div class="col-md-3 col-sm-4 m-b-2">
-            					<a href="https://www.youtube.com/watch?v=IMN2VfiXls4" data-lity>
+            					<a href="https://www.youtube.com/watch?v=IMN2VfiXls4" data-lity="true">
             						<img src="https://img.youtube.com/vi/IMN2VfiXls4/mqdefault.jpg" class="width-full" />
             					</a>
             				</div>
