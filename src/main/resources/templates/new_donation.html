@@ -584,7 +584,7 @@
 								<div class="row">
 									<!-- begin col-8 -->
 									<div class="col-md-8 offset-md-2">
-										<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">You contact info, so that we can easily reach you</legend>
+										<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Calculate Expected Returns</legend>
 
 										<!-- begin form-group row -->
 										<div class="container">
@@ -595,7 +595,7 @@
 															<label for="amount">Amount of money</label>
 															<div class="input-group">
 																<div class="input-group-addon">ZAR</div>
-																<input type="text" class="form-control validate" id="amount" name="amount" placeholder="Enter Donation Amount" required="required" oninput="multiplyBy()"/>
+																<input type="text"  class="form-control validate" id="amount" name="amount" placeholder="Enter Donation Amount" required="required" oninput="multiplyBy()"/>
 															</div>
 														</div>
 														<div class="text-right">
@@ -611,24 +611,22 @@
 															<label for="percent">Percent</label>
 															<div class="input-group">
 																<div class="input-group-addon">%</div>
-																<input type="text" name="percent" class="form-control validate" id="percent" enabled="true" placeholder="Percent" value="75"  required="required" oninput="multiplyBy()"/>
+																<input type="text" name="percent" class="form-control validate" id="percent" disabled="true" placeholder="Percent" value="75"  required="required" oninput="multiplyBy()"/>
 															</div>
 														</div>
-														<div class="form-group">
-															<label><span class="rangevalue">50</span> Months</label>
-															<input class="slider" type="range" min="1" max="24" value="10" oninput="multiplyBy()"/>
+														<!--<div class="form-group">-->
+															<!--<label><span class="rangevalue">50</span> Months</label>-->
+															<!--<input class="slider" type="range" min="1" max="24" value="10" oninput="multiplyBy()"/>-->
 
-														</div>
+														<!--</div>-->
 														<!--<input type="text" name="qty"  class="form-control" id="qty" />-->
 														<!--<input th:if="${result.userType=='1'}" type="hidden" id="userTypeCharge" value="5" class="form-control" />-->
 
 													</form>
-													<h3 class="results">Expected PayBack Amount: <span class="month-pay" id="result"></span>
-														<!--<small>Total payment: <span class="pay"></span></small>-->
-													</h3>
-
-
-
+													<h4 class="results text-warning">Expected PayBack R<span  class="month-pay text-info" id="result"></span>
+														<br></br>
+														<small>Maturity Date: <bold><span class="pay" id="oneMonthDate"></span></bold></small>
+													</h4>
 												</div>
 											</div>
 										</div>
@@ -686,8 +684,13 @@
 						<div id="step-4">
 							<div class="jumbotron m-b-0 text-center">
 								<h2 class="text-inverse">Confirm Donation Creation</h2>
-								<p class="m-b-30 f-s-16">Proceeding is Confirmation of creating new Donation<br />Click Confirm if you would like to proceed with the Donation. </p>
-								<p><a href="javascript:;" class="btn btn-primary btn-lg">Confirm New Donation</a></p>
+								<p class="m-b-30 f-s-16">Amount To Donate:   R<span  class="month-pay text-info" id="amountToGet"></span><br /> </p>
+
+								<p class="m-b-30 f-s-16">Amount To Benefit:  R<span  class="month-pay text-info" id="resultConfirmation"></span><br /> </p>
+
+								<p class="m-b-30 f-s-16">Maturity Date:       <span  class="month-pay text-info" id="oneMonthDate1"></span><br /> </p>
+
+								<p><a href="donation_status" class="btn btn-primary btn-lg">Confirm New Donation</a></p>
 							</div>
 						</div>
 						<!-- end step-4 -->
@@ -814,156 +817,19 @@
         {
             num1 = document.getElementById("percent").value;
             num2 = document.getElementById("amount").value;
-            num3=(num1/100) * num2;
-            document.getElementById("result").innerHTML = num3+num2;
+            num3=0.75 * document.getElementById("amount").value;
+            console.log(num3);
+            num4=parseInt(num3)+parseInt(document.getElementById("amount").value);
+            console.log(num4);
+            document.getElementById("result").innerHTML = num4;
+            document.getElementById("resultConfirmation").innerHTML = num4;
+            var dt = new Date();
+            dt.setMonth(dt.getMonth() + 1);
+            document.getElementById("oneMonthDate").innerHTML = new Date(dt).toISOString().split('T')[0];
+            document.getElementById("oneMonthDate1").innerHTML = new Date(dt).toISOString().split('T')[0];
+            document.getElementById("amountToGet").innerHTML=document.getElementById("amount").value;
         };
 	</script>
-<script>
-    $(function() {
 
-        var Calc = function(options) {
-            $.extend(this, options, {
-                currency: ' ₽',
-                months: 36
-            });
-
-            this.cache();
-            this.variables();
-            this.bind();
-
-            return this;
-        };
-
-        $.extend(Calc.prototype, {
-            cache: function() {
-                this.$convertDollar = $('.convert-dollar');
-                this.$convertEuro = $('.convert-euro');
-                this.$amount = $('#amount');
-                this.$slider = $('.slider');
-                this.$rangeValue = $('.rangevalue');
-                this.$credit = $('.credit');
-                this.$percent = $('#percent');
-                this.$pay = $('.pay');
-                this.$monthPay = $('.month-pay');
-                this.$results = $('.results');
-                this.$validate = $('.validate');
-            },
-            variables: function(){
-                this.usdUrl = "http://www.freecurrencyconverterapi.com/api/v3/convert?q=RUB_USD&amp;compact=y";
-                this.eurUrl = "http://www.freecurrencyconverterapi.com/api/v3/convert?q=RUB_EUR&amp;compact=y";
-                this.numberPat = /[0-9]+([\.|,][0-9]+)?/;
-                this.emailPat = /^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-            },
-            bind: function() {
-                this.$results.hide();
-                this.getMonths();
-                this.validate();
-
-                this.$slider.on('input', $.proxy(this.getMonths, this));
-                this.$amount.on('keyup', $.proxy(this.getCurrencies, this));
-                this.$credit.on('submit', $.proxy(this.calculate, this));
-                console.log(this.currency);
-
-                this.$validate.on('blur', this.rty);
-            },
-            getCurrencies: function(){
-                var $loader = $('.spinner'),
-                    $convertDollar = $('.convert-dollar'),
-                    $convertEuro = $('.convert-euro'),
-                    $amount = $('#amount');
-
-                $.ajax({
-                    type: "GET",
-                    url: this.usdUrl,
-                    dataType: "jsonp",
-                    cache: true,
-                    beforeSend: function(){
-                        $loader.removeClass('hide');
-                    },
-                    success: function(data) {
-                        console.log(data.RUB_USD.val);
-                        $convertDollar.text('$ '+ ($amount.val() * data.RUB_USD.val).toFixed(2));
-                        $loader.addClass('hide');
-                    },
-                    error: function(){
-                        $convertDollar.text('error');
-                    }
-                });
-                $.ajax({
-                    type: "GET",
-                    url: this.eurUrl,
-                    dataType: "jsonp",
-                    cache: true,
-                    beforeSend: function(){
-                        $loader.removeClass('hide');
-                    },
-                    success: function(data) {
-                        console.log(data.RUB_EUR.val);
-                        $convertEuro.text('€ '+ ($amount.val() * data.RUB_EUR.val).toFixed(2));
-                        $loader.addClass('hide');
-                    },
-                    error: function(){
-                        $convertDollar.text('error');
-                    }
-                });
-            },
-            getMonths: function(){
-                this.$slider.attr('max', this.months);
-                this.$rangeValue.text(this.$slider.val());
-            },
-            calculate: function(event){
-                event.preventDefault();
-
-                var payment = (+this.$amount.val() * this.$percent.val() / 100) + +this.$amount.val();
-                console.log(payment);
-
-                this.$results.fadeIn();
-                this.$pay.text( payment.toFixed(2) + this.currency);
-                this.$monthPay.text( (payment / this.$slider.val()).toFixed(2) + this.currency);
-            },
-            validate: function(){
-                var inputNumber = this.numberPat,
-                    inputEmail = this.emailPat;
-
-
-                $('.validate').on('keyup', function(){
-                    var inputType = $(this).attr('type'),
-                        $self = $(this);
-
-                    switch (inputType) {
-                        case 'number':
-                            if($self.val().match(inputNumber)){
-                                $self.closest('.form-group').removeClass('has-error').addClass('has-success');
-                                console.log('number yes');
-                            }else{
-                                $self.closest('.form-group').addClass('has-error').removeClass('has-success');
-                                console.log('number no');
-                            }
-                            break;
-
-                        case 'email':
-                            if($self.val().match(inputEmail)){
-                                $self.closest('.form-group').removeClass('has-error').addClass('has-success');
-                                console.log('email yes');
-                            }else{
-                                $self.closest('.form-group').addClass('has-error').removeClass('has-success');
-                                console.log('email no');
-                            }
-                            break;
-                    }
-                });
-            }
-
-        });
-
-
-        window.Calc = Calc;
-    });
-
-
-    $(function() {
-        var app = new Calc({months: 12});
-    });
-</script>
 </body>
 </html>

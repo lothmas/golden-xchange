@@ -51,7 +51,7 @@ public class Controller {
 //    }
 
 
-    @RequestMapping({"/verification_login", "/profile","/dashboard","/new_donation"})
+    @RequestMapping({"/verification_login", "/profile","/dashboard","/new_donation","donation_status"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
@@ -67,6 +67,9 @@ public class Controller {
             }
             if (url.contains("dashboard")) {
                 return "new_donation";
+            }
+            if (url.contains("donation_status")) {
+                return "donation_status";
             }
 
         }
