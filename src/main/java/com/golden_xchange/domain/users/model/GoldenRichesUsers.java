@@ -10,7 +10,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 
 @Entity
-@Audited
+//@Audited
 @Table(name = "users", schema = "", catalog = "")
 public class GoldenRichesUsers {
     private int id;
@@ -27,6 +27,8 @@ public class GoldenRichesUsers {
     private String accountHoldername;
     private String profilePic;
     private String gender;
+    private String accountType;
+    private String referenceUser;
 
     public GoldenRichesUsers() {
     }
@@ -72,7 +74,7 @@ public class GoldenRichesUsers {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 45)
+    @Column(name = "password", nullable = false, length = 500)
     public String getPassword() {
         return this.password;
     }
@@ -142,7 +144,7 @@ public class GoldenRichesUsers {
     }
 
     @Basic
-    @Column(name = "profile_pic", nullable = false, length = 45)
+    @Column(name = "profile_pic",  length = 17000000)
     public String getProfilePic() {
         return this.profilePic;
     }
@@ -165,6 +167,26 @@ public class GoldenRichesUsers {
     @Column(name = "account_holder_name", nullable = false, length = 45)
     public String getAccountHoldername() {
         return this.accountHoldername;
+    }
+
+    @Basic
+    @Column(name = "account_type",  length = 45)
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    @Basic
+    @Column(name = "reference",  length = 45)
+    public String getReferenceUser() {
+        return referenceUser;
+    }
+
+    public void setReferenceUser(String referenceUser) {
+        this.referenceUser = referenceUser;
     }
 
     public void setAccountHoldername(String accountHoldername) {

@@ -1,6 +1,8 @@
 package com.golden_xchange;
 
 
+import com.golden_xchange.controller.getbanknames.GetBankNameListResponse;
+import com.golden_xchange.controller.getbanknames.GetBankNameListWebserviceEndpoint;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -32,7 +34,8 @@ import java.util.concurrent.TimeUnit;
 public class Controller {
 
 
-
+@Autowired
+    GetBankNameListWebserviceEndpoint getBankNameListWebserviceEndpoint;
 
 
     public static String byteToString(byte[] _bytes) {
@@ -51,11 +54,11 @@ public class Controller {
 //    }
 
 
-    @RequestMapping({"/verification_login", "/profile","/dashboard","/new_donation","donation_status"})
+    @RequestMapping({"/profile","/dashboard","/new_donation","donation_status"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
-
+        model.addAttribute("bankDetails",new GetBankNameListResponse());
         String url = request.getRequestURI();
         int index = url.lastIndexOf("/");
         if (index != -1) {
@@ -65,7 +68,12 @@ public class Controller {
             if (url.contains("dashboard")) {
                 return "dashboard";
             }
-            if (url.contains("dashboard")) {
+            if (url.contains("new_donation")) {
+                try {
+                    model.addAttribute("profile",session.getAttribute("profile"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return "new_donation";
             }
             if (url.contains("donation_status")) {

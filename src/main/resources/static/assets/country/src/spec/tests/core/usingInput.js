@@ -57,8 +57,8 @@ describe("using input: ", function() {
       });
 
       it("then changing the flag updates the number correctly", function() {
-        selectFlag("zw");
-        expect(getInputVal()).toEqual("+263 " + telNo + key);
+        selectFlag("za");
+        expect(getInputVal()).toEqual("+27 " + telNo + key);
       });
 
     });
@@ -80,8 +80,8 @@ describe("using input: ", function() {
       });
 
       it("then changing the flag updates the number correctly", function() {
-        selectFlag("zw");
-        expect(getInputVal()).toEqual("+263 " + telNo + key);
+        selectFlag("za");
+        expect(getInputVal()).toEqual("+27 " + telNo + key);
       });
 
     });

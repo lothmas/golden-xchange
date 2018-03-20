@@ -59,7 +59,13 @@
                 <form action="#" data-th-action="@{./register}" th:object="${register}" method="post"
                       enctype="multipart/form-data" class="margin-bottom-0">
                     <div class="alert alert-danger" th:if="${response.message!=null}">
-                        <strong>Danger!</strong> <span th:text="${response.message}"></span>
+                    <strong>Danger!</strong> <span th:text="${response.message}"></span>
+                    </div>
+                    <div class="row row-space-10">
+                        <div class="col-md-12 m-b-15">
+                            <input type="text" name="referenceUser" class="form-control"
+                                   placeholder="Reference / Sponsore [Username]"/>
+                        </div>
                     </div>
                     <label class="control-label">Profile Details <span class="text-danger">*</span></label>
                     <div class="row row-space-10">
@@ -84,7 +90,8 @@
                         </div>
                     </div>
 
-                    <hr style="min-width:100%; background-color:#a1a1a1 !important; height:1px;"/>
+                    <hr style="min-width:100%; background-color:#5a58a1 !important; height:1px;"/>
+
                     <label class="control-label">User Details <span
                             class="text-danger">*</span></label>
                     <div class="row row-space-10">
@@ -119,40 +126,47 @@
                         </div>
                     </div>
 
-                    <hr style="min-width:85%; background-color:#a1a1a1 !important; height:1px;"/>
+                    <hr style="min-width:100%; background-color:#5a58a1 !important; height:1px;"/>
                     <label class="control-label">Your Bank Details <span
                             class="text-danger">*</span></label>
                     <div class="row row-space-10">
                         <div class="col-md-6 m-b-15">
                             <select class="form-control" name="bankName">
                                 <option selected="true" th:disabled="true">Select Your Bank</option>
-                                <option value="1">Absa</option>
-                                <option value="2">African Bank</option>
-                                <option value="3">Bidvest</option>
-                                <option value="4">Capitec</option>
-                                <option value="5">Discovery</option>
-                                <option value="6">FNB</option>
-                                <option value="7">Nedbank</option>
-                                <option value="8">Standard Bank</option>
+                                <option value="Absa">Absa</option>
+                                <option value="African Bank">African Bank</option>
+                                <option value="Bidvest">Bidvest</option>
+                                <option value="Capitec">Capitec</option>
+                                <option value="Discovery">Discovery</option>
+                                <option value="FNB">FNB</option>
+                                <option value="Nedbank">Nedbank</option>
+                                <option value="Standard Bank">Standard Bank</option>
                             </select>
                         </div>
                         <div class="col-md-6 m-b-15">
-                            <input type="text" name="branchNumber" class="form-control" placeholder="Branch Number"
-                            />
+                            <select class="form-control" name="accountType">
+                                <option selected="true" th:disabled="true">Account Type</option>
+                                <option value="Current">Current Account</option>
+                                <option value="Savings">Savings Account</option>
+                            </select>
                         </div>
-                        <div class="col-md-12 m-b-15">
-                            <input type="text" name="accountHolderName" class="form-control"
-                                   placeholder="Account Holder Name" required="true"/>
+                        <div class="row row-space-10">
+                            <div class="col-md-6 m-b-15">
+                                <input type="text" name="branchNumber" class="form-control"
+                                       placeholder="Branch Number" required="true"/>
+                            </div>
+                            <div class="col-md-6 m-b-15">
+                                <input type="text" name="accountHolderName" class="form-control"
+                                       placeholder="Account Holder Name" required="true"/>
+                            </div>
                         </div>
-
                         <div class="col-md-12 m-b-15">
                             <input type="text" name="accountNumber" class="form-control"
                                    placeholder="Account Number" required="true"/>
                         </div>
 
-
                     </div>
-                    <hr style="min-width:85%; background-color:#a1a1a1 !important; height:1px;"/>
+                    <hr style="min-width:100%; background-color:#5a58a1 !important; height:1px;"/>
                     <div class="row row-space-10">
                         <div class="col-md-12 m-b-15 ">
                             <span class="btn btn-file badge badge-info">
@@ -166,7 +180,7 @@
 
                     <div class="checkbox checkbox-css m-b-30">
                         <div class="checkbox checkbox-css m-b-30">
-                            <input type="checkbox" id="agreement_checkbox"/>
+                            <input type="checkbox" id="agreement_checkbox" required="true"/>
                             <label for="agreement_checkbox">
                                 By clicking Sign Up, you agree to our <a href="javascript:;">Terms</a> and that you have
                                 read our <a href="javascript:;">Data Policy</a>, including our <a href="javascript:;">Cookie

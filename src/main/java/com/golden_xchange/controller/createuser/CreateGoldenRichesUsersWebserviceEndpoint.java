@@ -10,6 +10,8 @@ import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
 import com.golden_xchange.domain.utilities.GeneralDomainFunctions;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @ControllerAdvice
@@ -41,7 +45,9 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
     }
 
     @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
-    public String handleCreateGoldenRichesRequest(@Valid CreateGoldenRichesUserRequest request, Model model, HttpSession session, @RequestParam(value = "diallingCode", required = false) String diallingCode) throws Exception {
+    @Transactional
+    public String handleCreateGoldenRichesRequest(@Valid CreateGoldenRichesUserRequest request, Model model, HttpSession session, @RequestParam(value = "diallingCode", required = false) String diallingCode
+            , @RequestParam(value = "pic", required = false) MultipartFile profilePic) throws Exception {
         CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
         GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
 
@@ -83,11 +89,15 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 goldenRichesUsers.setEnabled((byte) 1);
                 goldenRichesUsers.setAccountHoldername(request.getAccountHolderName());
                 goldenRichesUsers.setGender(request.getGender());
+                goldenRichesUsers.setAccountType(request.getAccountType());
+                goldenRichesUsers.setProfilePic(StringUtils.newStringUtf8(Base64.encodeBase64(profilePic.getBytes(), false)));
+                goldenRichesUsers.setReferenceUser(request.getReferenceUser());
                 this.goldenRichesUsersService.saveUser(goldenRichesUsers);
                 response.setMessage("User " + request.getUserName() + " Was Successfully Created");
                 response.setStatusCode(StatusCodeEnum.CREATED.getStatusCode());
                 model.addAttribute("profile",goldenRichesUsers);
-                return "dashboard";
+                session.setAttribute("profile", goldenRichesUsers);
+                return "profile";
             }
         }
     }

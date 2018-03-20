@@ -72,7 +72,10 @@ public class CreateGoldenRichesUserRequest {
     protected String telephone;
     @XmlElement(required = true)
     protected String gender;
-
+    @XmlElement(required = true)
+    protected String accountType;
+    @XmlElement(required = true)
+    protected String referenceUser;
     /**
      * Gets the value of the userName property.
      * 
@@ -361,4 +364,19 @@ public class CreateGoldenRichesUserRequest {
         this.gender = value;
     }
 
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getReferenceUser() {
+        return referenceUser;
+    }
+
+    public void setReferenceUser(String referenceUser) {
+        this.referenceUser = referenceUser;
+    }
 }

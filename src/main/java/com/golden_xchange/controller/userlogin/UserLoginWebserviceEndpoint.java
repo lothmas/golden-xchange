@@ -69,8 +69,9 @@ public class UserLoginWebserviceEndpoint {
                 return errorResponse(model, response);
             }
 
-
-            model.addAttribute("profile", goldenRichesUsersService.findGoldenRichesUsersByEmailAndPassword(username, password));
+            goldenRichesUsers= goldenRichesUsersService.findGoldenRichesUsersByEmailAndPassword(username, password);
+            model.addAttribute("profile", goldenRichesUsers);
+            session.setAttribute("profile", goldenRichesUsers);
 
 
         } catch (GoldenRichesUsersNotFoundException | NoSuchAlgorithmException grunf) {
@@ -81,6 +82,7 @@ public class UserLoginWebserviceEndpoint {
                 response.setMessage("User: " + goldenRichesUsers.getUserName() + " Successfully LoggedIn");
                 response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
                 model.addAttribute("profile", goldenRichesUsers);
+                session.setAttribute("profile", goldenRichesUsers);
                 return "profile";
             } catch (GoldenRichesUsersNotFoundException | NoSuchAlgorithmException unf) {
                 response.setMessage(unf.getMessage());

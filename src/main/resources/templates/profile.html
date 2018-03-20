@@ -6,7 +6,7 @@
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-	<title>Golden-Xchange | Donation</title>
+	<title>Golden-Xchange | Profile</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -42,7 +42,7 @@
 		<div id="header" class="header navbar-default">
 			<!-- begin navbar-header -->
 			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Color</b> Admin</a>
+				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Golden</b> -Xchange</a>
 				<button type="button" class="navbar-toggle" data-click="sidebar-toggled">
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -53,14 +53,7 @@
 			
 			<!-- begin header-nav -->
 			<ul class="navbar-nav navbar-right">
-				<li>
-					<form class="navbar-form">
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Enter keyword" />
-							<button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
-						</div>
-					</form>
-				</li>
+
 				<li class="dropdown">
 					<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
 						<i class="fa fa-bell"></i>
@@ -135,8 +128,9 @@
 				</li>
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<img src="../assets/img/user/user-13.jpg" alt="" /> 
-						<span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
+						<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
+							 alt="no profile pic set"/>
+						<span class="d-none d-md-inline" th:text="${profile.userName}"></span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="javascript:;" class="dropdown-item">Edit Profile</a>
@@ -162,12 +156,13 @@
 						<a href="javascript:;" data-toggle="nav-profile">
 							<div class="cover with-shadow"></div>
 							<div class="image">
-								<img src="../assets/img/user/user-13.jpg" alt="" />
+								<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
+									 alt="no profile pic set"/>
 							</div>
 							<div class="info">
 								<b class="caret pull-right"></b>
-								Sean Ngu
-								<small>Front end developer</small>
+								<span th:text="${profile.getUserName()}"></span>
+								<small th:text="${profile.getFirstName() +'  '+profile.getSurname()}">Front end developer</small>
 							</div>
 						</a>
 					</li>
@@ -183,281 +178,11 @@
 				<!-- begin sidebar nav -->
 				<ul class="nav">
 					<li class="nav-header">Navigation</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-th-large"></i>
-						    <span>Dashboard</span>
-					    </a>
-						<ul class="sub-menu">
-						    <li><a href="index.html">Dashboard v1</a></li>
-						    <li><a href="index_v2.html">Dashboard v2</a></li>
-						</ul>
-					</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-							<span class="badge pull-right">10</span>
-							<i class="fa fa-hdd"></i> 
-							<span>Email</span>
-						</a>
-						<ul class="sub-menu">
-						    <li><a href="email_inbox.html">Inbox</a></li>
-						    <li><a href="email_compose.html">Compose</a></li>
-						    <li><a href="email_detail.html">Detail</a></li>
-						</ul>
-					</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-gem"></i>
-						    <span>UI Elements <span class="label label-theme m-l-5">NEW</span></span> 
-						</a>
-						<ul class="sub-menu">
-							<li><a href="ui_general.html">General</a></li>
-							<li><a href="ui_typography.html">Typography</a></li>
-							<li><a href="ui_tabs_accordions.html">Tabs &amp; Accordions</a></li>
-							<li><a href="ui_unlimited_tabs.html">Unlimited Nav Tabs</a></li>
-							<li><a href="ui_modal_notification.html">Modal &amp; Notification <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
-							<li><a href="ui_widget_boxes.html">Widget Boxes</a></li>
-							<li><a href="ui_media_object.html">Media Object</a></li>
-							<li><a href="ui_buttons.html">Buttons</a></li>
-							<li><a href="ui_icons.html">Icons</a></li>
-							<li><a href="ui_simple_line_icons.html">Simple Line Icons</a></li>
-							<li><a href="ui_ionicons.html">Ionicons</a></li>
-							<li><a href="ui_tree.html">Tree View</a></li>
-							<li><a href="ui_language_bar_icon.html">Language Bar &amp; Icon</a></li>
-							<li><a href="ui_social_buttons.html">Social Buttons</a></li>
-							<li><a href="ui_tour.html">Intro JS</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="bootstrap_4.html">
-							<div class="icon-img">
-						    	<img src="../assets/img/logo/logo-bs4.png" alt="" />
-						    </div>
-						    <span>Bootstrap 4 <span class="label label-theme m-l-5">NEW</span></span> 
-						</a>
-					</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-list-ol"></i>
-						    <span>Form Stuff <span class="label label-theme m-l-5">NEW</span></span> 
-						</a>
-						<ul class="sub-menu">
-							<li><a href="form_elements.html">Form Elements <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
-							<li><a href="form_plugins.html">Form Plugins <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
-							<li><a href="form_slider_switcher.html">Form Slider + Switcher</a></li>
-							<li><a href="form_validation.html">Form Validation</a></li>
-							<li><a href="form_wizards.html">Wizards</a></li>
-							<li><a href="form_wizards_validation.html">Wizards + Validation</a></li>
-							<li><a href="form_wysiwyg.html">WYSIWYG</a></li>
-							<li><a href="form_editable.html">X-Editable</a></li>
-							<li><a href="form_multiple_upload.html">Multiple File Upload</a></li>
-							<li><a href="form_summernote.html">Summernote</a></li>
-							<li><a href="form_dropzone.html">Dropzone</a></li>
-						</ul>
-					</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-table"></i>
-						    <span>Tables</span>
-						</a>
-						<ul class="sub-menu">
-							<li><a href="table_basic.html">Basic Tables</a></li>
-							<li class="has-sub">
-							    <a href="javascript:;"><b class="caret pull-right"></b> Managed Tables</a>
-							    <ul class="sub-menu">
-							        <li><a href="table_manage.html">Default</a></li>
-							        <li><a href="table_manage_autofill.html">Autofill</a></li>
-							        <li><a href="table_manage_buttons.html">Buttons</a></li>
-							        <li><a href="table_manage_colreorder.html">ColReorder</a></li>
-							        <li><a href="table_manage_fixed_columns.html">Fixed Column</a></li>
-							        <li><a href="table_manage_fixed_header.html">Fixed Header</a></li>
-							        <li><a href="table_manage_keytable.html">KeyTable</a></li>
-							        <li><a href="table_manage_responsive.html">Responsive</a></li>
-							        <li><a href="table_manage_rowreorder.html">RowReorder</a></li>
-							        <li><a href="table_manage_scroller.html">Scroller</a></li>
-							        <li><a href="table_manage_select.html">Select</a></li>
-							        <li><a href="table_manage_combine.html">Extension Combination</a></li>
-							    </ul>
-							</li>
-						</ul>
-					</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-							<i class="fa fa-star"></i> 
-							<span>Front End</span>
-						</a>
-						<ul class="sub-menu">
-						    <li><a href="../../../frontend/template/template_one_page_parallax/index.html" target="_blank">One Page Parallax</a></li>
-						    <li><a href="../../../frontend/template/template_blog/index.html" target="_blank">Blog</a></li>
-						    <li><a href="../../../frontend/template/template_forum/index.html" target="_blank">Forum</a></li>
-						    <li><a href="../../../frontend/template/template_e_commerce/index.html" target="_blank">E-Commerce</a></li>
-						</ul>
-					</li>
-					<li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret"></b>
-					        <i class="fa fa-envelope"></i>
-					        <span>Email Template</span>
-					    </a>
-						<ul class="sub-menu">
-							<li><a href="email_system.html">System Template</a></li>
-							<li><a href="email_newsletter.html">Newsletter Template</a></li>
-						</ul>
-					</li>
-					<li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret"></b>
-					        <i class="fa fa-chart-pie"></i>
-						    <span>Chart</span>
-						</a>
-						<ul class="sub-menu">
-						    <li><a href="chart-flot.html">Flot Chart</a></li>
-						    <li><a href="chart-morris.html">Morris Chart</a></li>
-							<li><a href="chart-js.html">Chart JS</a></li>
-						    <li><a href="chart-d3.html">d3 Chart</a></li>
-						</ul>
-					</li>
-					<li><a href="calendar.html"><i class="fa fa-calendar"></i> <span>Calendar</span></a></li>
-					<li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret"></b>
-					        <i class="fa fa-map"></i>
-					        <span>Map</span>
-					    </a>
-						<ul class="sub-menu">
-							<li><a href="map_vector.html">Vector Map</a></li>
-							<li><a href="map_google.html">Google Map</a></li>
-						</ul>
-					</li>
-					<li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-image"></i>
-						    <span>Gallery</span>
-						</a>
-					    <ul class="sub-menu">
-					        <li><a href="gallery.html">Gallery v1</a></li>
-					        <li><a href="gallery_v2.html">Gallery v2</a></li>
-					    </ul>
-					</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-cogs"></i>
-						    <span>Page Options</span>
-						</a>
-						<ul class="sub-menu">
-							<li><a href="page_blank.html">Blank Page</a></li>
-							<li><a href="page_with_footer.html">Page with Footer</a></li>
-							<li><a href="page_without_sidebar.html">Page without Sidebar</a></li>
-							<li><a href="page_with_right_sidebar.html">Page with Right Sidebar</a></li>
-							<li><a href="page_with_minified_sidebar.html">Page with Minified Sidebar</a></li>
-							<li><a href="page_with_two_sidebar.html">Page with Two Sidebar</a></li>
-							<li><a href="page_with_line_icons.html">Page with Line Icons</a></li>
-							<li><a href="page_with_ionicons.html">Page with Ionicons</a></li>
-							<li><a href="page_full_height.html">Full Height Content</a></li>
-							<li><a href="page_with_wide_sidebar.html">Page with Wide Sidebar</a></li>
-							<li><a href="page_with_light_sidebar.html">Page with Light Sidebar</a></li>
-							<li><a href="page_with_mega_menu.html">Page with Mega Menu</a></li>
-                            <li><a href="page_with_top_menu.html">Page with Top Menu</a></li>
-                            <li><a href="page_with_boxed_layout.html">Page with Boxed Layout</a></li>
-                            <li><a href="page_with_mixed_menu.html">Page with Mixed Menu</a></li>
-                            <li><a href="page_boxed_layout_with_mixed_menu.html">Boxed Layout with Mixed Menu</a></li>
-                            <li><a href="page_with_transparent_sidebar.html">Page with Transparent Sidebar</a></li>
-						</ul>
-					</li>
-					<li class="has-sub active">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-gift"></i>
-						    <span>Extra</span>
-						</a>
-						<ul class="sub-menu">
-						    <li><a href="extra_timeline.html">Timeline</a></li>
-						    <li><a href="extra_coming_soon.html">Coming Soon Page</a></li>
-							<li><a href="extra_search_results.html">Search Results</a></li>
-							<li><a href="extra_invoice.html">Invoice</a></li>
-							<li><a href="extra_404_error.html">404 Error Page</a></li>
-							<li class="active"><a href="profile.html">Profile Page</a></li>
-						</ul>
-					</li>
-					<li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret"></b>
-					        <i class="fa fa-key"></i>
-					        <span>Login &amp; Register</span>
-					    </a>
-					    <ul class="sub-menu">
-							<li><a href="login.html">Login</a></li>
-					        <li><a href="login_v2.html">Login v2</a></li>
-					        <li><a href="login_v3.html">Login v3</a></li>
-					        <li><a href="register_v3.html">Register v3</a></li>
-					    </ul>
-					</li>
-					<li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret"></b>
-					        <i class="fa fa-cubes"></i>
-					        <span>Version <span class="label label-theme m-l-5">NEW</span></span>
-					    </a>
-					    <ul class="sub-menu">
-							<li><a href="javascript:;">HTML</a></li>
-					        <li><a href="../template_ajax/index.html">AJAX</a></li>
-					        <li><a href="../template_angularjs/index.html">ANGULAR JS</a></li>
-					        <li><a href="../template_angularjs5/index.html">ANGULAR JS 5 <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
-					        <li><a href="../template_laravel/index.html">LARAVEL <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
-					        <li><a href="../template_material/index.html">MATERIAL DESIGN</a></li>
-					        <li><a href="../template_apple/index.html">APPLE DESIGN</a></li>
-					        <li><a href="../template_transparent/index.html">TRANSPARENT DESIGN <i class="fa fa-paper-plane text-theme m-l-5"></i></a></li>
-					    </ul>
-					</li>
-					<li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret"></b>
-					        <i class="fa fa-medkit"></i>
-					        <span>Helper</span>
-					    </a>
-					    <ul class="sub-menu">
-							<li><a href="helper_css.html">Predefined CSS Classes</a></li>
-					    </ul>
-					</li>
-					<li class="has-sub">
-						<a href="javascript:;">
-					        <b class="caret"></b>
-						    <i class="fa fa-align-left"></i> 
-						    <span>Menu Level</span>
-						</a>
-						<ul class="sub-menu">
-							<li class="has-sub">
-								<a href="javascript:;">
-					        		<b class="caret"></b>
-						            Menu 1.1
-						        </a>
-								<ul class="sub-menu">
-									<li class="has-sub">
-										<a href="javascript:;">
-										    <b class="caret"></b>
-										    Menu 2.1
-										</a>
-										<ul class="sub-menu">
-											<li><a href="javascript:;">Menu 3.1</a></li>
-											<li><a href="javascript:;">Menu 3.2</a></li>
-										</ul>
-									</li>
-									<li><a href="javascript:;">Menu 2.2</a></li>
-									<li><a href="javascript:;">Menu 2.3</a></li>
-								</ul>
-							</li>
-							<li><a href="javascript:;">Menu 1.2</a></li>
-							<li><a href="javascript:;">Menu 1.3</a></li>
-						</ul>
-					</li>
-			        <!-- begin sidebar minify button -->
+					<li><a href="profile"><i class="fa fa-table"></i> <span>PROFILE</span></a></li>
+					<li><a href="new_donation"><i class="fa fa-image"></i> <span>NEW DONATION</span></a></li>
+					<li><a href="calendar.html"><i class="fa fa-clock"></i> <span>PENDING APPROVAL</span></a></li>
+					<li><a href="calendar.html"><i class="fa fa-calendar"></i> <span>DONATIONS STATUS</span></a></li>
+					<!-- begin sidebar minify button -->
 					<li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
 			        <!-- end sidebar minify button -->
 				</ul>
@@ -479,18 +204,98 @@
 					<!-- END profile-header-cover -->
 					<!-- BEGIN profile-header-content -->
 					<div class="profile-header-content">
-						<!-- BEGIN profile-header-img -->
-						<div class="profile-header-img">
-							<img src="../assets/img/user/user-13.jpg" alt=""/>
-						</div>
+
 						<!-- END profile-header-img -->
-						<!-- BEGIN profile-header-info -->
-						<div class="profile-header-info">
-							<h4 class="m-t-10 m-b-5">Sean Ngu</h4>
-							<p class="m-b-10">UXUI + Frontend Developer</p>
-							<a href="#" class="btn btn-xs btn-yellow">Edit Profile</a>
+
+						<div class="row">
+							<!-- begin col-3 -->
+							<div class="col-lg-2 col-md-2">
+								<!-- BEGIN profile-header-img -->
+								<div class="profile-header-img">
+									<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
+										 alt="no profile pic set"/>
+								</div>
+
+							</div>
+							<div class="col-lg-1 col-md-6" >
+								<!-- BEGIN profile-header-info -->
+								<div class="profile-header-info">
+									<h4 class="m-t-10 m-b-5" th:text="${profile.userName}"></h4>
+									<br/>
+									<a align="left" th:text="${profile.firstName + '  '+profile.surname}">Edit Profile</a>
+
+								</div>
+							</div>
+							<div class="col-lg-3 col-md-6">
+								<div class="widget widget-stats bg-black-lighter">
+									<div class="stats-icon"><i class="fa fa-clone"></i></div>
+									<div class="stats-info">
+										<h4>Give To Receive</h4>
+										<p><h3>New Donation</h3></p>
+									</div>
+									<div class="stats-link">
+										<a href="new_donation">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+									</div>
+								</div>
+							</div>
+							<!-- end col-3 -->
+							<!-- begin col-3 -->
+							<div class="col-lg-3 col-md-6">
+								<div class="widget widget-stats bg-grey-darker">
+									<div class="stats-icon"><i class="fa fa-link"></i></div>
+									<div class="stats-info">
+										<h4>Pending Approval</h4>
+										<p><h3>Approvals</h3></p>
+									</div>
+									<div class="stats-link">
+										<a href="new_donation">Donate <i class="fa fa-arrow-alt-circle-right"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-3 col-md-6">
+								<div class="widget widget-stats bg-orange">
+									<div class="stats-icon"><i class="fa fa-desktop"></i></div>
+									<div class="stats-info">
+										<h4>All Donations Status</h4>
+										<p><h3>Donation Status</h3></p>
+									</div>
+									<div class="stats-link">
+										<a href="profile">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+									</div>
+								</div>
+							</div>
+							<!-- end col-3 -->
+							<!-- begin col-3 -->
+							<!--<div class="col-lg-3 col-md-6">-->
+								<!--<div class="widget widget-stats bg-grey-darker">-->
+									<!--<div class="stats-icon"><i class="fa fa-users"></i></div>-->
+									<!--<div class="stats-info">-->
+										<!--<h4>Donations Status </h4>-->
+										<!--<p>Approvals</p>-->
+									<!--</div>-->
+									<!--<div class="stats-link">-->
+										<!--<a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--&lt;!&ndash; end col-3 &ndash;&gt;-->
+							<!--&lt;!&ndash; begin col-3 &ndash;&gt;-->
+							<!--<div class="col-lg-3 col-md-6">-->
+								<!--<div class="widget widget-stats bg-black-lighter">-->
+									<!--<div class="stats-icon"><i class="fa fa-clock"></i></div>-->
+									<!--<div class="stats-info">-->
+										<!--<h4>Completed Donations</h4>-->
+										<!--<p>Completed </p>-->
+									<!--</div>-->
+									<!--<div class="stats-link">-->
+										<!--<a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!-- end col-3 -->
 						</div>
 						<!-- END profile-header-info -->
+
 					</div>
 					<!-- END profile-header-content -->
 					<!-- BEGIN profile-header-tab -->
@@ -502,6 +307,7 @@
 						<!--<li class="nav-item"><a href="#profile-friends" class="nav-link" data-toggle="tab">FRIENDS</a></li>-->
 					</ul>
 					<!-- END profile-header-tab -->
+
 				</div>
 			</div>
 			<!-- end profile -->
@@ -699,41 +505,19 @@
 						<!-- begin table -->
 						<div class="table-responsive">
 							<table class="table table-profile">
-								<thead>
-									<tr>
-										<th></th>
-										<th>
-											<h4>Micheal	Meyer <small>Lorraine Stokes</small></h4>
-										</th>
-									</tr>
-								</thead>
 								<tbody>
-									<tr class="highlight">
-										<td class="field">username</td>
-										<td><a href="javascript:;">Add Mood Message</a></td>
-									</tr>
-									<tr class="divider">
-										<td colspan="2"></td>
-									</tr>
+
 									<tr>
-										<td class="field">firstname</td>
-										<td><a href="javascript:;">Add Number</a></td>
-									</tr>
-									<tr>
-										<td class="field">surname</td>
-										<td><a href="javascript:;">Add Number</a></td>
-									</tr>
-									<tr>
-										<td class="field">Mobile</td>
-										<td><i class="fa fa-mobile fa-lg m-r-5"></i> +1-(847)- 367-8924 <a href="javascript:;" class="m-l-5">Edit</a></td>
+										<td class="field">Phone Number</td>
+										<td><i class="fa fa-mobile" th:text="${profile.telephoneNumber}"></i>  </td>
 									</tr>
 
 									<tr class="divider">
 										<td colspan="2"></td>
 									</tr>
 									<tr >
-										<td class="field">email-address</td>
-										<td><a href="javascript:;">Add Description</a></td>
+										<td class="field" >Email Address</td>
+										<td th:text="${profile.emailAddress}"/>
 									</tr>
 									<tr class="divider">
 										<td colspan="2"></td>
@@ -742,49 +526,41 @@
 										<td class="field">Country/Region</td>
 										<td>
 											<select class="form-control input-inline input-xs" name="region">
-												<option value="US" selected="selected">United State</option>
-												<option value="AF">Afghanistan</option>
-												<option value="AL">Albania</option>
-												<option value="DZ">Algeria</option>
-												<option value="AS">American Samoa</option>
-												<option value="AD">Andorra</option>
-												<option value="AO">Angola</option>
-												<option value="AI">Anguilla</option>
-												<option value="AQ">Antarctica</option>
-												<option value="AG">Antigua and Barbuda</option>
+												<option value="ZA" selected="selected">South Africa</option>
 											</select>
 										</td>
 									</tr>
 									<tr>
-										<td class="field">Bank Name</td>
-										<td>Los Angeles</td>
+										<td class="field" >Bank Name</td>
+										<td th:text="${profile.bankName}"></td>
 									</tr>
 									<tr>
-										<td class="field">Branch Code</td>
-										<td><a href="javascript:;">Add Webpage</a></td>
-									</tr>
-									<tr>
-										<td class="field">Account Number</td>
-										<td><a href="javascript:;">Add State</a></td>
-									</tr>
-									<tr>
-										<td class="field">Account Holder Name</td>
-										<td><a href="javascript:;">Add Webpage</a></td>
+										<td class="field">Branch Number</td>
+										<td th:text="${profile.branchNumber}"/>
 									</tr>
 									<tr>
 										<td class="field">Account Type</td>
-										<td><a href="javascript:;">Add Webpage</a></td>
+										<td th:text="${profile.bankName}"/>
+									</tr>
+									<tr>
+										<td class="field">Account Number</td>
+										<td th:text="${profile.accountNumber}"/>
+									</tr>
+									<tr>
+										<td class="field">Account Holder Name</td>
+										<td th:text="${profile.accountHoldername}"/>
 									</tr>
 
-									<tr class="highlight">
+
+									<tr th:if="${profile.gender.equals('1')}">
 										<td class="field">Gender</td>
-										<td>
-											<select class="form-control input-inline input-xs" name="gender">
-												<option value="male">Male</option>
-												<option value="female">Female</option>
-											</select>
-										</td>
+										<td>Male</td>
 									</tr>
+									<tr th:if="${profile.gender==2}">
+										<td class="field">Female</td>
+										<td>Male</td>
+									</tr>
+
 									<tr>
 										<td class="field">Birthdate</td>
 										<td>
@@ -1771,83 +1547,7 @@
 		</div>
 		<!-- end #content -->
 		
-        <!-- begin theme-panel -->
-        <div class="theme-panel">
-            <a href="javascript:;" data-click="theme-panel-expand" class="theme-collapse-btn"><i class="fa fa-cog"></i></a>
-            <div class="theme-panel-content">
-                <h5 class="m-t-0">Color Theme</h5>
-                <ul class="theme-list clearfix">
-                    <li class="active"><a href="javascript:;" class="bg-green" data-theme="default" data-theme-file="../assets/css/default/theme/default.css" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Default">&nbsp;</a></li>
-                    <li><a href="javascript:;" class="bg-red" data-theme="red" data-theme-file="../assets/css/default/theme/red.css" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Red">&nbsp;</a></li>
-                    <li><a href="javascript:;" class="bg-blue" data-theme="blue" data-theme-file="../assets/css/default/theme/blue.css" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Blue">&nbsp;</a></li>
-                    <li><a href="javascript:;" class="bg-purple" data-theme="purple" data-theme-file="../assets/css/default/theme/purple.css" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Purple">&nbsp;</a></li>
-                    <li><a href="javascript:;" class="bg-orange" data-theme="orange" data-theme-file="../assets/css/default/theme/orange.css" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Orange">&nbsp;</a></li>
-                    <li><a href="javascript:;" class="bg-black" data-theme="black" data-theme-file="../assets/css/default/theme/black.css" data-click="theme-selector" data-toggle="tooltip" data-trigger="hover" data-container="body" data-title="Black">&nbsp;</a></li>
-                </ul>
-                <div class="divider"></div>
-                <div class="row m-t-10">
-                    <div class="col-md-5 control-label double-line">Header Styling</div>
-                    <div class="col-md-7">
-                        <select name="header-styling" class="form-control form-control-sm">
-                            <option value="1">default</option>
-                            <option value="2">inverse</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row m-t-10">
-                    <div class="col-md-5 control-label">Header</div>
-                    <div class="col-md-7">
-                        <select name="header-fixed" class="form-control form-control-sm">
-                            <option value="1">fixed</option>
-                            <option value="2">default</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row m-t-10">
-                    <div class="col-md-5 control-label double-line">Sidebar Styling</div>
-                    <div class="col-md-7">
-                        <select name="sidebar-styling" class="form-control form-control-sm">
-                            <option value="1">default</option>
-                            <option value="2">grid</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row m-t-10">
-                    <div class="col-md-5 control-label">Sidebar</div>
-                    <div class="col-md-7">
-                        <select name="sidebar-fixed" class="form-control form-control-sm">
-                            <option value="1">fixed</option>
-                            <option value="2">default</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row m-t-10">
-                    <div class="col-md-5 control-label double-line">Sidebar Gradient</div>
-                    <div class="col-md-7">
-                        <select name="content-gradient" class="form-control form-control-sm">
-                            <option value="1">disabled</option>
-                            <option value="2">enabled</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row m-t-10">
-                    <div class="col-md-5 control-label double-line">Content Styling</div>
-                    <div class="col-md-7">
-                        <select name="content-styling" class="form-control form-control-sm">
-                            <option value="1">default</option>
-                            <option value="2">black</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row m-t-10">
-                    <div class="col-md-12">
-                        <a href="javascript:;" class="btn btn-inverse btn-block btn-sm" data-click="reset-local-storage">Reset Local Storage</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end theme-panel -->
-		
+
 		<!-- begin scroll to top btn -->
 		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
 		<!-- end scroll to top btn -->
