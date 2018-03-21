@@ -10,7 +10,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Audited
+
 @Entity
 @Table(name = "main_list", schema = "", catalog = "")
 public class MainListEntity {

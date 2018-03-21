@@ -10,7 +10,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 
 @Entity
-//@Audited
+//
 @Table(name = "users", schema = "", catalog = "")
 public class GoldenRichesUsers {
     private int id;

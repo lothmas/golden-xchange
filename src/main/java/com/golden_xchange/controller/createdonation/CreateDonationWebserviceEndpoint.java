@@ -12,23 +12,30 @@ import com.golden_xchange.domain.mainlist.service.MainListService;
 import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
+import com.golden_xchange.domain.utilities.Enums;
 import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
 import com.golden_xchange.domain.utilities.SendSms;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@ControllerAdvice
 @Controller
 public class CreateDonationWebserviceEndpoint {
-    private static final String NAMESPACE_URI = "createDonation.webservice.golden_xchange.com";
     @Autowired
     MainListService donationService;
     @Autowired
@@ -40,14 +47,41 @@ public class CreateDonationWebserviceEndpoint {
     public CreateDonationWebserviceEndpoint() {
     }
 
-    @PayloadRoot(
-        namespace = "createDonation.webservice.golden_xchange.com",
-        localPart = "CreateDonationRequest"
-    )
-    @ResponsePayload
-    public CreateDonationResponse handleCreateGoldenRichesRequest(@RequestPayload CreateDonationRequest request) throws Exception {
+    @RequestMapping({"/createDonation"})
+    public CreateDonationResponse handleCreateGoldenRichesRequest(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateDonationRequest request, @RequestParam(value = "action", required = false) String action) throws Exception {
         MainListEntity createDonation = new MainListEntity();
         CreateDonationResponse response = new CreateDonationResponse();
+        Date utilDate = new Date();
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Timestamp sqlDate = new Timestamp(utilDate.getTime());
+
+        if(action.equals("1")){
+            if (commonValidator(request, response)) return response;
+            if(null==request.getPayerUsername()) {
+                response.setMessage("Please relogin and try again required values have not been supplied");
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return response;
+            }
+            GoldenRichesUsers goldenRichesUsers=goldenRichesUsersService.findUserByMemberId(request.getPayerUsername());
+            MainListEntity mainListEntity=new MainListEntity();
+            mainListEntity.setStatus(2);
+            mainListEntity.setUpdatedDate(sqlDate);
+            mainListEntity.setAdjustedAmount(request.getAmount() + 0.4D * request.getAmount());
+            mainListEntity.setDonatedAmount(request.getAmount());
+            mainListEntity.setEnabled(1);
+            mainListEntity.setBankAccountNumber(goldenRichesUsers.getAccountNumber());
+            mainListEntity.setAmountToReceive(request.getAmount() + 0.4D * request.getAmount());
+            mainListEntity.setDate(sqlDate);
+            String mainRef=RandomStringUtils.randomAlphanumeric(10).toUpperCase();
+            mainListEntity.setMainListReference(mainRef);
+            mainListEntity.setDonationReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+            mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+            mainListEntity.setUserName(request.getPayerUsername());
+            mainListEntity.setPayerUsername(request.getPayerUsername());
+            donationService.saveUser(mainListEntity);
+            createForSponsor(goldenRichesUsers,request,mainRef);
+        }
+        else{
 
         GoldenRichesUsers gold;
         try {
@@ -66,11 +100,7 @@ public class CreateDonationWebserviceEndpoint {
                         return response;
                     }
 
-                    if(request.getAmount() < 300.0D) {
-                        response.setMessage("Minimum Donation Amount is R300");
-                        response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return response;
-                    }
+                    if (commonValidator(request, response)) return response;
 
                     Double extra = Double.valueOf(this.mainListReference.getAdjustedAmount() - request.getAmount());
                     if(extra.doubleValue() < 300.0D && extra.doubleValue() != 0.0D) {
@@ -91,7 +121,7 @@ public class CreateDonationWebserviceEndpoint {
 
                         if(0.0D != request.getAmount()) {
                             createDonation.setDonatedAmount(request.getAmount());
-                            createDonation.setAdjustedAmount(request.getAmount() + 0.3D * request.getAmount());
+                            createDonation.setAdjustedAmount(request.getAmount() + 0.4D * request.getAmount());
                             createDonation.setAmountToReceive(createDonation.getAdjustedAmount());
                             if(null != request.getBankAccountNumber() && !request.getBankAccountNumber().isEmpty()) {
                                 if(!this.bankAccountService.findBankAccByAccNumberAndUserName(request.getBankAccountNumber(), request.getPayerUsername())) {
@@ -136,9 +166,7 @@ public class CreateDonationWebserviceEndpoint {
 
         createDonation.setEnabled(0);
         createDonation.setStatus(0);
-        Date utilDate = new Date();
-        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Timestamp sqlDate = new Timestamp(utilDate.getTime());
+
         createDonation.setUpdatedDate(sqlDate);
         createDonation.setDate(sqlDate);
         String user = this.mainListReference.getPayerUsername();
@@ -154,13 +182,60 @@ public class CreateDonationWebserviceEndpoint {
         }
 
         try {
-            SendSms send = new SendSms();
-            send.send("sendSms.sh", gold.getTelephoneNumber(), "Golden Riches Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + request.getAmount() + ". Confirm Before Payment [expires in 5hrs]");
+//            SendSms send = new SendSms();
+//            send.send("sendSms.sh", gold.getTelephoneNumber(), "Golden Riches Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + request.getAmount() + ". Confirm Before Payment [expires in 5hrs]");
         } catch (Exception var11) {
             ;
         }
 
         return response;
+    }
+        return response;
+    }
+
+    private boolean commonValidator(CreateDonationRequest request, CreateDonationResponse response) {
+        if(request.getAmount() < 500.0D) {
+            response.setMessage("Minimum Donation Amount is R500");
+            response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+            return true;
+        }
+        if(request.getAmount() > 100000.0D) {
+            response.setMessage("Maximum Donation Amount is R100000");
+            response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+            return true;
+        }
+
+
+        return false;
+    }
+
+
+    public void createForSponsor(GoldenRichesUsers goldenRichesUsers,CreateDonationRequest request,String ref){
+        Date utilDate = new Date();
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Timestamp sqlDate = new Timestamp(utilDate.getTime());
+        try {
+            GoldenRichesUsers sponsorProfile=goldenRichesUsersService.findUserByMemberId(goldenRichesUsers.getReferenceUser());
+            MainListEntity mainListEntity=new MainListEntity();
+            mainListEntity.setStatus(0);
+            mainListEntity.setUpdatedDate(sqlDate);
+            mainListEntity.setAdjustedAmount(0.2D * request.getAmount());
+            mainListEntity.setDonatedAmount(0.2D * request.getAmount());
+            mainListEntity.setEnabled(0);
+            mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
+            mainListEntity.setAmountToReceive(0.2D * request.getAmount());
+            mainListEntity.setDate(sqlDate);
+            mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+            mainListEntity.setDonationReference(ref);
+            mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+            mainListEntity.setUserName(request.getPayerUsername());
+            mainListEntity.setPayerUsername(sponsorProfile.getUserName());
+            donationService.saveUser(mainListEntity);
+        } catch (GoldenRichesUsersNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
 

@@ -5,7 +5,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import java.sql.Date;
 
-@Audited
+
 @Entity
 @Table(name = "bank_account", schema = "", catalog = "")
 public class BankAccountsEntity

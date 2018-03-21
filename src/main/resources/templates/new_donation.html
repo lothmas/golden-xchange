@@ -211,7 +211,8 @@
 			<!-- end page-header -->
 			
 			<!-- begin wizard-form -->
-			<form action="/" method="POST" class="form-control-with-bg">
+			<form action="#" data-th-action="@{./createDonation}" th:object="${register}" method="post"
+				  enctype="multipart/form-data" class="margin-bottom-0">
 				<!-- begin wizard -->
 				<div id="wizard">
 					<!-- begin wizard-step -->
@@ -348,7 +349,7 @@
 															<label for="percent">Percent</label>
 															<div class="input-group">
 																<div class="input-group-addon">%</div>
-																<input type="text" name="percent" class="form-control validate" id="percent" disabled="true" placeholder="Percent" value="75"  required="required" oninput="multiplyBy()"/>
+																<input type="text" name="percent" class="form-control validate" id="percent" disabled="true" placeholder="Percent" value="40"  required="required" oninput="multiplyBy()"/>
 															</div>
 														</div>
 														<!--<div class="form-group">-->
@@ -377,45 +378,45 @@
 						</div>
 						<!-- end step-2 -->
 						<!-- begin step-3 -->
-						<div id="step-3">
-							<!-- begin fieldset -->
-							<fieldset>
-								<!-- begin row -->
-								<div class="row">
-									<!-- begin col-8 -->
-									<div class="col-md-8 offset-md-2">
-										<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Select your login username and password</legend>
-										<!-- begin form-group row -->
-										<div class="form-group row m-b-10">
-											<label class="col-md-3 text-md-right col-form-label">Username</label>
-											<div class="col-md-6">
-												<input type="text" name="username" placeholder="johnsmithy" class="form-control" />
-											</div>
-										</div>
-										<!-- end form-group row -->
-										<!-- begin form-group row -->
-										<div class="form-group row m-b-10">
-											<label class="col-md-3 text-md-right col-form-label">Pasword</label>
-											<div class="col-md-6">
-												<input type="password" name="password" placeholder="Your password" class="form-control" />
-											</div>
-										</div>
-										<!-- end form-group row -->
-										<!-- begin form-group row -->
-										<div class="form-group row m-b-10">
-											<label class="col-md-3 text-md-right col-form-label">Confirm Pasword</label>
-											<div class="col-md-6">
-												<input type="password" name="password2" placeholder="Confirmed password" class="form-control" />
-											</div>
-										</div>
-										<!-- end form-group row -->
-									</div>
-									<!-- end col-8 -->
-								</div>
-								<!-- end row -->
-							</fieldset>
-							<!-- end fieldset -->
-						</div>
+						<!--<div id="step-3">-->
+							<!--&lt;!&ndash; begin fieldset &ndash;&gt;-->
+							<!--<fieldset>-->
+								<!--&lt;!&ndash; begin row &ndash;&gt;-->
+								<!--<div class="row">-->
+									<!--&lt;!&ndash; begin col-8 &ndash;&gt;-->
+									<!--<div class="col-md-8 offset-md-2">-->
+										<!--<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Select your login username and password</legend>-->
+										<!--&lt;!&ndash; begin form-group row &ndash;&gt;-->
+										<!--<div class="form-group row m-b-10">-->
+											<!--<label class="col-md-3 text-md-right col-form-label">Username</label>-->
+											<!--<div class="col-md-6">-->
+												<!--<input type="text" name="username" placeholder="johnsmithy" class="form-control" />-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--&lt;!&ndash; end form-group row &ndash;&gt;-->
+										<!--&lt;!&ndash; begin form-group row &ndash;&gt;-->
+										<!--<div class="form-group row m-b-10">-->
+											<!--<label class="col-md-3 text-md-right col-form-label">Pasword</label>-->
+											<!--<div class="col-md-6">-->
+												<!--<input type="password" name="password" placeholder="Your password" class="form-control" />-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--&lt;!&ndash; end form-group row &ndash;&gt;-->
+										<!--&lt;!&ndash; begin form-group row &ndash;&gt;-->
+										<!--<div class="form-group row m-b-10">-->
+											<!--<label class="col-md-3 text-md-right col-form-label">Confirm Pasword</label>-->
+											<!--<div class="col-md-6">-->
+												<!--<input type="password" name="password2" placeholder="Confirmed password" class="form-control" />-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--&lt;!&ndash; end form-group row &ndash;&gt;-->
+									<!--</div>-->
+									<!--&lt;!&ndash; end col-8 &ndash;&gt;-->
+								<!--</div>-->
+								<!--&lt;!&ndash; end row &ndash;&gt;-->
+							<!--</fieldset>-->
+							<!--&lt;!&ndash; end fieldset &ndash;&gt;-->
+						<!--</div>-->
 						<!-- end step-3 -->
 						<!-- begin step-4 -->
 						<div id="step-4">
@@ -427,7 +428,10 @@
 
 								<p class="m-b-30 f-s-16">Maturity Date:       <span  class="month-pay text-info" id="oneMonthDate1"></span><br /> </p>
 
-								<p><a href="donation_status" class="btn btn-primary btn-lg">Confirm New Donation</a></p>
+								<p><button name="action" value="1" type="submit" class="btn btn-primary btn-lg">Confirm New Donation</button></p>
+								<input name="amount" type="hidden" th:value="${amountToGet}"/>
+								<input name="payerUsername" type="hidden" th:value="${profile.userName}"/>
+								<input name="bankAccountNumber" type="hidden" th:value="${profile.accountNumber}"/>
 							</div>
 						</div>
 						<!-- end step-4 -->
@@ -554,7 +558,7 @@
         {
             num1 = document.getElementById("percent").value;
             num2 = document.getElementById("amount").value;
-            num3=0.75 * document.getElementById("amount").value;
+            num3=0.40 * document.getElementById("amount").value;
             console.log(num3);
             num4=parseInt(num3)+parseInt(document.getElementById("amount").value);
             console.log(num4);

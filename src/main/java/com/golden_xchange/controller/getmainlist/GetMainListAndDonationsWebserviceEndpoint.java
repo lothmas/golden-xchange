@@ -16,6 +16,9 @@ import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import com.golden_xchange.domain.utilities.Enums;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -26,10 +29,10 @@ import java.util.List;
 /**
  * @author louis
  */
-
+@ControllerAdvice
+@Controller
 public class GetMainListAndDonationsWebserviceEndpoint {
 
-    private static final String NAMESPACE_URI = "getMainList.webservice.golden_xchange.com";
 
 
     @Autowired
@@ -46,7 +49,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     Logger mainListLogger = Logger.getLogger(this.getClass().getName());
 
 
-
+    @RequestMapping({"/getDonationList"})
     public GetMainListResponse handleCreateGoldenRichesRequest(@RequestPayload GetMainListRequest request)
             throws Exception {
         GetMainListResponse response = new GetMainListResponse();
