@@ -28,6 +28,7 @@ public class MainListEntity {
     private String donationReference;
     private String depositReference;
     private Timestamp updatedDate;
+    private int donationType;
 
     public MainListEntity() {
     }
@@ -159,6 +160,23 @@ public class MainListEntity {
     public void setDepositReference(String depositReference) {
         this.depositReference = depositReference;
     }
+
+
+    @Basic
+    @Column(name = "donation_type", nullable = false,columnDefinition = "0")
+    public int getDonationType() {
+        return donationType;
+    }
+
+    public void setDonationType(int donationType) {
+        this.donationType = donationType;
+    }
+
+
+
+
+
+
 
     public boolean equals(Object o) {
         if(this == o) {

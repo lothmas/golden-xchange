@@ -109,23 +109,18 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public List<MainListEntity> returnMainList(String username) throws MainListNotFoundException {
-        List<GoldenRichesUsers> results = this.getCurrentSession().createCriteria(GoldenRichesUsers.class)
-                .add(Restrictions.eq("userName", username))
-                .list();
-        if(results.isEmpty()) {
-            throw new MainListNotFoundException("No User found associated with username:" + username);
-        } else {
             List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                     .add(Restrictions.eq("enabled", 1))
+                    .add(Restrictions.eq("payerUsername", username))
                     .add(Restrictions.eq("status", 2))
                     .add(Restrictions.gt("adjustedAmount",0.0))
                     .list();
-            if(results.isEmpty()) {
+            if(null==returnMainList) {
                 throw new MainListNotFoundException("No Donations to Display on the List");
             } else {
                 return returnMainList;
             }
-        }
+
     }
 
     public MainListEntity findBankAccByAccNumber(String accountNumber) throws MainListNotFoundException {

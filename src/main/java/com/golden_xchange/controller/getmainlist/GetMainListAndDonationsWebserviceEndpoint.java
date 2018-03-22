@@ -17,6 +17,7 @@ import com.golden_xchange.domain.utilities.Enums;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -24,6 +25,8 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -49,27 +52,24 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     Logger mainListLogger = Logger.getLogger(this.getClass().getName());
 
 
-    @RequestMapping({"/getDonationList"})
-    public GetMainListResponse handleCreateGoldenRichesRequest(@RequestPayload GetMainListRequest request)
+    @RequestMapping({"/donation_status"})
+    public String handleCreateGoldenRichesRequest(HttpServletRequest requests, Model model, HttpSession session)
             throws Exception {
         GetMainListResponse response = new GetMainListResponse();
         try {
 
+            GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
 
-           if (null == request.getUsername() || request.getUsername().isEmpty()) {
-               response.setMessage("Username Can't be Left Empty");
-               response.setStatusCode(Enums.StatusCodeEnum.EMPTYVALUE.getStatusCode());
-               return response;
-           }
+
 
 
            List<MainListEntity> returnedMainList = null;
            try {
-               returnedMainList = mainListService.returnMainList(request.getUsername());
+               returnedMainList = mainListService.returnMainList(goldenRichesUsers.getUserName());
            } catch (MainListNotFoundException ff) {
-               response.setMessage("No user found with username: " + request.getUsername());
+               response.setMessage("No user found with username: " + goldenRichesUsers.getUserName());
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
-               return response;
+               return response(model, session, response);
            }
 
            MainListLoop:
@@ -98,18 +98,24 @@ public class GetMainListAndDonationsWebserviceEndpoint {
            if (returnedMainList.size() == 0) {
                response.setMessage("No List to return");
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
-               return response;
+               return response(model, session, response);
            } else {
                response.setMessage("MainList Returned Successfully");
                response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
-               return response;
+               return response(model, session, response);
            }
 
        }
        catch (Exception exp){
-           mainListLogger.error(exp.getMessage() + exp.getStackTrace() +request.getUsername() );
+           mainListLogger.error(exp.getMessage() + exp.getStackTrace() );
        }
-       return response;
+        return response(model, session, response);
+    }
+
+    private String response(Model model, HttpSession session, GetMainListResponse response) {
+        model.addAttribute("response",response);
+        model.addAttribute("profile",(GoldenRichesUsers)session.getAttribute("profile"));
+        return "donation_status";
     }
 
 

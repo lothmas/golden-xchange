@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @ControllerAdvice
 @Controller
@@ -48,19 +49,34 @@ public class CreateDonationWebserviceEndpoint {
     }
 
     @RequestMapping({"/createDonation"})
-    public CreateDonationResponse handleCreateGoldenRichesRequest(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateDonationRequest request, @RequestParam(value = "action", required = false) String action) throws Exception {
+    public String handleCreateGoldenRichesRequest(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateDonationRequest request, @RequestParam(value = "action", required = false) String action) throws Exception {
         MainListEntity createDonation = new MainListEntity();
         CreateDonationResponse response = new CreateDonationResponse();
+
         Date utilDate = new Date();
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp sqlDate = new Timestamp(utilDate.getTime());
 
         if(action.equals("1")){
-            if (commonValidator(request, response)) return response;
+            if (commonValidator(request, response))return errorResponse(model, response,session);
+            try{
+            List<MainListEntity> mainListEntities= donationService.findMainListsEntityByUsername(request.getPayerUsername());
+
+            for(MainListEntity mainListEntity:mainListEntities){
+                if(mainListEntity.getStatus()!=3){
+                    response.setMessage("You still have un-completed donations and can't make new ones DONATION REF: "+ mainListEntity.getMainListReference());
+                    response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                    return errorResponse(model, response,session);
+                }
+            }}
+            catch(Exception ex){
+               //do nothing
+            }
+
             if(null==request.getPayerUsername()) {
                 response.setMessage("Please relogin and try again required values have not been supplied");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                return response;
+                return errorResponse(model, response,session);
             }
             GoldenRichesUsers goldenRichesUsers=goldenRichesUsersService.findUserByMemberId(request.getPayerUsername());
             MainListEntity mainListEntity=new MainListEntity();
@@ -78,6 +94,7 @@ public class CreateDonationWebserviceEndpoint {
             mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
             mainListEntity.setUserName(request.getPayerUsername());
             mainListEntity.setPayerUsername(request.getPayerUsername());
+            mainListEntity.setDonationType(0);
             donationService.saveUser(mainListEntity);
             createForSponsor(goldenRichesUsers,request,mainRef);
         }
@@ -91,22 +108,23 @@ public class CreateDonationWebserviceEndpoint {
                     if(this.mainListReference.getPayerUsername().equals(request.getPayerUsername())) {
                         response.setMessage("You can't Donate to Yourself");
                         response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return response;
+                        return errorResponse(model, response,session);
                     }
 
                     if(this.mainListReference.getAdjustedAmount() < request.getAmount()) {
                         response.setMessage("Provided amount is greater than amount required to Donate");
                         response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return response;
+                        return errorResponse(model, response,session);
                     }
 
-                    if (commonValidator(request, response)) return response;
+                    if (commonValidator(request, response)) return errorResponse(model, response,session);
+                    ;
 
                     Double extra = Double.valueOf(this.mainListReference.getAdjustedAmount() - request.getAmount());
                     if(extra.doubleValue() < 300.0D && extra.doubleValue() != 0.0D) {
                         response.setMessage("You can't leave less than R300 on a Donation after Payment.");
                         response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return response;
+                        return errorResponse(model, response,session);
                     }
 
                     if(null != request.getMainListReference() && !request.getMainListReference().isEmpty()) {
@@ -116,7 +134,7 @@ public class CreateDonationWebserviceEndpoint {
                         } catch (GoldenRichesUsersNotFoundException var12) {
                             response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
                             response.setMessage(var12.getMessage());
-                            return response;
+                            return errorResponse(model, response,session);
                         }
 
                         if(0.0D != request.getAmount()) {
@@ -127,7 +145,7 @@ public class CreateDonationWebserviceEndpoint {
                                 if(!this.bankAccountService.findBankAccByAccNumberAndUserName(request.getBankAccountNumber(), request.getPayerUsername())) {
                                     response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
                                     response.setMessage("Provided AccountNumber: " + request.getBankAccountNumber() + " doesn't match user: " + request.getPayerUsername());
-                                    return response;
+                                    return errorResponse(model, response,session);
                                 }
 
                                 GoldenRichesUsers goldenRichesUsers = this.goldenRichesUsersService.getUserByBankDetails(request.getBankAccountNumber());
@@ -141,27 +159,27 @@ public class CreateDonationWebserviceEndpoint {
 
                             response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                             response.setMessage("donationReference can't be left empty ");
-                            return response;
+                            return errorResponse(model, response,session);
                         }
 
                         response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
                         response.setMessage("amount cant be empty!!");
-                        return response;
+                        return errorResponse(model, response,session);
                     }
 
                     response.setMessage("MainListReference` Can't be Left Empty");
                     response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
-                    return response;
+                    return errorResponse(model, response,session);
                 }
 
                 response.setMessage("MainListReference` Can't be Left Empty");
                 response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
-                return response;
+                return errorResponse(model, response,session);
             }
         } catch (MainListNotFoundException | GoldenRichesUsersNotFoundException var13) {
             response.setMessage(var13.getMessage());
             response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
-            return response;
+            return errorResponse(model, response,session);
         }
 
         createDonation.setEnabled(0);
@@ -187,10 +205,17 @@ public class CreateDonationWebserviceEndpoint {
         } catch (Exception var11) {
             ;
         }
-
-        return response;
+        model.addAttribute("profile",session.getAttribute("profile"));
+        return "donation_status";
     }
-        return response;
+        model.addAttribute("profile",session.getAttribute("profile"));
+        return "donation_status";
+    }
+
+    private String errorResponse(Model model, CreateDonationResponse response,HttpSession session ) {
+        model.addAttribute("response",response);
+        model.addAttribute("profile",session.getAttribute("profile"));
+        return "new_donation";
     }
 
     private boolean commonValidator(CreateDonationRequest request, CreateDonationResponse response) {
@@ -230,6 +255,7 @@ public class CreateDonationWebserviceEndpoint {
             mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
             mainListEntity.setUserName(request.getPayerUsername());
             mainListEntity.setPayerUsername(sponsorProfile.getUserName());
+            mainListEntity.setDonationType(1);
             donationService.saveUser(mainListEntity);
         } catch (GoldenRichesUsersNotFoundException e) {
             e.printStackTrace();
