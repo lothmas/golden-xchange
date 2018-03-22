@@ -51,5 +51,8 @@ public interface MainListService {
     List<MainListEntity> getCompletedDonations() throws MainListNotFoundException;
 
     List<MainListEntity> returnCompletedDonation(String var1) throws MainListNotFoundException;
+
+    List<MainListEntity> getMainList() throws MainListNotFoundException;
+
 }
 

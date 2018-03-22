@@ -63,7 +63,14 @@ public class MainList {
     protected String accountHolderName;
     @XmlElement(required = true)
     protected String mainListReference;
+    @XmlElement(required = true)
     protected double amount;
+    @XmlElement(required = true)
+    protected String donationReference;
+    @XmlElement(required = true)
+    protected String accountType;
+    @XmlElement(required = true)
+    protected String depositReference;
 
     /**
      * Gets the value of the username property.
@@ -273,4 +280,27 @@ public class MainList {
         this.amount = value;
     }
 
+    public String getDonationReference() {
+        return donationReference;
+    }
+
+    public void setDonationReference(String donationReference) {
+        this.donationReference = donationReference;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getDepositReference() {
+        return depositReference;
+    }
+
+    public void setDepositReference(String depositReference) {
+        this.depositReference = depositReference;
+    }
 }

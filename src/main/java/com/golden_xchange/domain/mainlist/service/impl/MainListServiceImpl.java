@@ -112,5 +112,12 @@ public class MainListServiceImpl implements MainListService {
     public List<MainListEntity> returnCompletedDonation(String mainreference) throws MainListNotFoundException {
         return this.mainListDao.returnCompletedDonation(mainreference);
     }
+
+    @Override
+    public List<MainListEntity> getMainList() throws MainListNotFoundException {
+        return this.getMainList();
+    }
+
+
 }
 

@@ -101,10 +101,12 @@ public class GoldenRichesUsersDaoImpl extends AbstractDaoImpl<GoldenRichesUsers,
                 setBankAcc.setAccountHoldername(results.get(0).getAccountHoldername());
                 setBankAcc.setBranchNumber(results.get(0).getBranchNumber());
                 setBankAcc.setBankName(results.get(0).getBankName());
+                setBankAcc.setAccountType(results.get(0).getAccountType());
             } else {
                 setBankAcc.setAccountHoldername(bankResults.get(0).getAccountHolderName());
                 setBankAcc.setBranchNumber(bankResults.get(0).getBranchNumber());
                 setBankAcc.setBankName(bankResults.get(0).getBankName());
+                setBankAcc.setAccountType(bankResults.get(0).getAccountType());
             }
         } catch (Exception var6) {
             log.error("Error on retrieving mainList: "+var6.getCause() +var6.getMessage() +" accountNumber: "+accountNumber);

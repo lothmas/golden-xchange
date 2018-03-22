@@ -20,6 +20,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -171,7 +173,10 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public List<MainListEntity> returnPendingPayerList(String payerUsername) throws MainListNotFoundException {
-        List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("payerUsername", payerUsername)).add(Restrictions.eq("status", Integer.valueOf(0))).add(Restrictions.eq("enabled", Integer.valueOf(0))).list();
+        List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("payerUsername", payerUsername))
+                .add(Restrictions.eq("status", Integer.valueOf(0)))
+                .add(Restrictions.eq("enabled", Integer.valueOf(0))).list();
         if(results.isEmpty()) {
             throw new MainListNotFoundException("No PendigList found for username:" + payerUsername);
         } else {
@@ -237,5 +242,32 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
             return results;
         }
     }
+
+    @Override
+    public List<MainListEntity> getMainList() throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = null;
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -30);
+        try {
+                     returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                    .add(Restrictions.ne("status", Integer.valueOf(2)))
+                    .add(Restrictions.gt("adjustedAmount", 0.0))
+                    .add( Restrictions.gt("updatedDate", cal.getTime() ) )
+                    .add( Restrictions.gt("donationType", 0 ) )
+                    .add(Restrictions.eq("enabled", 1))
+                             .list();
+        }
+        catch (Exception exp){
+            throw new MainListNotFoundException("No MainListFound found:");
+        }
+        if(!returnMainList.isEmpty() && returnMainList != null) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        } else {
+            return returnMainList;
+        }
+    }
+
+
 }
 

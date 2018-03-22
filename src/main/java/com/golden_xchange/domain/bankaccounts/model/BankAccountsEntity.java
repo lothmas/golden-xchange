@@ -23,7 +23,7 @@ public class BankAccountsEntity
     private int enabled;
     private String gender;
     private String accountHolderName;
-
+    private String accountType;
 
 
     @Id
@@ -180,6 +180,16 @@ public class BankAccountsEntity
     public void setAccountHolderName(String accountHoldername)
     {
         this.accountHolderName = accountHoldername;
+    }
+
+    @Basic
+    @Column(name = "account_type", nullable = false, length = 45)
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     public boolean equals(Object o)

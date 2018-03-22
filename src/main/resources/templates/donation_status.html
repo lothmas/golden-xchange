@@ -296,7 +296,7 @@
 							<!-- begin table-responsive -->
 							<div class="table-responsive">
 
-								<table class="table table-striped m-b-0">
+								<table class="table table-striped m-b-0" >
 									<thead>
 									<tr>
 										<th>Deposit Reference</th>
@@ -306,7 +306,7 @@
 										<th>Account Number</th>
 										<th>Account Holder Name</th>
 										<th>Donation Amount</th>
-										<th width="1%"></th>
+										<!--<th width="1%"></th>-->
 										<th>Donation Status</th>
 									</tr>
 									</thead>
@@ -315,16 +315,16 @@
 										<!--<td class="with-img">-->
 											<!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
 										<!--</td>-->
-										<td th:text="${result.username}"/>
+										<td th:text="${result.depositReference}"/>
 										<td th:text="${result.bankName}"/>
 										<td th:text="${result.branchNumber}"/>
-										<td/>
+										<td th:text="${result.accountType}"/>
 										<td th:text="${result.accountNumber}"/>
 										<td th:text="${result.accountHolderName}"/>
 										<td th:text="${result.amount}"/>
 
 										<td class="with-btn" nowrap="nowrap">
-											<a href="#" class="btn btn-sm btn-primary width-60 m-r-2">Confirm Payment</a>
+											<a href="#" class="btn btn-sm btn-primary ">Make Payment &amp; Confirm</a>
 										</td>
 									</tr>
 

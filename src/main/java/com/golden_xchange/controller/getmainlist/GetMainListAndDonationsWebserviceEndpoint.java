@@ -63,18 +63,18 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
 
 
-           List<MainListEntity> returnedMainList = null;
+           List<MainListEntity> returnedSponsor = null;
            try {
-               returnedMainList = mainListService.returnMainList(goldenRichesUsers.getUserName());
+               returnedSponsor = mainListService.returnMainList(goldenRichesUsers.getUserName());
            } catch (MainListNotFoundException ff) {
                response.setMessage("No user found with username: " + goldenRichesUsers.getUserName());
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
                return response(model, session, response);
            }
-
+            MainList mainLists = new MainList();
            MainListLoop:
-           for (MainListEntity retunedList : returnedMainList) {
-               MainList mainLists = new MainList();
+           for (MainListEntity retunedList : returnedSponsor) {
+
                try {
                    GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(retunedList.getBankAccountNumber().trim());
                    mainLists.setUsername(checkUser.getUserName());
@@ -86,7 +86,8 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                    mainLists.setAccountNumber(checkUser.getAccountNumber());
                    mainLists.setAmount(retunedList.getAdjustedAmount());
                    mainLists.setMainListReference(retunedList.getMainListReference());
-
+                   mainLists.setAccountType(checkUser.getAccountType());
+                   mainLists.setDepositReference(retunedList.getDepositReference());
                    response.getReturnData().add(mainLists);
                }
                catch (Exception expt){
@@ -95,7 +96,28 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
            }
 
-           if (returnedMainList.size() == 0) {
+
+            List<MainListEntity> mainList = mainListService.getMainList();
+           for(MainListEntity mainListEntity:mainList){
+               GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(mainListEntity.getBankAccountNumber().trim());
+                //check amounts
+               mainLists.setUsername(checkUser.getUserName());
+               mainLists.setEmailAddress(checkUser.getEmailAddress());
+               mainLists.setMobileNumber(checkUser.getTelephoneNumber());
+               mainLists.setBranchNumber(checkUser.getBranchNumber());
+               mainLists.setBankName(checkUser.getBankName());
+               mainLists.setAccountHolderName(checkUser.getAccountHoldername());
+               mainLists.setAccountNumber(checkUser.getAccountNumber());
+               mainLists.setAmount(mainListEntity.getAdjustedAmount());
+               mainLists.setMainListReference(mainListEntity.getMainListReference());
+               mainLists.setAccountType(checkUser.getAccountType());
+               mainLists.setDepositReference(mainListEntity.getDepositReference());
+               response.getReturnData().add(mainLists);
+           }
+
+
+
+           if (returnedSponsor.size() == 0) {
                response.setMessage("No List to return");
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
                return response(model, session, response);

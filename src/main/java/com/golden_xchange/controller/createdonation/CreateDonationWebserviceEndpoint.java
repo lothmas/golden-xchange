@@ -52,7 +52,7 @@ public class CreateDonationWebserviceEndpoint {
     public String handleCreateGoldenRichesRequest(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateDonationRequest request, @RequestParam(value = "action", required = false) String action) throws Exception {
         MainListEntity createDonation = new MainListEntity();
         CreateDonationResponse response = new CreateDonationResponse();
-
+        model.addAttribute("response",response);
         Date utilDate = new Date();
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp sqlDate = new Timestamp(utilDate.getTime());
@@ -190,9 +190,7 @@ public class CreateDonationWebserviceEndpoint {
         String user = this.mainListReference.getPayerUsername();
         createDonation.setUserName(user);
         this.donationService.saveUser(createDonation);
-        response.setMessage("Donation  Was Successfully Created and Pending Payment");
-        response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
-        response.setDepositReference(createDonation.getDepositReference());
+
         if(this.mainListReference.getAdjustedAmount() > 0.0D) {
             double reduceDonatedAmount = this.mainListReference.getAdjustedAmount() - request.getAmount();
             this.mainListReference.setAdjustedAmount(reduceDonatedAmount);
@@ -205,11 +203,9 @@ public class CreateDonationWebserviceEndpoint {
         } catch (Exception var11) {
             ;
         }
-        model.addAttribute("profile",session.getAttribute("profile"));
-        return "donation_status";
+
     }
-        model.addAttribute("profile",session.getAttribute("profile"));
-        return "donation_status";
+        return "redirect:/donation_status";
     }
 
     private String errorResponse(Model model, CreateDonationResponse response,HttpSession session ) {
@@ -253,8 +249,8 @@ public class CreateDonationWebserviceEndpoint {
             mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
             mainListEntity.setDonationReference(ref);
             mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-            mainListEntity.setUserName(request.getPayerUsername());
-            mainListEntity.setPayerUsername(sponsorProfile.getUserName());
+            mainListEntity.setUserName(sponsorProfile.getUserName());
+            mainListEntity.setPayerUsername(request.getPayerUsername());
             mainListEntity.setDonationType(1);
             donationService.saveUser(mainListEntity);
         } catch (GoldenRichesUsersNotFoundException e) {

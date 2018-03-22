@@ -163,7 +163,7 @@ public class MainListEntity {
 
 
     @Basic
-    @Column(name = "donation_type", nullable = false,columnDefinition = "0")
+    @Column(name = "donation_type", nullable = false)
     public int getDonationType() {
         return donationType;
     }
