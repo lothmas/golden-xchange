@@ -72,6 +72,10 @@ public class MainList {
     @XmlElement(required = true)
     protected String depositReference;
 
+    protected int donationType;
+
+    protected int status;
+
     /**
      * Gets the value of the username property.
      * 
@@ -302,5 +306,21 @@ public class MainList {
 
     public void setDepositReference(String depositReference) {
         this.depositReference = depositReference;
+    }
+
+    public int getDonationType() {
+        return donationType;
+    }
+
+    public void setDonationType(int donationType) {
+        this.donationType = donationType;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

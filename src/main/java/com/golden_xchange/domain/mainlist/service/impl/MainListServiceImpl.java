@@ -115,7 +115,7 @@ public class MainListServiceImpl implements MainListService {
 
     @Override
     public List<MainListEntity> getMainList() throws MainListNotFoundException {
-        return this.getMainList();
+        return this.mainListDao.getMainList();
     }
 
 

@@ -288,7 +288,7 @@
 								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>-->
 								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>-->
 							</div>
-							<h4 class="panel-title">Donate to The Below People<span class="label label-success m-l-5 t-minus-1">NEW</span></h4>
+							<h4 class="panel-title">Make Payments To Your Sponsors</h4>
 						</div>
 						<!-- end panel-heading -->
 						<!-- begin panel-body -->
@@ -310,8 +310,8 @@
 										<th>Donation Status</th>
 									</tr>
 									</thead>
-									<tbody th:each="result: *{response.returnData}">
-									<tr>
+									<tbody >
+									<tr th:each="result : ${response.returnData}">
 										<!--<td class="with-img">-->
 											<!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
 										<!--</td>-->
@@ -323,8 +323,14 @@
 										<td th:text="${result.accountHolderName}"/>
 										<td th:text="${result.amount}"/>
 
-										<td class="with-btn" nowrap="nowrap">
-											<a href="#" class="btn btn-sm btn-primary ">Make Payment &amp; Confirm</a>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.status==0}">
+											<a href="#" class="btn btn-sm btn-primary ">Confirm Payment</a>
+										</td>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.status==1}">
+											<a href="#" class="btn btn-sm btn-primary ">Pending Approval</a>
+										</td>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}">
+											<a href="#" class="btn btn-sm btn-primary ">Donation Approved</a>
 										</td>
 									</tr>
 
@@ -332,7 +338,13 @@
 								</table>
 							</div>
 							<!-- end table-responsive -->
+
 						</div>
+						<div class="alert alert-info">
+							<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List. </span>
+						</div>	<!-- begin panel-heading -->
+						<img src="../assets/img/intro-image-security.png" class="media-object" alt="" />
+
 						<!-- end panel-body -->
 						<!-- begin hljs-wrapper -->
 

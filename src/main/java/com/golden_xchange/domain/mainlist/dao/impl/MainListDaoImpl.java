@@ -114,7 +114,8 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
             List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                     .add(Restrictions.eq("enabled", 1))
                     .add(Restrictions.eq("payerUsername", username))
-                    .add(Restrictions.eq("status", 2))
+                    .add(Restrictions.eq("donationType", 1))
+                    .add(Restrictions.ne("status", 3 ))
                     .add(Restrictions.gt("adjustedAmount",0.0))
                     .list();
             if(null==returnMainList) {
@@ -146,7 +147,8 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public MainListEntity findDonationByMainListReference(String mainListRefernce) throws MainListNotFoundException, NoSuchAlgorithmException {
-        List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("mainListReference", mainListRefernce)).list();
+        List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("mainListReference", mainListRefernce)).list();
         if(results.isEmpty()) {
             throw new MainListNotFoundException("No Donation found for MainList with ref:" + mainListRefernce);
         } else {

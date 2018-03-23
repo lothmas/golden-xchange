@@ -80,7 +80,7 @@ public class CreateDonationWebserviceEndpoint {
             }
             GoldenRichesUsers goldenRichesUsers=goldenRichesUsersService.findUserByMemberId(request.getPayerUsername());
             MainListEntity mainListEntity=new MainListEntity();
-            mainListEntity.setStatus(2);
+            mainListEntity.setStatus(0);
             mainListEntity.setUpdatedDate(sqlDate);
             mainListEntity.setAdjustedAmount(request.getAmount() + 0.4D * request.getAmount());
             mainListEntity.setDonatedAmount(request.getAmount());
@@ -235,29 +235,37 @@ public class CreateDonationWebserviceEndpoint {
         Date utilDate = new Date();
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp sqlDate = new Timestamp(utilDate.getTime());
+        double sponsorPercentage=0.2D;
         try {
             GoldenRichesUsers sponsorProfile=goldenRichesUsersService.findUserByMemberId(goldenRichesUsers.getReferenceUser());
-            MainListEntity mainListEntity=new MainListEntity();
-            mainListEntity.setStatus(0);
-            mainListEntity.setUpdatedDate(sqlDate);
-            mainListEntity.setAdjustedAmount(0.2D * request.getAmount());
-            mainListEntity.setDonatedAmount(0.2D * request.getAmount());
-            mainListEntity.setEnabled(0);
-            mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
-            mainListEntity.setAmountToReceive(0.2D * request.getAmount());
-            mainListEntity.setDate(sqlDate);
-            mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-            mainListEntity.setDonationReference(ref);
-            mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-            mainListEntity.setUserName(sponsorProfile.getUserName());
-            mainListEntity.setPayerUsername(request.getPayerUsername());
-            mainListEntity.setDonationType(1);
-            donationService.saveUser(mainListEntity);
+            addSponsors(request, ref, sqlDate, 0.2D, sponsorProfile);
+            GoldenRichesUsers sponsorProfile1=goldenRichesUsersService.findUserByMemberId(sponsorProfile.getReferenceUser());
+            addSponsors(request, ref, sqlDate, 0.1D, sponsorProfile1);
+
         } catch (GoldenRichesUsersNotFoundException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    private void addSponsors(CreateDonationRequest request, String ref, Timestamp sqlDate, double sponsorPercentage, GoldenRichesUsers sponsorProfile) {
+        MainListEntity mainListEntity=new MainListEntity();
+        mainListEntity.setStatus(0);
+        mainListEntity.setUpdatedDate(sqlDate);
+        mainListEntity.setAdjustedAmount(sponsorPercentage * request.getAmount());
+        mainListEntity.setDonatedAmount(sponsorPercentage * request.getAmount());
+        mainListEntity.setEnabled(1);
+        mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
+        mainListEntity.setAmountToReceive(sponsorPercentage * request.getAmount());
+        mainListEntity.setDate(sqlDate);
+        mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+        mainListEntity.setDonationReference(ref);
+        mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+        mainListEntity.setUserName(sponsorProfile.getUserName());
+        mainListEntity.setPayerUsername(request.getPayerUsername());
+        mainListEntity.setDonationType(1);
+        donationService.saveUser(mainListEntity);
     }
 }
 

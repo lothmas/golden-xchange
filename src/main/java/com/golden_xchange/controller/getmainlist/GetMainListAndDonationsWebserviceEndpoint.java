@@ -71,11 +71,11 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
                return response(model, session, response);
            }
-            MainList mainLists = new MainList();
            MainListLoop:
            for (MainListEntity retunedList : returnedSponsor) {
 
                try {
+                   MainList mainLists = new MainList();
                    GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(retunedList.getBankAccountNumber().trim());
                    mainLists.setUsername(checkUser.getUserName());
                    mainLists.setEmailAddress(checkUser.getEmailAddress());
@@ -88,6 +88,8 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                    mainLists.setMainListReference(retunedList.getMainListReference());
                    mainLists.setAccountType(checkUser.getAccountType());
                    mainLists.setDepositReference(retunedList.getDepositReference());
+                   mainLists.setDonationType(retunedList.getDonationType());
+                   mainLists.setStatus(retunedList.getStatus());
                    response.getReturnData().add(mainLists);
                }
                catch (Exception expt){
@@ -99,8 +101,12 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
             List<MainListEntity> mainList = mainListService.getMainList();
            for(MainListEntity mainListEntity:mainList){
+               MainList mainLists = new MainList();
+
                GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(mainListEntity.getBankAccountNumber().trim());
                 //check amounts
+              // if(mainListEntity)
+//               mainListService.findDonationByMainListReference()
                mainLists.setUsername(checkUser.getUserName());
                mainLists.setEmailAddress(checkUser.getEmailAddress());
                mainLists.setMobileNumber(checkUser.getTelephoneNumber());
@@ -112,13 +118,15 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                mainLists.setMainListReference(mainListEntity.getMainListReference());
                mainLists.setAccountType(checkUser.getAccountType());
                mainLists.setDepositReference(mainListEntity.getDepositReference());
+               mainLists.setDonationType(mainListEntity.getDonationType());
+               mainLists.setStatus(mainListEntity.getStatus());
                response.getReturnData().add(mainLists);
            }
 
 
 
            if (returnedSponsor.size() == 0) {
-               response.setMessage("No List to return");
+               response.setMessage("No Donations to show, Please make a new Donation");
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
                return response(model, session, response);
            } else {
