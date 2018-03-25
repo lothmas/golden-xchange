@@ -66,6 +66,12 @@ public class GetMainListAndDonationsWebserviceEndpoint {
            List<MainListEntity> returnedSponsor = null;
            try {
                returnedSponsor = mainListService.returnMainList(goldenRichesUsers.getUserName());
+              if(returnedSponsor.size()!=0)
+              { model.addAttribute("sponsorResponse",1);}
+              else{
+                  model.addAttribute("sponsorResponse",null);
+              }
+
            } catch (MainListNotFoundException ff) {
                response.setMessage("No user found with username: " + goldenRichesUsers.getUserName());
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
@@ -139,6 +145,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
        catch (Exception exp){
            mainListLogger.error(exp.getMessage() + exp.getStackTrace() );
        }
+        response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
         return response(model, session, response);
     }
 

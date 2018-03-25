@@ -10,7 +10,7 @@
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
-	
+
 	<!-- ================== BEGIN BASE CSS STYLE ================== -->
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="../assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
@@ -21,13 +21,13 @@
 	<link href="../assets/css/default/style-responsive.min.css" rel="stylesheet" />
 	<link href="../assets/css/default/theme/default.css" rel="stylesheet" id="theme" />
 	<!-- ================== END BASE CSS STYLE ================== -->
-	
+
 	<!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
 	<link href="../assets/plugins/jquery-jvectormap/jquery-jvectormap.css" rel="stylesheet" />
 	<link href="../assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
     <link href="../assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" />
 	<!-- ================== END PAGE LEVEL STYLE ================== -->
-	
+
 	<!-- ================== BEGIN BASE JS ================== -->
 	<script src="../assets/plugins/pace/pace.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
@@ -36,7 +36,7 @@
 	<!-- begin #page-loader -->
 	<div id="page-loader" class="fade show"><span class="spinner"></span></div>
 	<!-- end #page-loader -->
-	
+
 	<!-- begin #page-container -->
 	<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
 		<!-- begin #header -->
@@ -152,7 +152,7 @@
 			<!-- end header navigation right -->
 		</div>
 		<!-- end #header -->
-		
+
 		<!-- begin #sidebar -->
 		<div id="sidebar" class="sidebar">
 			<!-- begin sidebar scrollbar -->
@@ -199,7 +199,7 @@
 		</div>
 		<div class="sidebar-bg"></div>
 		<!-- end #sidebar -->
-		
+
 		<!-- begin #content -->
 		<div id="content" class="content">
 			<!-- begin breadcrumb -->
@@ -211,7 +211,7 @@
 			<!-- begin page-header -->
 			<h1 class="page-header">Dashboard <small>GOLDEN-XCHANGE</small></h1>
 			<!-- end page-header -->
-			
+
 			<!-- begin row -->
 			<div class="row">
 				<!-- begin col-3 -->
@@ -275,10 +275,13 @@
 			<!-- begin row -->
 			<div class="row">
 				<!-- begin col-8 -->
+
 				<div class="col-lg-12">
+                    <form action="#" data-th-action="@{./approveDonation}" th:object="${register}" method="post"
+                          enctype="multipart/form-data" class="margin-bottom-0">
 					<!-- begin panel -->
 					<div class="panel panel-inverse" data-sortable-id="table-basic-7">
-						<div class="alert alert-danger" th:if="${response.statusCode!=200}">
+						<div th:if="${response.statusCode!=200}" class="alert alert-danger" >
 							<strong>Danger!</strong> <span th:text="${response.message}"></span>
 						</div>	<!-- begin panel-heading -->
 						<div class="panel-heading">
@@ -310,8 +313,8 @@
 										<th>Donation Status</th>
 									</tr>
 									</thead>
-									<tbody >
-									<tr th:each="result : ${response.returnData}">
+									<th:block th:each="result, rowStat : ${response.returnData}" th:name="action" th:attr="action=${rowStat.index}">
+									<tr >
 										<!--<td class="with-img">-->
 											<!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
 										<!--</td>-->
@@ -323,37 +326,41 @@
 										<td th:text="${result.accountHolderName}"/>
 										<td th:text="${result.amount}"/>
 
-										<td class="with-btn" nowrap="nowrap" th:if="${result.status==0}">
-											<a href="#" class="btn btn-sm btn-primary ">Confirm Payment</a>
+
+										<td class="with-btn" nowrap="nowrap" th:if="${result.status==0}" >
+                                            <button name="approver" value="1" type="submit" class="btn btn-danger btn-sm">Confirm Payment</button>
+                                            <input name="action"  th:value="${rowStat.index}" type="hidden"/>
+
+                                        </td>
+										<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.status==1}" >
+                                            <button name="approver" value="2" type="submit" class="btn btn-warning btn-lg">Pending Approval</button>
 										</td>
-										<td class="with-btn" nowrap="nowrap" th:if="${result.status==1}">
-											<a href="#" class="btn btn-sm btn-primary ">Pending Approval</a>
-										</td>
-										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}">
-											<a href="#" class="btn btn-sm btn-primary ">Donation Approved</a>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}" >
+                                            <button disabled="true" class="btn btn-primary btn-sm">Donation Approved</button>
 										</td>
 									</tr>
 
-									</tbody>
+									</th:block>
 								</table>
 							</div>
 							<!-- end table-responsive -->
 
 						</div>
-						<div class="alert alert-info">
+						<div th:if="sponsorResponse!=1" align="center">
+						<div class="alert alert-info col-lg-6" >
 							<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List. </span>
 						</div>	<!-- begin panel-heading -->
 						<img src="../assets/img/intro-image-security.png" class="media-object" alt="" />
-
+						</div>
 						<!-- end panel-body -->
 						<!-- begin hljs-wrapper -->
 
 						<!-- end hljs-wrapper -->
 					</div>
-					<!-- end panel -->
+					<!-- end panel --> </form>
 				</div>
 
-                    
+
 
 				<!-- begin col-4 -->
 
@@ -362,17 +369,17 @@
 			<!-- end row -->
 		</div>
 		<!-- end #content -->
-		
+
         <!-- begin theme-panel -->
 
         <!-- end theme-panel -->
-		
+
 		<!-- begin scroll to top btn -->
 		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
 		<!-- end scroll to top btn -->
 	</div>
 	<!-- end page container -->
-	
+
 	<!-- ================== BEGIN BASE JS ================== -->
 	<script src="../assets/plugins/jquery/jquery-3.2.1.min.js"></script>
 	<script src="../assets/plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -387,7 +394,7 @@
 	<script src="../assets/js/theme/default.min.js"></script>
 	<script src="../assets/js/apps.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
-	
+
 	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
 	<script src="../assets/plugins/gritter/js/jquery.gritter.js"></script>
 	<script src="../assets/plugins/flot/jquery.flot.min.js"></script>
@@ -400,7 +407,7 @@
 	<script src="../assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 	<script src="../assets/js/demo/dashboard.min.js"></script>
 	<!-- ================== END PAGE LEVEL JS ================== -->
-	
+
 	<script>
 		$(document).ready(function() {
 			App.init();

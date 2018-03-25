@@ -15,18 +15,26 @@ import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
 import com.golden_xchange.domain.utilities.SendSms;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-
+@ControllerAdvice
+@Controller
 public class ApproveDonationWebserviceEndpoint {
     private static final String NAMESPACE_URI = "approveDonation.webservice.golden_xchange.com";
     @Autowired
@@ -37,12 +45,9 @@ public class ApproveDonationWebserviceEndpoint {
     public ApproveDonationWebserviceEndpoint() {
     }
 
-    @PayloadRoot(
-        namespace = "approveDonation.webservice.golden_xchange.com",
-        localPart = "ApproveDonationRequest"
-    )
-    @ResponsePayload
-    public ApproveDonationResponse handleApproveDonationRequest(@RequestPayload ApproveDonationRequest request) throws Exception {
+    @RequestMapping({"/approveDonation"})
+    public ApproveDonationResponse handleApproveDonationRequest(ApproveDonationRequest request, HttpServletRequest requests, Model model, HttpSession session,
+                                                                @RequestParam(value = "action", required = false) Integer action) throws Exception {
         Logger LOG = Logger.getLogger(this.getClass().getName());
         ApproveDonationResponse response = new ApproveDonationResponse();
         new MainListEntity();
