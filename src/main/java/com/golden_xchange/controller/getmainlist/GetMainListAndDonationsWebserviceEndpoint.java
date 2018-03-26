@@ -11,6 +11,7 @@ import com.golden_xchange.domain.bankaccounts.service.BankAccountService;
 import com.golden_xchange.domain.mainlist.exception.MainListNotFoundException;
 import com.golden_xchange.domain.mainlist.model.MainListEntity;
 import com.golden_xchange.domain.mainlist.service.MainListService;
+import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import com.golden_xchange.domain.utilities.Enums;
@@ -77,9 +78,16 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
                return response(model, session, response);
            }
+
+           boolean getMainList=true;
+           double amountToSponsors = 0;
+           double totalAmountToPay;
            MainListLoop:
            for (MainListEntity retunedList : returnedSponsor) {
-
+               amountToSponsors=+retunedList.getAmountToReceive();
+                    if(retunedList.getStatus()==1||retunedList.getStatus()==2){
+                        getMainList=false;
+                    }
                try {
                    MainList mainLists = new MainList();
                    GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(retunedList.getBankAccountNumber().trim());
@@ -103,35 +111,11 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                }
 
            }
+            totalAmountToPay =mainListService.findDonationByMainListReference(returnedSponsor.get(0).getDonationReference()).getDonatedAmount()-amountToSponsors;
 
+            getMainListAfterPayingSponsor(response, getMainList,totalAmountToPay);
 
-            List<MainListEntity> mainList = mainListService.getMainList();
-           for(MainListEntity mainListEntity:mainList){
-               MainList mainLists = new MainList();
-
-               GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(mainListEntity.getBankAccountNumber().trim());
-                //check amounts
-              // if(mainListEntity)
-//               mainListService.findDonationByMainListReference()
-               mainLists.setUsername(checkUser.getUserName());
-               mainLists.setEmailAddress(checkUser.getEmailAddress());
-               mainLists.setMobileNumber(checkUser.getTelephoneNumber());
-               mainLists.setBranchNumber(checkUser.getBranchNumber());
-               mainLists.setBankName(checkUser.getBankName());
-               mainLists.setAccountHolderName(checkUser.getAccountHoldername());
-               mainLists.setAccountNumber(checkUser.getAccountNumber());
-               mainLists.setAmount(mainListEntity.getAdjustedAmount());
-               mainLists.setMainListReference(mainListEntity.getMainListReference());
-               mainLists.setAccountType(checkUser.getAccountType());
-               mainLists.setDepositReference(mainListEntity.getDepositReference());
-               mainLists.setDonationType(mainListEntity.getDonationType());
-               mainLists.setStatus(mainListEntity.getStatus());
-               response.getReturnData().add(mainLists);
-           }
-
-
-
-           if (returnedSponsor.size() == 0) {
+            if (returnedSponsor.size() == 0) {
                response.setMessage("No Donations to show, Please make a new Donation");
                response.setStatusCode(Enums.StatusCodeEnum.NOTFOUND.getStatusCode());
                return response(model, session, response);
@@ -149,8 +133,38 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         return response(model, session, response);
     }
 
+    private void getMainListAfterPayingSponsor(GetMainListResponse response, boolean getMainList,double amountToPay) throws MainListNotFoundException, GoldenRichesUsersNotFoundException {
+        if(getMainList) {
+            List<MainListEntity> mainList = mainListService.getMainList();
+            for (MainListEntity mainListEntity : mainList) {
+                if(mainListEntity.getAmountToReceive()<=amountToPay) {
+                    MainList mainLists = new MainList();
+
+                    GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(mainListEntity.getBankAccountNumber().trim());
+                    //check amounts
+                    // if(mainListEntity)
+//               mainListService.findDonationByMainListReference()
+                    mainLists.setUsername(checkUser.getUserName());
+                    mainLists.setEmailAddress(checkUser.getEmailAddress());
+                    mainLists.setMobileNumber(checkUser.getTelephoneNumber());
+                    mainLists.setBranchNumber(checkUser.getBranchNumber());
+                    mainLists.setBankName(checkUser.getBankName());
+                    mainLists.setAccountHolderName(checkUser.getAccountHoldername());
+                    mainLists.setAccountNumber(checkUser.getAccountNumber());
+                    mainLists.setAmount(mainListEntity.getAdjustedAmount());
+                    mainLists.setMainListReference(mainListEntity.getMainListReference());
+                    mainLists.setAccountType(checkUser.getAccountType());
+                    mainLists.setDepositReference(mainListEntity.getDepositReference());
+                    mainLists.setDonationType(mainListEntity.getDonationType());
+                    mainLists.setStatus(mainListEntity.getStatus());
+                    response.getReturnData().add(mainLists);
+                }}
+        }
+    }
+
     private String response(Model model, HttpSession session, GetMainListResponse response) {
         model.addAttribute("response",response);
+        session.setAttribute("mainList",response);
         model.addAttribute("profile",(GoldenRichesUsers)session.getAttribute("profile"));
         return "donation_status";
     }

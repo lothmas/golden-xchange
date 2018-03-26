@@ -12,6 +12,7 @@ import com.golden_xchange.domain.mainlist.service.MainListService;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.utilities.AbstractDaoImpl;
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -72,7 +73,8 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public MainListEntity findMainListsByDepositReference(String depositReference) throws MainListNotFoundException, NoSuchAlgorithmException {
-        List<MainListEntity> result = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("depositReference", depositReference)).list();
+        List<MainListEntity> result = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("depositReference", depositReference)).list();
         if(result != null && !result.isEmpty()) {
             return (MainListEntity)result.get(0);
         } else {
@@ -166,7 +168,8 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public List<MainListEntity> findMainListEntityByUsername(String username) throws MainListNotFoundException {
-        List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("userName", username)).list();
+        List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("userName", username)).list();
         if(results.isEmpty()) {
             throw new MainListNotFoundException("No MainList found associated with username:" + username);
         } else {
@@ -253,12 +256,13 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         cal.add(Calendar.DATE, -30);
         try {
                      returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
-                    .add(Restrictions.ne("status", Integer.valueOf(2)))
+                    .add(Restrictions.ne("status", Integer.valueOf(0)))
                     .add(Restrictions.gt("adjustedAmount", 0.0))
-                    .add( Restrictions.gt("updatedDate", cal.getTime() ) )
-                    .add( Restrictions.gt("donationType", 0 ) )
+                    .add(Restrictions.gt("updatedDate", cal.getTime()))
+                    .add(Restrictions.gt("donationType", 0))
                     .add(Restrictions.eq("enabled", 1))
-                             .list();
+                    .addOrder(Order.desc("updatedDate"))
+                    .list();
         }
         catch (Exception exp){
             throw new MainListNotFoundException("No MainListFound found:");

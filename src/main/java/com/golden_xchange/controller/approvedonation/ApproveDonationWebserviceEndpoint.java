@@ -5,6 +5,7 @@
 
 package com.golden_xchange.controller.approvedonation;
 
+import com.golden_xchange.controller.getmainlist.GetMainListResponse;
 import com.golden_xchange.domain.mainlist.exception.MainListNotFoundException;
 import com.golden_xchange.domain.mainlist.model.MainListEntity;
 import com.golden_xchange.domain.mainlist.service.MainListService;
@@ -36,7 +37,6 @@ import java.util.List;
 @ControllerAdvice
 @Controller
 public class ApproveDonationWebserviceEndpoint {
-    private static final String NAMESPACE_URI = "approveDonation.webservice.golden_xchange.com";
     @Autowired
     MainListService mainListService;
     @Autowired
@@ -46,19 +46,27 @@ public class ApproveDonationWebserviceEndpoint {
     }
 
     @RequestMapping({"/approveDonation"})
-    public ApproveDonationResponse handleApproveDonationRequest(ApproveDonationRequest request, HttpServletRequest requests, Model model, HttpSession session,
-                                                                @RequestParam(value = "action", required = false) Integer action) throws Exception {
+    public String handleApproveDonationRequest(ApproveDonationRequest request, HttpServletRequest requests, Model model, HttpSession session,
+                                                                @RequestParam(value = "approver", required = false) Integer approver) throws Exception {
         Logger LOG = Logger.getLogger(this.getClass().getName());
         ApproveDonationResponse response = new ApproveDonationResponse();
         new MainListEntity();
         new GoldenRichesUsers();
-
+        GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
+        request.setUsername(goldenRichesUsers.getUserName());
         try {
             Date utilDate = new Date();
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Timestamp sqlDate = new Timestamp(utilDate.getTime());
+
             MainListEntity mainListEntity = this.mainListService.findMainListsByDepositReference(request.getDepositReference());
-            this.goldenRichesUsersService.findUserByMemberId(request.getUsername());
+//            if(!mainListEntity.getUserName().equals(request.getUsername())) {
+//                response.setMessage("FORBIDDEN Not Allowed To Update Donation: Please Contact System Administrator " + request.getDepositReference());
+//                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+//                LOG.error("FORBIDDEN Not Allowed To Approve Donation:" + request.getDepositReference() + "between ["+mainListEntity.getUserName()+ "] and ["+request.getUsername() +"]");
+//                return errorResponse(model,response,session);
+//            }
+
             if(request.getApprover() == 1) {
                 if(mainListEntity.getPayerUsername().equals(request.getUsername())) {
                     mainListEntity.setStatus(1);
@@ -67,26 +75,22 @@ public class ApproveDonationWebserviceEndpoint {
                 }
 
                 try {
-                    GoldenRichesUsers goldenRichesUsers = this.goldenRichesUsersService.findUserByMemberId(mainListEntity.getUserName());
+//                    GoldenRichesUsers goldenRichesUsers = this.goldenRichesUsersService.findUserByMemberId(mainListEntity.getUserName());
                     SendSms send = new SendSms();
                     send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "Golden Riches: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
                     LOG.info("MSG SENT: Golden Riches: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
-                } catch (GoldenRichesUsersNotFoundException var12) {
-                    ;
+                } catch (Exception var12) {
+                    //do nothing skip
                 }
 
                 response.setMessage("Payer Has Approved Payment For Deposit Reference: " + request.getDepositReference());
                 response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
-                return response;
+                return "redirect:/donation_status";
+
             } else if(request.getApprover() != 2) {
                 response.setMessage("Please set Approver: [1 = PayerApprover] [2= Receiver Approver]");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                return response;
-            } else if(!mainListEntity.getUserName().equals(request.getUsername())) {
-                response.setMessage("FORBIDDEN Not Allowed To Approve Donation:" + request.getDepositReference());
-                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                LOG.error("FORBIDDEN Not Allowed To Approve Donation:" + request.getDepositReference() + "between ["+mainListEntity.getUserName()+ "] and ["+request.getUsername() +"]");
-                return response;
+                return errorResponse(model,response,session);
             } else {
                 mainListEntity.setStatus(2);
                 mainListEntity.setUpdatedDate(sqlDate);
@@ -115,18 +119,27 @@ public class ApproveDonationWebserviceEndpoint {
                         completeDonation.setEnabled(0);
                         this.mainListService.saveUser(completeDonation);
                         LOG.info("DONATION COMPLETED: " + completeDonation.getMainListReference());
-                        return response;
+                        return "redirect:/donation_status";
                     }
                 }
-
-                return response;
             }
-        } catch (MainListNotFoundException | GoldenRichesUsersNotFoundException var13) {
+        } catch (MainListNotFoundException var13) {
             response.setMessage(var13.getMessage());
             response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
             LOG.error(var13.getCause() +"   "+ var13.getMessage());
-            return response;
+            return errorResponse(model,response,session);
         }
+
+
+        return "redirect:/donation_status";
+    }
+    private String errorResponse(Model model, ApproveDonationResponse response,HttpSession session ) {
+        model.addAttribute("profile",session.getAttribute("profile"));
+        GetMainListResponse responses = (GetMainListResponse) session.getAttribute("mainList");
+        responses.setStatusCode(response.getStatusCode());
+        responses.setMessage(response.getMessage());
+        model.addAttribute("response",responses);
+        return "donation_status";
     }
 }
 
