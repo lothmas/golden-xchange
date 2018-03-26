@@ -137,7 +137,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         if(getMainList) {
             List<MainListEntity> mainList = mainListService.getMainList();
             for (MainListEntity mainListEntity : mainList) {
-                if(mainListEntity.getAmountToReceive()<=amountToPay) {
+                if(mainListEntity.getAmountToReceive()>=amountToPay && mainListEntity.getAmountToReceive()-amountToPay>=500) {
                     MainList mainLists = new MainList();
 
                     GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(mainListEntity.getBankAccountNumber().trim());
@@ -158,7 +158,8 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                     mainLists.setDonationType(mainListEntity.getDonationType());
                     mainLists.setStatus(mainListEntity.getStatus());
                     response.getReturnData().add(mainLists);
-                }}
+                }
+            }
         }
     }
 
