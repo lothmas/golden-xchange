@@ -55,11 +55,11 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 
     public void updateDonor(MainListEntity MainListEntity, String depositReference, String mainListReference, String donorUsername) throws NoSuchAlgorithmException, MainListNotFoundException {
         MainListEntity mainList = this.findDonationByMainListReference(mainListReference);
-        if(!mainList.getDepositReference().equals(depositReference)) {
+        if (!mainList.getDepositReference().equals(depositReference)) {
             throw new MainListNotFoundException("Forbidden operation Can't update transaction status");
-        } else if(!mainList.getMainListReference().equals(mainListReference)) {
+        } else if (!mainList.getMainListReference().equals(mainListReference)) {
             throw new MainListNotFoundException("Forbidden operation Can't update transaction status");
-        } else if(!mainList.getPayerUsername().equals(donorUsername)) {
+        } else if (!mainList.getPayerUsername().equals(donorUsername)) {
             throw new MainListNotFoundException("Forbidden operation Can't update transaction status");
         } else {
             mainList.setStatus(2);
@@ -75,8 +75,8 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     public MainListEntity findMainListsByDepositReference(String depositReference) throws MainListNotFoundException, NoSuchAlgorithmException {
         List<MainListEntity> result = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("depositReference", depositReference)).list();
-        if(result != null && !result.isEmpty()) {
-            return (MainListEntity)result.get(0);
+        if (result != null && !result.isEmpty()) {
+            return (MainListEntity) result.get(0);
         } else {
             throw new MainListNotFoundException("No donation found associated with depositReference: " + depositReference);
         }
@@ -86,11 +86,11 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         boolean result = false;
         username = username.replaceAll(" ", "");
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("username", username)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             result = true;
         }
 
-        if(!results.isEmpty()) {
+        if (!results.isEmpty()) {
             result = false;
         }
 
@@ -101,11 +101,11 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         boolean result = true;
         email = email.replaceAll(" ", "");
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("emailAddress", email)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             result = false;
         }
 
-        if(!results.isEmpty()) {
+        if (!results.isEmpty()) {
             result = true;
         }
 
@@ -113,54 +113,54 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public List<MainListEntity> returnMainList(String username) throws MainListNotFoundException {
-            List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
-                    .add(Restrictions.eq("enabled", 1))
-                    .add(Restrictions.eq("payerUsername", username))
-                    .add(Restrictions.eq("donationType", 1))
-                    .add(Restrictions.ne("status", 3 ))
-                    .add(Restrictions.gt("adjustedAmount",0.0))
-                    .list();
-            if(null==returnMainList) {
-                throw new MainListNotFoundException("No Donations to Display on the List");
-            } else {
-                return returnMainList;
-            }
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", 1))
+                .add(Restrictions.eq("payerUsername", username))
+                .add(Restrictions.eq("donationType", 1))
+                .add(Restrictions.ne("status", 3))
+                .add(Restrictions.gt("adjustedAmount", 0.0))
+                .list();
+        if (null == returnMainList) {
+            throw new MainListNotFoundException("No Donations to Display on the List");
+        } else {
+            return returnMainList;
+        }
 
     }
 
     public MainListEntity findBankAccByAccNumber(String accountNumber) throws MainListNotFoundException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("bankAccountNumber", accountNumber)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No MainList found associated with accountNumber:" + accountNumber);
-        } else if(results.size() != 1) {
+        } else if (results.size() != 1) {
             throw new MainListNotFoundException("There are several MainListEntity found associated with accountNumber:" + accountNumber);
         } else {
-            return (MainListEntity)results.get(0);
+            return (MainListEntity) results.get(0);
         }
     }
 
     public MainListEntity findMainRefByAccNumber(String accountNumber) throws MainListNotFoundException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("bankAccountNumber", accountNumber)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No MainList found associated with accountNumber:" + accountNumber);
         } else {
-            return (MainListEntity)results.get(0);
+            return (MainListEntity) results.get(0);
         }
     }
 
     public MainListEntity findDonationByMainListReference(String mainListRefernce) throws MainListNotFoundException, NoSuchAlgorithmException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("mainListReference", mainListRefernce)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No Donation found for MainList with ref:" + mainListRefernce);
         } else {
-            return (MainListEntity)results.get(0);
+            return (MainListEntity) results.get(0);
         }
     }
 
     public List<MainListEntity> returnAdminUsers() {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("status", Integer.valueOf(5))).add(Restrictions.eq("enabled", Integer.valueOf(1))).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             ;
         }
 
@@ -170,7 +170,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     public List<MainListEntity> findMainListEntityByUsername(String username) throws MainListNotFoundException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("userName", username)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No MainList found associated with username:" + username);
         } else {
             return results;
@@ -182,7 +182,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.eq("payerUsername", payerUsername))
                 .add(Restrictions.eq("status", Integer.valueOf(0)))
                 .add(Restrictions.eq("enabled", Integer.valueOf(0))).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No PendigList found for username:" + payerUsername);
         } else {
             return results;
@@ -194,7 +194,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.eq("status", Integer.valueOf(1)))
                 .add(Restrictions.eq("enabled", Integer.valueOf(0)))
                 .add(Restrictions.eq("userName", username)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No Donations found Pending Approval  found");
         } else {
             return results;
@@ -205,9 +205,9 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("enabled", Integer.valueOf(1)))
                 .add(Restrictions.eq("status", Integer.valueOf(2)))
-                .add(Restrictions.gt("adjustedAmount",0.0))
+                .add(Restrictions.gt("adjustedAmount", 0.0))
                 .list();
-        if(!returnMainList.isEmpty() && returnMainList != null) {
+        if (!returnMainList.isEmpty() && returnMainList != null) {
             this.schedulerLog.info(returnMainList.size() + " Donations Still Available on the MainList");
             return false;
         } else {
@@ -232,7 +232,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.eq("status", Integer.valueOf(3)))
                 .add(Restrictions.eq("enabled", Integer.valueOf(0)))
                 .list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No CompletedDonations found:");
         } else {
             return results;
@@ -241,7 +241,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 
     public List<MainListEntity> returnCompletedDonation(String mainreference) throws MainListNotFoundException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("donationReference", mainreference)).list();
-        if(results.isEmpty()) {
+        if (results.isEmpty()) {
             throw new MainListNotFoundException("No CompletedDonations found:");
         } else {
             return results;
@@ -249,25 +249,25 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     @Override
-    public List<MainListEntity> getMainList() throws MainListNotFoundException {
+    public List<MainListEntity> getMainList(String username) throws MainListNotFoundException {
         List<MainListEntity> returnMainList = null;
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -30);
         try {
-                     returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
-                    .add(Restrictions.ne("status", Integer.valueOf(0)))
+            returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                    .add(Restrictions.ne("userName", username))
+                    .add(Restrictions.eq("status", 0))
                     .add(Restrictions.gt("adjustedAmount", 0.0))
-                    .add(Restrictions.gt("updatedDate", cal.getTime()))
-                    .add(Restrictions.gt("donationType", 0))
+//                    .add(Restrictions.gt("updatedDate", cal.getTime()))
+                    .add(Restrictions.eq("donationType", 0))
                     .add(Restrictions.eq("enabled", 1))
                     .addOrder(Order.desc("updatedDate"))
                     .list();
-        }
-        catch (Exception exp){
+        } catch (Exception exp) {
             throw new MainListNotFoundException("No MainListFound found:");
         }
-        if(!returnMainList.isEmpty() && returnMainList != null) {
+        if (null == returnMainList || returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
         } else {
             return returnMainList;

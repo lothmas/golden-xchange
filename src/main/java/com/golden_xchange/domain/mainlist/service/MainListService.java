@@ -52,7 +52,7 @@ public interface MainListService {
 
     List<MainListEntity> returnCompletedDonation(String var1) throws MainListNotFoundException;
 
-    List<MainListEntity> getMainList() throws MainListNotFoundException;
+    List<MainListEntity> getMainList(String username) throws MainListNotFoundException;
 
 }
 

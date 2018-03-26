@@ -322,14 +322,18 @@
 
 
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==0}" >
-                                            <button name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-danger btn-sm">Confirm Payment</button>
+                                            <button name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm">Confirm Payment</button>
                                             <input name="approver"  type="hidden" th:value="1"/>
                                         </td>
+										<!--<td class="with-btn" nowrap="nowrap" th:if="${result.status==0 &amp;&amp; result.enabled==0}" >-->
+											<!--<button name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm">Book Donation</button>-->
+											<!--<input name="approver"  type="hidden" th:value="1"/>-->
+										<!--</td>-->
 										<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.status==1}" >
                                             <button name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm">Pending Approval</button>
                                         </td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}" >
-                                            <button disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm">Donation Approved</button>
+                                            <button disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-success btn-sm">Donation Approved</button>
                                         </td>
 									</tr>
 
@@ -343,7 +347,7 @@
 						<div class="alert alert-info col-lg-12" >
 							<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List and wait approval by sponsors</span>
 						</div>	<!-- begin panel-heading -->
-						<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:35%; height:35%"/>
+						<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:20%; height:20%"/>
 						</div>
 						<!-- end panel-body -->
 						<!-- begin hljs-wrapper -->

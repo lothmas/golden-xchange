@@ -63,7 +63,7 @@ public class CreateDonationWebserviceEndpoint {
             List<MainListEntity> mainListEntities= donationService.findMainListsEntityByUsername(request.getPayerUsername());
 
             for(MainListEntity mainListEntity:mainListEntities){
-                if(mainListEntity.getStatus()!=3){
+                if(mainListEntity.getStatus()!=3 && request.getPayerUsername().equals(mainListEntity.getPayerUsername()) && mainListEntity.getDonationType()==1){
                     response.setMessage("You still have un-completed donations and can't make new ones DONATION REF: "+ mainListEntity.getMainListReference());
                     response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                     return errorResponse(model, response,session);
