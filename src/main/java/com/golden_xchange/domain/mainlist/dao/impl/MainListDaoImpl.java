@@ -50,6 +50,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 
     public void save(MainListEntity MainListEntity) {
         this.saveOrUpdate(MainListEntity);
+
     }
 
     public void updateDonor(MainListEntity MainList) {
@@ -118,33 +119,9 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.eq("payerUsername", username))
-                .add(Restrictions.or(Restrictions.eq("donationType", 1)))
-                .add(Restrictions.or(Restrictions.eq("donationType", 2)))
+                .add(Restrictions.or(Restrictions.eq("donationType", 1), Restrictions.or(Restrictions.eq("donationType",2))))
                 .add(Restrictions.ne("status", 3))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
-                .list();
-
-        List<AvailableBanksInCountry> result = getCurrentSession().createCriteria(AvailableBanksInCountry.class)
-                .setProjection(Projections.projectionList()
-                        .add(Projections.groupProperty("city"))
-                        .add(Projections.alias(Projections.min("countryCode"),"countryCode"))
-                        .add(Projections.alias(Projections.min("bankName"),"bankName"))
-                        .add(Projections.alias(Projections.min("bankCode"),"bankCode"))
-                        .add(Projections.alias(Projections.min("branchName"),"branchName"))
-                        .add(Projections.alias(Projections.min("branchCode"),"branchCode"))
-                        .add(Projections.alias(Projections.min("state"),"state"))
-                        .add(Projections.alias(Projections.min("routingNumber"),"routingNumber"))
-                        .add(Projections.alias(Projections.min("ifscCode"),"ifscCode"))
-                        .add(Projections.alias(Projections.min("enabled"),"enabled"))
-                        .add(Projections.alias(Projections.min("agentId"),"agentId"))
-                        .add(Projections.alias(Projections.min("id"),"id"))
-                        .add(Projections.alias(Projections.property("city"), "city")))
-                .add(Restrictions.eq("countryCode", countryCode))
-                .add(Restrictions.or(Restrictions.eq("state", bankState), Restrictions.or(Restrictions.isNull("state"), Restrictions.eq("state", ""))))
-                .add(Restrictions.eq("enabled", true))
-                .add(Restrictions.isNotNull("city"))
-                .addOrder(Order.asc("city"))
-                .setResultTransformer(Transformers.aliasToBean(AvailableBanksInCountry.class))
                 .list();
 
         if (null == returnMainList) {

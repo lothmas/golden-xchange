@@ -96,7 +96,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             amountToSponsors = 0;
             MainListLoop:
             for (MainListEntity retunedList : returnedSponsor) {
-                amountToSponsors = retunedList.getAmountToReceive() + amountToSponsors;
+                amountToSponsors = retunedList.getDonatedAmount() + amountToSponsors;
                 if (retunedList.getStatus() == 1 || retunedList.getStatus() == 0) {
                     getMainList = false;
                 }
@@ -110,7 +110,9 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             MainListEntity mainListEntity1 = mainListService.findDonationByMainListReference(returnedSponsor.get(0).getDonationReference());
             totalAmountToPay = mainListEntity1.getDonatedAmount() - amountToSponsors;
 
-            getMainListAfterPayingSponsor(response, getMainList, totalAmountToPay, mainListEntity1.getUserName());
+            if(totalAmountToPay!=0){
+                getMainListAfterPayingSponsor(response, getMainList, totalAmountToPay, mainListEntity1.getUserName());
+            }
 
             if (returnedSponsor.size() == 0) {
                 response.setMessage("No Donations to show, Please make a new Donation");
@@ -167,13 +169,19 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                             createDonationRequest.setAmount(amountToPay);
                             createDonationRequest.setPayerUsername(username);
                             createDonationRequest.setBankAccountNumber(mainListEntity.getBankAccountNumber());
-                            try {
-                               if(!createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, mainListEntity, null, sqlDate)){
-                                   amountToPay=  amountToPay-mainListEntity.getAdjustedAmount();
-                               }
-                            } catch (NoSuchAlgorithmException e) {
-                                e.printStackTrace();
-                            }
+
+                        try {
+                            MainListEntity mainListEntity11=createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, new MainListEntity(), null, sqlDate);
+                           if(null!=mainListEntity11){
+                            amountToPay=  amountToPay-mainListEntity.getAdjustedAmount();
+                            prepareMainListResponse(response,mainListEntity11);
+                           }
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        }
+
+
+
 //                        }
 
                     }
