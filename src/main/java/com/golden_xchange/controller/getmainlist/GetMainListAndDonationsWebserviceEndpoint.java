@@ -100,6 +100,11 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                 if (retunedList.getStatus() == 1 || retunedList.getStatus() == 0) {
                     getMainList = false;
                 }
+
+                if (retunedList.getDonationType() == 2) {
+                    model.addAttribute("sponsorResponse", 1);
+                }
+
                 try {
                     prepareMainListResponse(response, retunedList);
                 } catch (Exception expt) {
@@ -110,7 +115,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             MainListEntity mainListEntity1 = mainListService.findDonationByMainListReference(returnedSponsor.get(0).getDonationReference());
             totalAmountToPay = mainListEntity1.getDonatedAmount() - amountToSponsors;
 
-            if(totalAmountToPay!=0){
+            if (totalAmountToPay != 0) {
                 getMainListAfterPayingSponsor(response, getMainList, totalAmountToPay, mainListEntity1.getUserName());
             }
 
@@ -157,29 +162,28 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
         if (getMainList) {
             List<MainListEntity> mainList = mainListService.getMainList(username);
-            while(amountToPay>0) {
+            while (amountToPay > 0) {
                 for (MainListEntity mainListEntity : mainList) {
 
                     if (checkDateLimit(mainListEntity.getUpdatedDate())) {
-                       // double amountToBeDistributed = mainListEntity.getDonatedAmount() - amountToPay;
+                        // double amountToBeDistributed = mainListEntity.getDonatedAmount() - amountToPay;
 
 //                        if (amountToBeDistributed == 0 || amountToBeDistributed > 100) {
-                            CreateDonationRequest createDonationRequest = new CreateDonationRequest();
-                            createDonationRequest.setMainListReference(mainListEntity.getMainListReference());
-                            createDonationRequest.setAmount(amountToPay);
-                            createDonationRequest.setPayerUsername(username);
-                            createDonationRequest.setBankAccountNumber(mainListEntity.getBankAccountNumber());
+                        CreateDonationRequest createDonationRequest = new CreateDonationRequest();
+                        createDonationRequest.setMainListReference(mainListEntity.getMainListReference());
+                        createDonationRequest.setAmount(amountToPay);
+                        createDonationRequest.setPayerUsername(username);
+                        createDonationRequest.setBankAccountNumber(mainListEntity.getBankAccountNumber());
 
                         try {
-                            MainListEntity mainListEntity11=createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, new MainListEntity(), null, sqlDate);
-                           if(null!=mainListEntity11){
-                            amountToPay=  amountToPay-mainListEntity.getAdjustedAmount();
-                            prepareMainListResponse(response,mainListEntity11);
-                           }
+                            MainListEntity mainListEntity11 = createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, new MainListEntity(), null, sqlDate);
+                            if (null != mainListEntity11) {
+                                amountToPay = amountToPay - mainListEntity.getAdjustedAmount();
+                                prepareMainListResponse(response, mainListEntity11);
+                            }
                         } catch (NoSuchAlgorithmException e) {
                             e.printStackTrace();
                         }
-
 
 
 //                        }
