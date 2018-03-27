@@ -13,7 +13,9 @@ import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.utilities.AbstractDaoImpl;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -121,6 +123,30 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.ne("status", 3))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
                 .list();
+
+        List<AvailableBanksInCountry> result = getCurrentSession().createCriteria(AvailableBanksInCountry.class)
+                .setProjection(Projections.projectionList()
+                        .add(Projections.groupProperty("city"))
+                        .add(Projections.alias(Projections.min("countryCode"),"countryCode"))
+                        .add(Projections.alias(Projections.min("bankName"),"bankName"))
+                        .add(Projections.alias(Projections.min("bankCode"),"bankCode"))
+                        .add(Projections.alias(Projections.min("branchName"),"branchName"))
+                        .add(Projections.alias(Projections.min("branchCode"),"branchCode"))
+                        .add(Projections.alias(Projections.min("state"),"state"))
+                        .add(Projections.alias(Projections.min("routingNumber"),"routingNumber"))
+                        .add(Projections.alias(Projections.min("ifscCode"),"ifscCode"))
+                        .add(Projections.alias(Projections.min("enabled"),"enabled"))
+                        .add(Projections.alias(Projections.min("agentId"),"agentId"))
+                        .add(Projections.alias(Projections.min("id"),"id"))
+                        .add(Projections.alias(Projections.property("city"), "city")))
+                .add(Restrictions.eq("countryCode", countryCode))
+                .add(Restrictions.or(Restrictions.eq("state", bankState), Restrictions.or(Restrictions.isNull("state"), Restrictions.eq("state", ""))))
+                .add(Restrictions.eq("enabled", true))
+                .add(Restrictions.isNotNull("city"))
+                .addOrder(Order.asc("city"))
+                .setResultTransformer(Transformers.aliasToBean(AvailableBanksInCountry.class))
+                .list();
+
         if (null == returnMainList) {
             throw new MainListNotFoundException("No Donations to Display on the List");
         } else {
