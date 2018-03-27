@@ -116,7 +116,8 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.eq("payerUsername", username))
-                .add(Restrictions.eq("donationType", 1))
+                .add(Restrictions.or(Restrictions.eq("donationType", 1)))
+                .add(Restrictions.or(Restrictions.eq("donationType", 2)))
                 .add(Restrictions.ne("status", 3))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
                 .list();

@@ -6,6 +6,8 @@
 package com.golden_xchange.controller.getmainlist;
 
 
+import com.golden_xchange.controller.createdonation.CreateDonationRequest;
+import com.golden_xchange.controller.createdonation.CreateDonationWebserviceEndpoint;
 import com.golden_xchange.domain.bankaccounts.model.BankAccountsEntity;
 import com.golden_xchange.domain.bankaccounts.service.BankAccountService;
 import com.golden_xchange.domain.mainlist.exception.MainListNotFoundException;
@@ -29,6 +31,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -44,7 +47,8 @@ import java.util.List;
 @Controller
 public class GetMainListAndDonationsWebserviceEndpoint {
 
-
+    @Autowired
+    MainListService donationService;
     @Autowired
     MainListService mainListService;
 
@@ -54,12 +58,13 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     @Autowired
     GoldenRichesUsersService goldenRichesUsersService;
 
+    @Autowired
+    CreateDonationWebserviceEndpoint createDonationWebserviceEndpoint;
+
 
     BankAccountsEntity createBankAccount = new BankAccountsEntity();
     Logger mainListLogger = Logger.getLogger(this.getClass().getName());
     static double amountToSponsors = 0;
-
-
 
 
     @RequestMapping({"/donation_status"})
@@ -150,34 +155,31 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
         if (getMainList) {
             List<MainListEntity> mainList = mainListService.getMainList(username);
-            for (MainListEntity mainListEntity : mainList) {
+            while(amountToPay>0) {
+                for (MainListEntity mainListEntity : mainList) {
 
-                if (checkDateLimit(mainListEntity.getUpdatedDate())) {
-                    double amountToBeDistributed = mainListEntity.getAmountToReceive() - amountToPay;
+                    if (checkDateLimit(mainListEntity.getUpdatedDate())) {
+                       // double amountToBeDistributed = mainListEntity.getDonatedAmount() - amountToPay;
 
-                    if (amountToBeDistributed > 100) {
-                        prepareMainListResponse(response, mainListEntity);
-                        MainListEntity newMain=new MainListEntity();
-                        newMain.setStatus(0);
-                        newMain.setUpdatedDate(sqlDate);
-                        newMain.setAdjustedAmount(request.getAmount() + 0.4D * request.getAmount());
-                        newMain.setDonatedAmount(request.getAmount());
-                        newMain.setEnabled(1);
-                        newMain.setBankAccountNumber(goldenRichesUsers.getAccountNumber());
-                        newMain.setAmountToReceive(request.getAmount() + 0.4D * request.getAmount());
-                        newMain.setDate(sqlDate);
-                        String mainRef= RandomStringUtils.randomAlphanumeric(10).toUpperCase();
-                        newMain.setMainListReference(mainRef);
-                        newMain.setDonationReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-                        newMain.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-                        newMain.setUserName(request.getPayerUsername());
-                        newMain.setPayerUsername(request.getPayerUsername());
-                        newMain.setDonationType(0);
-                        donationService.saveUser(newMain);
+//                        if (amountToBeDistributed == 0 || amountToBeDistributed > 100) {
+                            CreateDonationRequest createDonationRequest = new CreateDonationRequest();
+                            createDonationRequest.setMainListReference(mainListEntity.getMainListReference());
+                            createDonationRequest.setAmount(amountToPay);
+                            createDonationRequest.setPayerUsername(username);
+                            createDonationRequest.setBankAccountNumber(mainListEntity.getBankAccountNumber());
+                            try {
+                               if(!createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, mainListEntity, null, sqlDate)){
+                                   amountToPay=  amountToPay-mainListEntity.getAdjustedAmount();
+                               }
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            }
+//                        }
+
                     }
                 }
+                break;
             }
-
 
         }
     }

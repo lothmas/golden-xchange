@@ -29,6 +29,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -100,6 +101,14 @@ public class CreateDonationWebserviceEndpoint {
         }
         else{
 
+            if (createDonationFromExisting(request, createDonation, response, sqlDate))
+                return errorResponse(model, response, session);
+
+        }
+        return "redirect:/donation_status";
+    }
+
+    public boolean createDonationFromExisting(CreateDonationRequest request, MainListEntity createDonation, CreateDonationResponse response, Timestamp sqlDate) throws NoSuchAlgorithmException {
         GoldenRichesUsers gold;
         try {
             label94: {
@@ -108,45 +117,45 @@ public class CreateDonationWebserviceEndpoint {
                     if(this.mainListReference.getPayerUsername().equals(request.getPayerUsername())) {
                         response.setMessage("You can't Donate to Yourself");
                         response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return errorResponse(model, response,session);
+                        return true;
                     }
 
                     if(this.mainListReference.getAdjustedAmount() < request.getAmount()) {
                         response.setMessage("Provided amount is greater than amount required to Donate");
                         response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return errorResponse(model, response,session);
+                        return true;
                     }
 
-                    if (commonValidator(request, response)) return errorResponse(model, response,session);
+                    if (commonValidator(request, response)) return true;
                     ;
 
                     Double extra = Double.valueOf(this.mainListReference.getAdjustedAmount() - request.getAmount());
                     if(extra.doubleValue() < 300.0D && extra.doubleValue() != 0.0D) {
                         response.setMessage("You can't leave less than R300 on a Donation after Payment.");
                         response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return errorResponse(model, response,session);
+                        return true;
                     }
 
                     if(null != request.getMainListReference() && !request.getMainListReference().isEmpty()) {
-                        try {
-                            gold = this.goldenRichesUsersService.findUserByMemberId(request.getPayerUsername());
+      //                  try {
+//                            gold = this.goldenRichesUsersService.findUserByMemberId(request.getPayerUsername());
                             createDonation.setPayerUsername(request.getPayerUsername());
-                        } catch (GoldenRichesUsersNotFoundException var12) {
-                            response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
-                            response.setMessage(var12.getMessage());
-                            return errorResponse(model, response,session);
-                        }
+//                        } catch (GoldenRichesUsersNotFoundException var12) {
+//                            response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
+//                            response.setMessage(var12.getMessage());
+//                            return true;
+//                        }
 
                         if(0.0D != request.getAmount()) {
                             createDonation.setDonatedAmount(request.getAmount());
-                            createDonation.setAdjustedAmount(request.getAmount() + 0.4D * request.getAmount());
-                            createDonation.setAmountToReceive(createDonation.getAdjustedAmount());
+                            createDonation.setAdjustedAmount(request.getAmount());
+                            createDonation.setAmountToReceive(0.0);
                             if(null != request.getBankAccountNumber() && !request.getBankAccountNumber().isEmpty()) {
-                                if(!this.bankAccountService.findBankAccByAccNumberAndUserName(request.getBankAccountNumber(), request.getPayerUsername())) {
-                                    response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
-                                    response.setMessage("Provided AccountNumber: " + request.getBankAccountNumber() + " doesn't match user: " + request.getPayerUsername());
-                                    return errorResponse(model, response,session);
-                                }
+//                                if(!this.bankAccountService.findBankAccByAccNumberAndUserName(request.getBankAccountNumber(), request.getPayerUsername())) {
+//                                    response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
+//                                    response.setMessage("Provided AccountNumber: " + request.getBankAccountNumber() + " doesn't match user: " + request.getPayerUsername());
+//                                    return true;
+//                                }
 
                                 GoldenRichesUsers goldenRichesUsers = this.goldenRichesUsersService.getUserByBankDetails(request.getBankAccountNumber());
                                 createDonation.setUserName(this.mainListReference.getUserName());
@@ -159,32 +168,32 @@ public class CreateDonationWebserviceEndpoint {
 
                             response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                             response.setMessage("donationReference can't be left empty ");
-                            return errorResponse(model, response,session);
+                            return true;
                         }
 
                         response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
                         response.setMessage("amount cant be empty!!");
-                        return errorResponse(model, response,session);
+                        return true;
                     }
 
                     response.setMessage("MainListReference` Can't be Left Empty");
                     response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
-                    return errorResponse(model, response,session);
+                    return true;
                 }
 
                 response.setMessage("MainListReference` Can't be Left Empty");
                 response.setStatusCode(StatusCodeEnum.EMPTYVALUE.getStatusCode());
-                return errorResponse(model, response,session);
+                return true;
             }
         } catch (MainListNotFoundException | GoldenRichesUsersNotFoundException var13) {
             response.setMessage(var13.getMessage());
             response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
-            return errorResponse(model, response,session);
+            return true;
         }
 
-        createDonation.setEnabled(0);
+        createDonation.setEnabled(1);
         createDonation.setStatus(0);
-
+        createDonation.setDonationType(2);
         createDonation.setUpdatedDate(sqlDate);
         createDonation.setDate(sqlDate);
         String user = this.mainListReference.getPayerUsername();
@@ -203,9 +212,7 @@ public class CreateDonationWebserviceEndpoint {
         } catch (Exception var11) {
             ;
         }
-
-    }
-        return "redirect:/donation_status";
+        return false;
     }
 
     private String errorResponse(Model model, CreateDonationResponse response,HttpSession session ) {
