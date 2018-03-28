@@ -124,13 +124,11 @@ public class CreateDonationWebserviceEndpoint {
                     }
 
                     if(mainListReference.getAdjustedAmount() < request.getAmount()) {
-                        response.setMessage("Provided amount is greater than amount required to Donate");
-                        response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                        return mainListReference;
+                    request.setAmount(mainListReference.getAdjustedAmount());
                     }
 
                     if (commonValidator(request, response)) return mainListReference;
-                    ;
+
 
                     Double extra = Double.valueOf(mainListReference.getAdjustedAmount() - request.getAmount());
                     if(extra.doubleValue() < 300.0D && extra.doubleValue() != 0.0D) {
@@ -194,7 +192,7 @@ public class CreateDonationWebserviceEndpoint {
             return mainListReference;
         }
 
-        createDonation.setEnabled(1);
+        createDonation.setEnabled(0);
         createDonation.setStatus(0);
         createDonation.setDonationType(2);
         createDonation.setUpdatedDate(sqlDate);

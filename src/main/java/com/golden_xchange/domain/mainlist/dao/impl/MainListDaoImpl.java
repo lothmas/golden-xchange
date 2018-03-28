@@ -183,9 +183,9 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 
     public List<MainListEntity> returnPendingPayerList(String payerUsername) throws MainListNotFoundException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
-                .add(Restrictions.eq("payerUsername", payerUsername))
-                .add(Restrictions.eq("status", Integer.valueOf(0)))
-                .add(Restrictions.eq("enabled", Integer.valueOf(0))).list();
+                .add(Restrictions.or(Restrictions.eq("payerUsername", payerUsername), Restrictions
+                .or(Restrictions.eq("userName",payerUsername))))
+                .list();
         if (results.isEmpty()) {
             throw new MainListNotFoundException("No PendigList found for username:" + payerUsername);
         } else {

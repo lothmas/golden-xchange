@@ -259,7 +259,7 @@
 							<p>Completed </p>
 						</div>
 						<div class="stats-link">
-							<a href="donation_state">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+							<a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
 						</div>
 					</div>
 				</div>
@@ -291,11 +291,12 @@
 						<!-- begin panel-body -->
 						<div class="panel-body">
 							<!-- begin table-responsive -->
-							<div class="table-responsive">
 
-								<table class="table table-striped m-b-0" >
+								<table id="data-table-default" class="table table-striped table-bordered">
 									<thead>
 									<tr>
+										<!--<th></th>-->
+										<th width="1%" data-orderable="false">Donation Type</th>
 										<th>Deposit Reference</th>
 										<th>Bank Name</th>
 										<th>Branch Number</th>
@@ -312,6 +313,9 @@
 										<!--<td class="with-img">-->
 											<!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
 										<!--</td>-->
+										<!--<td width="1%" class="f-s-600 text-inverse" th:text="${rowStat.count}"/>-->
+										<td width="1%" class="with-img" th:if="${result.donationType==1}"><img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" /></td>
+										<td width="1%" class="with-img" th:if="${result.donationType!=1}"><img src="../assets/img/user/user-2.jpg" class="img-rounded height-30" /></td>
 										<td th:text="${result.depositReference}"/>
 										<td th:text="${result.bankName}"/>
 										<td th:text="${result.branchNumber}"/>
@@ -322,7 +326,7 @@
 
 
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==0}" >
-                                            <button  style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
+                                            <button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
                                             <input name="approver"  type="hidden" th:value="1"/>
                                         </td>
 										<!--<td class="with-btn" nowrap="nowrap" th:if="${result.status==0 &amp;&amp; result.enabled==0}" >-->
@@ -339,16 +343,16 @@
 
 									</th:block>
 								</table>
-							</div>
+
 							<!-- end table-responsive -->
 
 						</div>
-						<div th:if="${sponsorResponse!=1}" align="center">
-						<div class="alert alert-info col-lg-12" >
-							<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List and wait approval by sponsors</span>
-						</div>	<!-- begin panel-heading -->
-						<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:20%; height:20%"/>
-						</div>
+						<!--<div th:if="sponsorResponse!=1" align="center">-->
+						<!--<div class="alert alert-info col-lg-12" >-->
+							<!--<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List and wait approval by sponsors</span>-->
+						<!--</div>	&lt;!&ndash; begin panel-heading &ndash;&gt;-->
+						<!--<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:20%; height:20%"/>-->
+						<!--</div>-->
 						<!-- end panel-body -->
 						<!-- begin hljs-wrapper -->
 
