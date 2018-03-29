@@ -192,7 +192,7 @@ public class CreateDonationWebserviceEndpoint {
             return mainListReference;
         }
 
-        createDonation.setEnabled(0);
+        createDonation.setEnabled(1);
         createDonation.setStatus(0);
         createDonation.setDonationType(2);
         createDonation.setUpdatedDate(sqlDate);

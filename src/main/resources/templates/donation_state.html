@@ -325,20 +325,38 @@
 										<td th:text="${result.amount}"/>
 
 
-										<td class="with-btn" nowrap="nowrap" th:if="${result.status==0}" >
-                                            <button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
-                                            <input name="approver"  type="hidden" th:value="1"/>
-                                        </td>
-										<!--<td class="with-btn" nowrap="nowrap" th:if="${result.status==0 &amp;&amp; result.enabled==0}" >-->
-											<!--<button name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm">Book Donation</button>-->
-											<!--<input name="approver"  type="hidden" th:value="1"/>-->
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==0}  ">
+                                            <button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-muted btn-sm text-left">Pending Payment</button>
+											<input name="approver"  type="hidden" th:value="1"/>
+										</td>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==2}  ">
+											<button  style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
+											<input name="approver"  type="hidden" th:value="1"/>
+										</td>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==1}  ">
+											<button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
+
+										</td>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1}">
+											<button style="width: 98%" disabled="true" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
+										</td>
+										<!--<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.username.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >-->
+											<!--<button style="width: 98%" name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>-->
 										<!--</td>-->
-										<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.status==1}" >
-                                            <button style="width: 98%" name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
-                                        </td>
+										<td class="with-btn" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >
+											<button name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-light bg-dark btn-sm text-white">Waiting Confirmation</button>
+											<!--<input name="approver"  type="hidden" th:value="1"/>-->
+										</td>
+										<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1}" >
+                                            <button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-danger btn-sm text-left">Approve Donation</button>
+											<input name="approvers"  type="hidden" th:value="2"/>
+										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}" >
-                                            <button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-success btn-sm text-left">Donation Approved</button>
+                                            <button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-light bg-dark btn-sm text-left text-white">Completed</button>
                                         </td>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.status==3}" >
+											<button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-light bg-dark btn-sm text-left text-white" >Completed</button>
+										</td>
 									</tr>
 
 									</th:block>

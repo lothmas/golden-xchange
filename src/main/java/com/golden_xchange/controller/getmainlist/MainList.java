@@ -76,6 +76,8 @@ public class MainList {
 
     protected int status;
 
+    protected String payerUsername;
+
     /**
      * Gets the value of the username property.
      * 
@@ -322,5 +324,13 @@ public class MainList {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getPayerUsername() {
+        return payerUsername;
+    }
+
+    public void setPayerUsername(String payerUsername) {
+        this.payerUsername = payerUsername;
     }
 }

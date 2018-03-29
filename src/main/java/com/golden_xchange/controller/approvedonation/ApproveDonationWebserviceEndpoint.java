@@ -47,8 +47,12 @@ public class ApproveDonationWebserviceEndpoint {
 
     @RequestMapping({"/approveDonation"})
     public String handleApproveDonationRequest(ApproveDonationRequest request, HttpServletRequest requests, Model model, HttpSession session,
-                                                                @RequestParam(value = "approver", required = false) Integer approver) throws Exception {
+                                                                @RequestParam(value = "approvers", required = false) Integer approvers) throws Exception {
         Logger LOG = Logger.getLogger(this.getClass().getName());
+
+        if(null!=approvers && approvers==2){
+            request.setApprover(2);
+        }
         ApproveDonationResponse response = new ApproveDonationResponse();
         new MainListEntity();
         new GoldenRichesUsers();

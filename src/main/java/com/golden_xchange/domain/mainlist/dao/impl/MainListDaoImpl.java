@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -266,7 +267,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 //                    .add(Restrictions.gt("updatedDate", cal.getTime()))
                     .add(Restrictions.eq("donationType", 0))
                     .add(Restrictions.eq("enabled", 1))
-                    .addOrder(Order.desc("updatedDate"))
+//                    .addOrder(Order.desc("updatedDate"))
                     .list();
         } catch (Exception exp) {
             throw new MainListNotFoundException("No MainListFound found:");
@@ -274,6 +275,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         if (null == returnMainList || returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
         } else {
+            Collections.reverse(returnMainList);
             return returnMainList;
         }
     }

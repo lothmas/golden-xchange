@@ -67,7 +67,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     static double amountToSponsors = 0;
 
 
-    @RequestMapping({"/donation_status","/donation_state"})
+    @RequestMapping({"/donation_status", "/donation_state"})
     public String handleCreateGoldenRichesRequest(HttpServletRequest requests, Model model, HttpSession session)
             throws Exception {
         GetMainListResponse response = new GetMainListResponse();
@@ -76,19 +76,18 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
             GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
 
-            if(url.contains("donation_state")){
+            if (url.contains("donation_state")) {
                 model.addAttribute("profile", goldenRichesUsers);
-                try{
-                List<MainListEntity> payerPendingList = this.mainListService.returnPendingPayerList(goldenRichesUsers.getUserName());
-                for(MainListEntity mainListEntity:payerPendingList){
+                try {
+                    List<MainListEntity> payerPendingList = this.mainListService.returnPendingPayerList(goldenRichesUsers.getUserName());
+                    for (MainListEntity mainListEntity : payerPendingList) {
 
-                    prepareMainListResponse(response, mainListEntity);
-                }
+                        prepareMainListResponse(response, mainListEntity);
+                    }
 
-                response.setMessage("sucessfull");
-                response.setStatusCode(200);
-                }
-                catch (Exception exp){
+                    response.setMessage("sucessfull");
+                    response.setStatusCode(200);
+                } catch (Exception exp) {
                     response.setMessage("not sucessfull");
                     response.setStatusCode(500);
                 }
@@ -174,48 +173,70 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         mainLists.setDepositReference(retunedList.getDepositReference());
         mainLists.setDonationType(retunedList.getDonationType());
         mainLists.setStatus(retunedList.getStatus());
+        mainLists.setPayerUsername(retunedList.getPayerUsername());
         response.getReturnData().add(mainLists);
     }
 
-    private void getMainListAfterPayingSponsor(GetMainListResponse response, boolean getMainList, double amountToPay, String username) throws MainListNotFoundException, GoldenRichesUsersNotFoundException {
+    private boolean getMainListAfterPayingSponsor(GetMainListResponse response, boolean getMainList, double amountToPay, String username) throws MainListNotFoundException, GoldenRichesUsersNotFoundException {
         Date utilDate = new Date();
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp sqlDate = new Timestamp(utilDate.getTime());
+        double checker = amountToPay;
 
         if (getMainList) {
             List<MainListEntity> mainList = mainListService.getMainList(username);
-            while (amountToPay > 0) {
-                for (MainListEntity mainListEntity : mainList) {
+            amountToPay = createDonationProcess(response, amountToPay, username, sqlDate, true, mainList);
 
-                    if (checkDateLimit(mainListEntity.getUpdatedDate())) {
-                        // double amountToBeDistributed = mainListEntity.getDonatedAmount() - amountToPay;
-
-//                        if (amountToBeDistributed == 0 || amountToBeDistributed > 100) {
-                        CreateDonationRequest createDonationRequest = new CreateDonationRequest();
-                        createDonationRequest.setMainListReference(mainListEntity.getMainListReference());
-                        createDonationRequest.setAmount(amountToPay);
-                        createDonationRequest.setPayerUsername(username);
-                        createDonationRequest.setBankAccountNumber(mainListEntity.getBankAccountNumber());
-
-                        try {
-                            MainListEntity mainListEntity11 = createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, new MainListEntity(), null, sqlDate);
-                            if (null != mainListEntity11) {
-                                amountToPay = amountToPay - mainListEntity.getAdjustedAmount();
-                                prepareMainListResponse(response, mainListEntity11);
-                            }
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        }
-
-
-//                        }
-
-                    }
-                }
-                break;
+            if(amountToPay>0){
+                //keeper add keeper if not
+                amountToPay = createDonationProcess(response, amountToPay, username, sqlDate, false, mainList);
             }
 
         }
+        {
+            return false;
+        }
+    }
+
+    private double createDonationProcess(GetMainListResponse response, double amountToPay, String username, Timestamp sqlDate, boolean keeper, List<MainListEntity> mainList) throws GoldenRichesUsersNotFoundException {
+        while (amountToPay > 0) {
+            for (MainListEntity mainListEntity : mainList) {
+
+                if (checkDateLimit(mainListEntity.getUpdatedDate())&&keeper) {
+                    amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
+                }
+                if (!keeper) {
+                    amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
+                }
+            }
+            break;
+        }
+        return amountToPay;
+    }
+
+    private double createDonation(GetMainListResponse response, double amountToPay, String username, Timestamp sqlDate, MainListEntity mainListEntity) throws GoldenRichesUsersNotFoundException {
+        // double amountToBeDistributed = mainListEntity.getDonatedAmount() - amountToPay;
+//                        checker=checker-mainListEntity.getAdjustedAmount();
+//                        if (amountToBeDistributed == 0 || amountToBeDistributed > 100) {
+        CreateDonationRequest createDonationRequest = new CreateDonationRequest();
+        createDonationRequest.setMainListReference(mainListEntity.getMainListReference());
+        createDonationRequest.setAmount(amountToPay);
+        createDonationRequest.setPayerUsername(username);
+        createDonationRequest.setBankAccountNumber(mainListEntity.getBankAccountNumber());
+
+        try {
+            MainListEntity mainListEntity11 = createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, new MainListEntity(), null, sqlDate);
+            if (null != mainListEntity11) {
+                amountToPay = amountToPay - mainListEntity.getAdjustedAmount();
+                prepareMainListResponse(response, mainListEntity11);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+
+//                        }
+        return amountToPay;
     }
 
 
