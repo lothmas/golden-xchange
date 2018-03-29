@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -80,6 +81,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                 model.addAttribute("profile", goldenRichesUsers);
                 try {
                     List<MainListEntity> payerPendingList = this.mainListService.returnPendingPayerList(goldenRichesUsers.getUserName());
+                    Collections.reverse(payerPendingList);
                     for (MainListEntity mainListEntity : payerPendingList) {
 
                         prepareMainListResponse(response, mainListEntity);
