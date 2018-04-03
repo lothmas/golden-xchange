@@ -275,8 +275,8 @@
                           enctype="multipart/form-data" class="margin-bottom-0">
 					<!-- begin panel -->
 					<div class="panel panel-inverse" data-sortable-id="table-basic-7">
-						<div th:if="${response.statusCode!=200}" class="alert alert-danger" >
-							<strong>Danger!</strong> <span th:text="${response.message}"></span>
+						<div th:if="${response.statusCode!=200}" class="alert alert-warning" >
+							<strong>Warning!</strong> <span th:text="${response.message}"></span>
 						</div>	<!-- begin panel-heading -->
 						<div class="panel-heading">
 							<div class="panel-heading-btn">
@@ -285,7 +285,7 @@
 								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>-->
 								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>-->
 							</div>
-							<h4 class="panel-title">Make Payments To Your Sponsors</h4>
+							<h4 class="panel-title">Donation Status</h4>
 						</div>
 						<!-- end panel-heading -->
 						<!-- begin panel-body -->
@@ -325,11 +325,20 @@
 										<td th:text="${result.amount}"/>
 
 
-										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==0}  ">
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==0}">
                                             <button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-muted btn-sm text-left">Pending Payment</button>
 											<input name="approver"  type="hidden" th:value="1"/>
 										</td>
-										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==2}  ">
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType==0}">
+											<div class="progress">
+												<div class="progress-bar progress-bar-striped progress-bar-animated text-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"  th:style="'width: '+${result.getMaturityAmount()/result.getAmountToReceive()*100}+'%'"  ></div>
+											</div>
+
+											<h6><p th:text="${T(Math).floor(result.getMaturityAmount()/result.getAmountToReceive()*100)+'% '+'Maturity Level'}"/></h6>
+											<p  class="text-danger " align="center"/>
+											<h4><p  class="text-danger " align="center" th:text="${'R'+result.maturityAmount}"/></h4>
+										</td>
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==2} ">
 											<button  style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
 											<input name="approver"  type="hidden" th:value="1"/>
 										</td>
@@ -337,7 +346,7 @@
 											<button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
 
 										</td>
-										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1}">
+										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType!=0}">
 											<button style="width: 98%" disabled="true" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
 										</td>
 										<!--<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.username.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >-->

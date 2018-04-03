@@ -118,6 +118,11 @@ public class MainListServiceImpl implements MainListService {
         return this.mainListDao.getMainList(username);
     }
 
+    @Override
+    public List<MainListEntity> findPaidDonationsPayerName(String payerUsername) throws MainListNotFoundException {
+        return this.mainListDao.findPaidDonationsPayerName(payerUsername);
+    }
+
 
 }
 

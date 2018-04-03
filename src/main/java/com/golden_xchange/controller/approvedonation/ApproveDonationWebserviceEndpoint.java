@@ -47,16 +47,16 @@ public class ApproveDonationWebserviceEndpoint {
 
     @RequestMapping({"/approveDonation"})
     public String handleApproveDonationRequest(ApproveDonationRequest request, HttpServletRequest requests, Model model, HttpSession session,
-                                                                @RequestParam(value = "approvers", required = false) Integer approvers) throws Exception {
+                                               @RequestParam(value = "approvers", required = false) Integer approvers) throws Exception {
         Logger LOG = Logger.getLogger(this.getClass().getName());
 
-        if(null!=approvers && approvers==2){
+        if (null != approvers && approvers == 2) {
             request.setApprover(2);
         }
         ApproveDonationResponse response = new ApproveDonationResponse();
         new MainListEntity();
         new GoldenRichesUsers();
-        GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
+        GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
         request.setUsername(goldenRichesUsers.getUserName());
         try {
             Date utilDate = new Date();
@@ -71,8 +71,8 @@ public class ApproveDonationWebserviceEndpoint {
 //                return errorResponse(model,response,session);
 //            }
 
-            if(request.getApprover() == 1) {
-                if(mainListEntity.getPayerUsername().equals(request.getUsername())) {
+            if (request.getApprover() == 1) {
+                if (mainListEntity.getPayerUsername().equals(request.getUsername())) {
                     mainListEntity.setStatus(1);
                     mainListEntity.setUpdatedDate(sqlDate);
                     this.mainListService.saveUser(mainListEntity);
@@ -87,14 +87,15 @@ public class ApproveDonationWebserviceEndpoint {
                     //do nothing skip
                 }
 
+
                 response.setMessage("Payer Has Approved Payment For Deposit Reference: " + request.getDepositReference());
                 response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
                 return "redirect:/donation_status";
 
-            } else if(request.getApprover() != 2) {
+            } else if (request.getApprover() != 2) {
                 response.setMessage("Please set Approver: [1 = PayerApprover] [2= Receiver Approver]");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                return errorResponse(model,response,session);
+                return errorResponse(model, response, session);
             } else {
                 mainListEntity.setStatus(2);
                 mainListEntity.setUpdatedDate(sqlDate);
@@ -102,23 +103,43 @@ public class ApproveDonationWebserviceEndpoint {
                 response.setMessage("Donation Receiver has Approved Deposit Reference: " + request.getDepositReference());
                 response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
                 List<MainListEntity> donations = this.mainListService.findDonorsByDonationReference(mainListEntity.getDonationReference());
+                List<MainListEntity> paidDonations = this.mainListService.findPaidDonationsPayerName(mainListEntity.getPayerUsername());
                 Iterator var10 = donations.iterator();
 
-                boolean setToCompleted=true;
-
-                for(MainListEntity donated: donations){
-                    if(donated.getStatus() == 2 && (donated.getEnabled() != 1 || donated.getEnabled() != 0)) {
-                        //do nothing
+                boolean paidAll = true;
+                double amountToPay = 0;
+                for (MainListEntity mainListEntity2 : paidDonations) {
+                    if (mainListEntity2.getStatus() == 0 || mainListEntity2.getStatus() == 1) {
+                        paidAll = false;
+                        break;
+                    } else {
+                        amountToPay = amountToPay + mainListEntity2.getDonatedAmount();
                     }
-                    else{
-                        setToCompleted =false;
+                }
+
+                if (paidAll) {
+                    //update donation to 1 so it can be added to
+                    MainListEntity mainListEntity3 = mainListService.findDonationByMainListReference(mainListEntity.getDonationReference());
+                    if (amountToPay - mainListEntity3.getDonatedAmount() == 0.0) {
+                        mainListEntity3.setStatus(1);
+                        mainListService.saveUser(mainListEntity3);
+                    }
+                }
+
+                boolean setToCompleted = true;
+
+                for (MainListEntity donated : donations) {
+                    if (donated.getStatus() == 2 && (donated.getEnabled() != 1 || donated.getEnabled() != 0)) {
+                        //do nothing
+                    } else {
+                        setToCompleted = false;
                     }
 
                 }
 
-                if(setToCompleted){
+                if (setToCompleted) {
                     MainListEntity completeDonation = this.mainListService.findDonationByMainListReference(mainListEntity.getDonationReference());
-                    if(completeDonation.getAdjustedAmount() == 0.0D) {
+                    if (completeDonation.getAdjustedAmount() == 0.0D) {
                         completeDonation.setStatus(3);
                         completeDonation.setEnabled(0);
                         this.mainListService.saveUser(completeDonation);
@@ -130,19 +151,20 @@ public class ApproveDonationWebserviceEndpoint {
         } catch (MainListNotFoundException var13) {
             response.setMessage(var13.getMessage());
             response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
-            LOG.error(var13.getCause() +"   "+ var13.getMessage());
-            return errorResponse(model,response,session);
+            LOG.error(var13.getCause() + "   " + var13.getMessage());
+            return errorResponse(model, response, session);
         }
 
 
         return "redirect:/donation_status";
     }
-    private String errorResponse(Model model, ApproveDonationResponse response,HttpSession session ) {
-        model.addAttribute("profile",session.getAttribute("profile"));
+
+    private String errorResponse(Model model, ApproveDonationResponse response, HttpSession session) {
+        model.addAttribute("profile", session.getAttribute("profile"));
         GetMainListResponse responses = (GetMainListResponse) session.getAttribute("mainList");
         responses.setStatusCode(response.getStatusCode());
         responses.setMessage(response.getMessage());
-        model.addAttribute("response",responses);
+        model.addAttribute("response", responses);
         return "donation_status";
     }
 }

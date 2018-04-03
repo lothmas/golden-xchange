@@ -34,7 +34,9 @@ import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -83,14 +85,13 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                     List<MainListEntity> payerPendingList = this.mainListService.returnPendingPayerList(goldenRichesUsers.getUserName());
                     Collections.reverse(payerPendingList);
                     for (MainListEntity mainListEntity : payerPendingList) {
-
                         prepareMainListResponse(response, mainListEntity);
                     }
 
                     response.setMessage("sucessfull");
                     response.setStatusCode(200);
                 } catch (Exception exp) {
-                    response.setMessage("not sucessfull");
+                    response.setMessage("No Previous Donations Found. Create a New Donation");
                     response.setStatusCode(500);
                 }
                 model.addAttribute("response", response);
@@ -136,7 +137,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
             }
             MainListEntity mainListEntity1 = mainListService.findDonationByMainListReference(returnedSponsor.get(0).getDonationReference());
-            totalAmountToPay = mainListEntity1.getDonatedAmount() - amountToSponsors;
+            totalAmountToPay = mainListEntity1.getAmountToReceive() - amountToSponsors;
 
             if (totalAmountToPay != 0) {
                 getMainListAfterPayingSponsor(response, getMainList, totalAmountToPay, mainListEntity1.getUserName());
@@ -176,7 +177,19 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         mainLists.setDonationType(retunedList.getDonationType());
         mainLists.setStatus(retunedList.getStatus());
         mainLists.setPayerUsername(retunedList.getPayerUsername());
+        mainLists.setAmountToReceive(retunedList.getAmountToReceive());
+        LocalDateTime endDate = LocalDateTime.now();
+        long numberOfDays = Duration.between(retunedList.getUpdatedDate().toLocalDateTime(), endDate).toDays();
+        double percentage=(double)numberOfDays/30*retunedList.getAmountToReceive();
+        if(numberOfDays<=30){
+            mainLists.setMaturityAmount(Math.round((percentage) * 100.0) / 100.0);
+        }
+        else{
+            mainLists.setMaturityAmount(retunedList.getAmountToReceive());
+        }
+
         response.getReturnData().add(mainLists);
+
     }
 
     private boolean getMainListAfterPayingSponsor(GetMainListResponse response, boolean getMainList, double amountToPay, String username) throws MainListNotFoundException, GoldenRichesUsersNotFoundException {
@@ -189,7 +202,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             List<MainListEntity> mainList = mainListService.getMainList(username);
             amountToPay = createDonationProcess(response, amountToPay, username, sqlDate, true, mainList);
 
-            if(amountToPay>0){
+            if (amountToPay > 0) {
                 //keeper add keeper if not
                 amountToPay = createDonationProcess(response, amountToPay, username, sqlDate, false, mainList);
             }
@@ -204,7 +217,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         while (amountToPay > 0) {
             for (MainListEntity mainListEntity : mainList) {
 
-                if (checkDateLimit(mainListEntity.getUpdatedDate())&&keeper) {
+                if (checkDateLimit(mainListEntity.getUpdatedDate()) && keeper) {
                     amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
                 }
                 if (!keeper) {

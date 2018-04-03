@@ -78,6 +78,10 @@ public class MainList {
 
     protected String payerUsername;
 
+    protected double maturityAmount;
+
+    protected double amountToReceive;
+
     /**
      * Gets the value of the username property.
      * 
@@ -332,5 +336,21 @@ public class MainList {
 
     public void setPayerUsername(String payerUsername) {
         this.payerUsername = payerUsername;
+    }
+
+    public double getMaturityAmount() {
+        return maturityAmount;
+    }
+
+    public void setMaturityAmount(double maturityAmount) {
+        this.maturityAmount = maturityAmount;
+    }
+
+    public double getAmountToReceive() {
+        return amountToReceive;
+    }
+
+    public void setAmountToReceive(double amountToReceive) {
+        this.amountToReceive = amountToReceive;
     }
 }
