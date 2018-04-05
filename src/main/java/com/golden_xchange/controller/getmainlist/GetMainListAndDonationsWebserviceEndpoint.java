@@ -70,7 +70,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     static double amountToSponsors = 0;
 
 
-    @RequestMapping({"/donation_status", "/donation_state"})
+    @RequestMapping({"/current_donations", "/donation_state"})
     public String handleCreateGoldenRichesRequest(HttpServletRequest requests, Model model, HttpSession session)
             throws Exception {
         GetMainListResponse response = new GetMainListResponse();
@@ -137,7 +137,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
             }
             MainListEntity mainListEntity1 = mainListService.findDonationByMainListReference(returnedSponsor.get(0).getDonationReference());
-            totalAmountToPay = mainListEntity1.getAmountToReceive() - amountToSponsors;
+            totalAmountToPay = mainListEntity1.getDonatedAmount() - amountToSponsors;
 
             if (totalAmountToPay != 0) {
                 getMainListAfterPayingSponsor(response, getMainList, totalAmountToPay, mainListEntity1.getUserName());
@@ -259,7 +259,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         model.addAttribute("response", response);
         session.setAttribute("mainList", response);
         model.addAttribute("profile", (GoldenRichesUsers) session.getAttribute("profile"));
-        return "donation_status";
+        return "current_donations";
     }
 
 

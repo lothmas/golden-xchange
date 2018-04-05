@@ -123,6 +123,11 @@ public class MainListServiceImpl implements MainListService {
         return this.mainListDao.findPaidDonationsPayerName(payerUsername);
     }
 
+    @Override
+    public MainListEntity findDonationToStartMaturityProcess(String userName, double donatedAmount) throws MainListNotFoundException {
+        return this.mainListDao.findDonationToStartMaturityProcess(userName,donatedAmount);
+    }
+
 
 }
 

@@ -107,7 +107,7 @@ public class CreateDonationWebserviceEndpoint {
 //                return errorResponse(model, response, session);
 //            }
         }
-        return "redirect:/donation_status";
+        return "redirect:/current_donations";
     }
 
     public MainListEntity createDonationFromExisting(CreateDonationRequest request, MainListEntity createDonation, CreateDonationResponse response, Timestamp sqlDate) throws NoSuchAlgorithmException {

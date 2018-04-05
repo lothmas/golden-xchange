@@ -67,6 +67,8 @@ public class Controller {
         int index = url.lastIndexOf("/");
         if (index != -1) {
             if (url.contains("profile")) {
+                model.addAttribute("profile",session.getAttribute("profile"));
+                model.addAttribute("response",new CreateDonationResponse());
                 return "profile";
             }
             if (url.contains("dashboard")) {
@@ -81,10 +83,10 @@ public class Controller {
                 }
                 return "new_donation";
             }
-//            if (url.contains("donation_status")) {
+//            if (url.contains("current_donations")) {
 //
 //
-//                return "donation_status";
+//                return "current_donations";
 //            }
 
         }

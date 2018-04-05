@@ -185,7 +185,7 @@
 					<li class="nav-header">Navigation</li>
 					<li><a href="profile"><i class="fa fa-table"></i> <span>PROFILE</span></a></li>
 					<li><a href="new_donation"><i class="fa fa-image"></i> <span>NEW DONATION</span></a></li>
-					<li><a href="donation_status"><i class="fa fa-clock"></i> <span>PENDING APPROVAL</span></a></li>
+					<li><a href="current_donations"><i class="fa fa-clock"></i> <span>NEWLY CREATED</span></a></li>
 					<li><a href="calendar.html"><i class="fa fa-calendar"></i> <span>DONATIONS STATUS</span></a></li>
 					<!-- begin sidebar minify button -->
 					<li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
@@ -210,7 +210,66 @@
 			<!-- begin page-header -->
 			<h1 class="page-header">New Donation </h1>
 			<!-- end page-header -->
-			
+			<div class="row">
+				<!-- begin col-3 -->
+				<div class="col-lg-3 col-md-6">
+					<div class="widget widget-stats bg-yellow-darker">
+						<div class="stats-icon"><i class="fa fa-user"></i></div>
+						<div class="stats-info">
+							<h4>Profile</h4>
+							<p>User Details</p>
+						</div>
+						<div class="stats-link">
+							<a href="profile">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+						</div>
+					</div>
+				</div>
+				<!-- end col-3 -->
+				<!-- begin col-3 -->
+				<div class="col-lg-3 col-md-6">
+					<div class="widget widget-stats bg-orange">
+						<div class="stats-icon"><i class="fa fa-file"></i></div>
+						<div class="stats-info">
+							<h4>Give To Receive</h4>
+							<p>New Donation</p>
+						</div>
+						<div class="stats-link">
+							<a href="new_donation">Donate <i class="fa fa-arrow-alt-circle-right"></i></a>
+						</div>
+					</div>
+				</div>
+				<!-- end col-3 -->
+				<!-- begin col-3 -->
+				<div class="col-lg-3 col-md-6">
+					<div class="widget widget-stats bg-purple">
+						<div class="stats-icon"><i class="fa fa-users"></i></div>
+						<div class="stats-info">
+							<h4>Tracking Newly Created Donations </h4>
+							<p>Current Donation</p>
+						</div>
+						<div class="stats-link">
+							<a href="current_donations">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+						</div>
+					</div>
+				</div>
+				<!-- end col-3 -->
+				<!-- begin col-3 -->
+				<div class="col-lg-3 col-md-6">
+					<div class="widget widget-stats bg-black-lighter">
+						<div class="stats-icon"><i class="fa fa-clock"></i></div>
+						<div class="stats-info">
+							<h4>All Latest Donation Status</h4>
+							<p>Active Donations </p>
+						</div>
+						<div class="stats-link">
+							<a href="donation_state">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+						</div>
+					</div>
+				</div>
+
+
+				<!-- end col-3 -->
+			</div>
 			<!-- begin wizard-form -->
 			<form action="#" data-th-action="@{./createDonation}" th:object="${register}" method="post"
 				  enctype="multipart/form-data" class="margin-bottom-0">

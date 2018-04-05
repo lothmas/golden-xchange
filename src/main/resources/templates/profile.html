@@ -178,13 +178,13 @@
 				<!-- begin sidebar nav -->
 				<ul class="nav">
 					<li class="nav-header">Navigation</li>
-					<li><a href="profile"><i class="fa fa-table"></i> <span>PROFILE</span></a></li>
-					<li><a href="new_donation"><i class="fa fa-image"></i> <span>NEW DONATION</span></a></li>
-					<li><a href="donation_status"><i class="fa fa-clock"></i> <span>PENDING APPROVAL</span></a></li>
+					<li><a href="profile"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>
+					<li><a href="new_donation"><i class="fa fa-file"></i> <span>NEW DONATION</span></a></li>
+					<li><a href="current_donations"><i class="fa fa-clock"></i> <span>NEWLY CREATED</span></a></li>
 					<li><a href="calendar.html"><i class="fa fa-calendar"></i> <span>DONATIONS STATUS</span></a></li>
 					<!-- begin sidebar minify button -->
 					<li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
-			        <!-- end sidebar minify button -->
+					<!-- end sidebar minify button -->
 				</ul>
 				<!-- end sidebar nav -->
 			</div>
@@ -207,6 +207,7 @@
 
 						<!-- END profile-header-img -->
 
+
 						<div class="row">
 							<!-- begin col-3 -->
 							<div class="col-lg-2 col-md-2">
@@ -217,53 +218,7 @@
 								</div>
 
 							</div>
-							<div class="col-lg-1 col-md-6" >
-								<!-- BEGIN profile-header-info -->
-								<div class="profile-header-info">
-									<h4 class="m-t-10 m-b-5" th:text="${profile.userName}"></h4>
-									<br/>
-									<a align="left" th:text="${profile.firstName + '  '+profile.surname}">Edit Profile</a>
 
-								</div>
-							</div>
-							<div class="col-lg-3 col-md-6">
-								<div class="widget widget-stats bg-black-lighter">
-									<div class="stats-icon"><i class="fa fa-clone"></i></div>
-									<div class="stats-info">
-										<h4>Give To Receive</h4>
-										<p><h3>New Donation</h3></p>
-									</div>
-									<div class="stats-link">
-										<a href="new_donation">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
-									</div>
-								</div>
-							</div>
-							<!-- end col-3 -->
-							<!-- begin col-3 -->
-							<div class="col-lg-3 col-md-6">
-								<div class="widget widget-stats bg-grey-darker">
-									<div class="stats-icon"><i class="fa fa-link"></i></div>
-									<div class="stats-info">
-										<h4>Pending Approval</h4>
-										<p><h3>Approvals</h3></p>
-									</div>
-									<div class="stats-link">
-										<a href="new_donation">Donate <i class="fa fa-arrow-alt-circle-right"></i></a>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-3 col-md-6">
-								<div class="widget widget-stats bg-orange">
-									<div class="stats-icon"><i class="fa fa-desktop"></i></div>
-									<div class="stats-info">
-										<h4>All Donations Status</h4>
-										<p><h3>Donation Status</h3></p>
-									</div>
-									<div class="stats-link">
-										<a href="profile">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
-									</div>
-								</div>
-							</div>
 							<!-- end col-3 -->
 							<!-- begin col-3 -->
 							<!--<div class="col-lg-3 col-md-6">-->

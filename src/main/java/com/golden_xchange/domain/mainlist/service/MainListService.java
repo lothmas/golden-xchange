@@ -55,5 +55,7 @@ public interface MainListService {
     List<MainListEntity> getMainList(String username) throws MainListNotFoundException;
 
     List<MainListEntity> findPaidDonationsPayerName(String payerUsername) throws MainListNotFoundException;
+
+    public MainListEntity findDonationToStartMaturityProcess(String userName,double donatedAmount) throws MainListNotFoundException;
 }
 
