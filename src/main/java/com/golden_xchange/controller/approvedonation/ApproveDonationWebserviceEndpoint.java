@@ -105,7 +105,6 @@ public class ApproveDonationWebserviceEndpoint {
                 response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
                 List<MainListEntity> donations = this.mainListService.findDonorsByDonationReference(mainListEntity.getDonationReference());
                 List<MainListEntity> paidDonations = this.mainListService.findPaidDonationsPayerName(mainListEntity.getPayerUsername());
-                Iterator var10 = donations.iterator();
 
                 boolean paidAll = true;
                 double amountToPay = 0;

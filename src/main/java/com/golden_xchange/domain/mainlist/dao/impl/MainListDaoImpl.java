@@ -317,5 +317,23 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         }
     }
 
+    @Override
+    public List<MainListEntity> outStandingPayment(String payerUsername) throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", 1))
+                .add(Restrictions.or(Restrictions.eq("status", 0), Restrictions
+                        .or(Restrictions.eq("status",1))))
+                .add(Restrictions.gt("adjustedAmount", 0.0))
+                .add(Restrictions.eq("payerUsername",payerUsername))
+                .list();
+        if (returnMainList.size() == 0 ) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        }
+       else {
+            return returnMainList;
+        }
+    }
+
+
 }
 

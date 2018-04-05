@@ -41,7 +41,7 @@
 		<div id="header" class="header navbar-default">
 			<!-- begin navbar-header -->
 			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Color</b> Admin</a>
+				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Golden</b> -Xchange</a>
 				<button type="button" class="navbar-toggle" data-click="sidebar-toggled">
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -49,17 +49,10 @@
 				</button>
 			</div>
 			<!-- end navbar-header -->
-			
+
 			<!-- begin header-nav -->
 			<ul class="navbar-nav navbar-right">
-				<li>
-					<form class="navbar-form">
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Enter keyword" />
-							<button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
-						</div>
-					</form>
-				</li>
+
 				<li class="dropdown">
 					<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
 						<i class="fa fa-bell"></i>
@@ -134,8 +127,9 @@
 				</li>
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<img src="../assets/img/user/user-13.jpg" alt="" /> 
-						<span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
+						<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
+							 alt="no profile pic set"/>
+						<span class="d-none d-md-inline" th:text="${profile.userName}"></span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="javascript:;" class="dropdown-item">Edit Profile</a>
@@ -183,10 +177,10 @@
 				<!-- begin sidebar nav -->
 				<ul class="nav">
 					<li class="nav-header">Navigation</li>
-					<li><a href="profile"><i class="fa fa-table"></i> <span>PROFILE</span></a></li>
-					<li><a href="new_donation"><i class="fa fa-image"></i> <span>NEW DONATION</span></a></li>
-					<li><a href="current_donations"><i class="fa fa-clock"></i> <span>NEWLY CREATED</span></a></li>
-					<li><a href="calendar.html"><i class="fa fa-calendar"></i> <span>DONATIONS STATUS</span></a></li>
+					<li><a href="profile"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>
+					<li><a href="new_donation"><i class="fa fa-image"></i> <span>CREATE DONATION</span></a></li>
+					<li><a href="current_donations"><i class="fa fa-clock"></i> <span>CURRENT DONATION</span></a></li>
+					<li><a href="donation_state"><i class="fa fa-table"></i> <span>ALL DONATIONS</span></a></li>
 					<!-- begin sidebar minify button -->
 					<li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
 					<!-- end sidebar minify button -->
@@ -242,10 +236,10 @@
 				<!-- begin col-3 -->
 				<div class="col-lg-3 col-md-6">
 					<div class="widget widget-stats bg-purple">
-						<div class="stats-icon"><i class="fa fa-users"></i></div>
+						<div class="stats-icon"><i class="fa fa-clock"></i></div>
 						<div class="stats-info">
 							<h4>Tracking Newly Created Donations </h4>
-							<p>Current Donation</p>
+							<p>Current Donations</p>
 						</div>
 						<div class="stats-link">
 							<a href="current_donations">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -256,10 +250,10 @@
 				<!-- begin col-3 -->
 				<div class="col-lg-3 col-md-6">
 					<div class="widget widget-stats bg-black-lighter">
-						<div class="stats-icon"><i class="fa fa-clock"></i></div>
+						<div class="stats-icon"><i class="fa fa-table" aria-hidden="true"></i></div>
 						<div class="stats-info">
 							<h4>All Latest Donation Status</h4>
-							<p>Active Donations </p>
+							<p>ALL Donations </p>
 						</div>
 						<div class="stats-link">
 							<a href="donation_state">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -328,7 +322,7 @@
 										<div class="alert alert-danger" th:if="${null!=response.message}">
 											<strong>Danger!</strong> <span th:text="${response.message}"></span>
 										</div>
-										<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Confirm Your Bank Account</legend>
+										<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Confirm Your Bank Detail</legend>
 										<!-- begin form-group row -->
 										<div class="form-group row m-b-10">
 											<label class="col-md-3 text-md-right col-form-label">Bank Name</label>
@@ -368,8 +362,12 @@
 											</div>
 										</div>
 										<!-- end form-group row -->
+										<div class=" pull-right">
+											<button type="button"  class="btn btn-default"><span class="badge">info</span>By Clicking Next You Confirm Your Above Bank Details To Which You Will Receive Donation PayBack </button>
+										</div>
 
 									</div>
+
 									<!-- end col-8 -->
 								</div>
 								<!-- end row -->

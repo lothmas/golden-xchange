@@ -63,15 +63,22 @@ public class CreateDonationWebserviceEndpoint {
         if(action.equals("1")){
             if (commonValidator(request, response))return errorResponse(model, response,session);
             try{
-            List<MainListEntity> mainListEntities= donationService.findMainListsEntityByUsername(request.getPayerUsername());
+                List<MainListEntity> paidDonations = this.donationService.outStandingPayment(request.getPayerUsername());
+                response.setMessage("You still have un-completed donations and can't make new ones DEPOSIT REF: "+ paidDonations.get(0).getDepositReference());
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return errorResponse(model, response,session);
 
-            for(MainListEntity mainListEntity:mainListEntities){
-                if(mainListEntity.getStatus()!=3 && request.getPayerUsername().equals(mainListEntity.getPayerUsername()) && mainListEntity.getDonationType()==1){
-                    response.setMessage("You still have un-completed donations and can't make new ones DONATION REF: "+ mainListEntity.getMainListReference());
-                    response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                    return errorResponse(model, response,session);
-                }
-            }}
+
+
+
+//            for(MainListEntity mainListEntity:mainListEntities){
+//                if((mainListEntity.getStatus()!=3 && mainListEntity.getStatus()!=2) && request.getPayerUsername().equals(mainListEntity.getPayerUsername()) && mainListEntity.getDonationType()==1){
+//                   
+//                }
+//            }
+//            
+            
+            }
             catch(Exception ex){
                //do nothing
             }
