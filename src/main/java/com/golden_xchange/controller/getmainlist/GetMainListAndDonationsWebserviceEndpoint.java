@@ -74,6 +74,8 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     public String handleCreateGoldenRichesRequest(HttpServletRequest requests, Model model, HttpSession session)
             throws Exception {
         GetMainListResponse response = new GetMainListResponse();
+        model.addAttribute("notifications",session.getAttribute("notifications")) ;
+
         try {
             String url = requests.getRequestURI();
 

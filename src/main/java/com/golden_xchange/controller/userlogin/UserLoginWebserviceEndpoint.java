@@ -6,6 +6,8 @@
 package com.golden_xchange.controller.userlogin;
 
 
+import com.golden_xchange.domain.notifications.model.NotificationsEntity;
+import com.golden_xchange.domain.notifications.service.NotificationsService;
 import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * @author louis
@@ -37,6 +40,9 @@ public class UserLoginWebserviceEndpoint {
 
     @Autowired
     GoldenRichesUsersService goldenRichesUsersService;
+
+    @Autowired
+    NotificationsService notificationsService;
 
 
     @RequestMapping({"/login"})
@@ -73,7 +79,6 @@ public class UserLoginWebserviceEndpoint {
             model.addAttribute("profile", goldenRichesUsers);
             session.setAttribute("profile", goldenRichesUsers);
 
-
         } catch (GoldenRichesUsersNotFoundException | NoSuchAlgorithmException grunf) {
 
             try {
@@ -83,6 +88,8 @@ public class UserLoginWebserviceEndpoint {
                 response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
                 model.addAttribute("profile", goldenRichesUsers);
                 session.setAttribute("profile", goldenRichesUsers);
+                getNotifications(model, goldenRichesUsers,session);
+
                 return "profile";
             } catch (GoldenRichesUsersNotFoundException | NoSuchAlgorithmException unf) {
                 response.setMessage(unf.getMessage());
@@ -94,7 +101,20 @@ public class UserLoginWebserviceEndpoint {
         }
         response.setMessage("User: " + goldenRichesUsers.getUserName() + " Successfully LoggedIn");
         response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
+
+        getNotifications(model, goldenRichesUsers,session);
         return "profile";
+    }
+
+    private void getNotifications(Model model, GoldenRichesUsers goldenRichesUsers,HttpSession session) {
+        try {
+            List<NotificationsEntity> notificationsEntityList=notificationsService.getUserNotifications(goldenRichesUsers.getId());
+          model.addAttribute("notifications",notificationsEntityList) ;
+          session.setAttribute("notifications",notificationsEntityList);
+        }
+        catch (Exception exp){
+            model.addAttribute("notifications",new NotificationsEntity()) ;
+            session.setAttribute("notifications",new NotificationsEntity());        }
     }
 
     private String errorResponse(Model model, UserLoginResponse response) {

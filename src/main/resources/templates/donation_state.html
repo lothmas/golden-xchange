@@ -254,7 +254,7 @@
 						<div class="stats-icon"><i class="fa fa-clock"></i></div>
 						<div class="stats-info">
 							<h4>Tracking Newly Created Donations </h4>
-							<p>Current Donations</p>
+							<p>Latest Donation</p>
 						</div>
 						<div class="stats-link">
 							<a href="current_donations">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -268,7 +268,7 @@
 						<div class="stats-icon"><i class="fa fa-table" aria-hidden="false"></i></div>
 						<div class="stats-info">
 							<h4>All Latest Donation Status</h4>
-							<p>ALL Donations </p>
+							<p>All Donations </p>
 						</div>
 						<div class="stats-link">
 							<a href="donation_state">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -315,7 +315,7 @@
 									<thead>
 									<tr>
 										<!--<th></th>-->
-										<th width="1%" data-orderable="false">Donation Type</th>
+										<!--<th width="1%" data-orderable="false">Donation Type</th>-->
 										<th>Payer Username</th>
 										<th>Deposit Reference</th>
 										<th>Bank Name</th>
@@ -334,8 +334,8 @@
 											<!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
 										<!--</td>-->
 										<!--<td width="1%" class="f-s-600 text-inverse" th:text="${rowStat.count}"/>-->
-										<td width="1%" class="with-img" th:if="${result.donationType==1}"><img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" /></td>
-										<td width="1%" class="with-img" th:if="${result.donationType!=1}"><img src="../assets/img/user/user-2.jpg" class="img-rounded height-30" /></td>
+										<!--<td width="1%" class="with-img" th:if="${result.donationType==1}"><img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" /></td>-->
+										<!--<td width="1%" class="with-img" th:if="${result.donationType!=1}"><img src="../assets/img/user/user-2.jpg" class="img-rounded height-30" /></td>-->
 										<td th:text="${result.payerUsername}"/>
 										<td th:text="${result.depositReference}"/>
 										<td th:text="${result.bankName}"/>
@@ -347,7 +347,7 @@
 
 
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==0}">
-                                            <button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-muted btn-sm text-left">Pending Payment</button>
+                                            <button disabled="disabled"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-muted btn-sm text-left">Pending Payment</button>
 											<input name="approver"  type="hidden" th:value="1"/>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType==0}">
@@ -360,63 +360,91 @@
 											<h4><p  class="text-danger " align="center" th:text="${'R'+result.maturityAmount}"/></h4>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==2} ">
-											<button  style="width: 98%" type="button" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPayment">Confirm Payment</button>
+											<button   type="button" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPayment">Confirm Payment</button>
 											<input name="approver"  type="hidden" th:value="1"/>
 											<input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>
+                                            <div class="modal fade" id="confirmPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmPaymentTitle">Confirm Payment (CONFIRMATION)</h5>
+
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <h4><div class="modal-body" >
+                                                            <p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>
+
+                                                            <p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>
+                                                            <p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>
+
+                                                        </div>
+                                                        </h4>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-info">Confirm Payment</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==1}  ">
-											<button style="width: 98%" type="button" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPayment">Confirm Payment</button>
-											<input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>
+											<button  type="button" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPayment1">Confirm Payment</button>
+											<!--<input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>-->
+											<input name="approver"  type="hidden" th:value="1"/>
+                                            <input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>
+                                            <div class="modal fade" id="confirmPayment1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmPaymentTitle1">Confirm Payment (CONFIRMATION)</h5>
 
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <h4><div class="modal-body" >
+                                                            <p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>
+
+                                                            <p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>
+                                                            <p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>
+
+                                                        </div>
+                                                        </h4>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-info">Confirm Payment</button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType!=0}">
-											<button style="width: 98%" disabled="true" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
+											<button  disabled="true" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
 										</td>
 										<!--<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.username.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >-->
-											<!--<button style="width: 98%" name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>-->
+											<!--<button  name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>-->
 										<!--</td>-->
 										<td class="with-btn" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >
 											<button name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-light bg-dark btn-sm text-white">Waiting Confirmation</button>
 											<!--<input name="approver"  type="hidden" th:value="1"/>-->
 										</td>
 										<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1}" >
-                                            <button style="width: 98%"  type="button" class="btn btn-danger btn-sm text-left" data-toggle="modal" data-target="#approveDonation">Approve Donation</button>
+                                            <button   type="button" class="btn btn-danger btn-sm text-left" data-toggle="modal" data-target="#approveDonation">Approve Donation</button>
 											<input name="approvers"  type="hidden" th:value="2"/>
 											<input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>
 
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}" >
-                                            <button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white">Completed</button>
+                                            <button  disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white">Completed</button>
                                         </td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==3}" >
-											<button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white" >Completed</button>
+											<button  disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white" >Completed</button>
 										</td>
 									</tr>
-										<div class="modal fade" id="confirmPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-											<div class="modal-dialog modal-dialog-centered" role="document">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title" id="confirmPaymentTitle">Confirm Payment (CONFIRMATION)</h5>
 
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-															<span aria-hidden="true">&times;</span>
-														</button>
-													</div>
-													<h4><div class="modal-body" >
-														<p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>
-
-														<p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>
-														<p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>
-
-													</div>
-													</h4>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-														<button type="submit" class="btn btn-info">Confirm Payment</button>
-													</div>
-												</div>
-											</div>
-										</div>
 										<div class="modal fade" id="approveDonation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 										<div class="modal-dialog modal-dialog-centered" role="document">
 											<div class="modal-content">

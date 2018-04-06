@@ -59,6 +59,7 @@ public class CreateDonationWebserviceEndpoint {
         Date utilDate = new Date();
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp sqlDate = new Timestamp(utilDate.getTime());
+        model.addAttribute("notifications",session.getAttribute("notifications")) ;
 
         if(action.equals("1")){
             if (commonValidator(request, response))return errorResponse(model, response,session);

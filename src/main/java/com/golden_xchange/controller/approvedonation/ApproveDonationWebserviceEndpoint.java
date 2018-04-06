@@ -48,7 +48,10 @@ public class ApproveDonationWebserviceEndpoint {
     @RequestMapping({"/approveDonation"})
     public String handleApproveDonationRequest(ApproveDonationRequest request, HttpServletRequest requests, Model model, HttpSession session,
                                                @RequestParam(value = "approvers", required = false) Integer approvers
-    ,@RequestParam(value = "requester", required = false) String requester) throws Exception {
+    ,@RequestParam(value = "requester", required = false) String requester
+            ,@RequestParam(value = "selectedRow", required = false) String Integer) throws Exception {
+        model.addAttribute("notifications",session.getAttribute("notifications")) ;
+
         Logger LOG = Logger.getLogger(this.getClass().getName());
         String url = requests.getRequestURI();
         if (null != approvers && approvers == 2) {

@@ -271,3 +271,10 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2018-03-20 16:54:09
+CREATE TABLE `golden-xchange`.`notifications` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `userId` VARCHAR(45) NOT NULL,
+  `message` VARCHAR(5000) NOT NULL,
+  `creationDate` DATE NOT NULL,
+  `status` INT(1) NOT NULL,
+  PRIMARY KEY (`id`));
