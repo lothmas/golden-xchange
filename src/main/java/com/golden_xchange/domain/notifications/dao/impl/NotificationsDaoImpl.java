@@ -11,8 +11,13 @@ import com.golden_xchange.domain.notifications.model.NotificationsEntity;
 import com.golden_xchange.domain.utilities.AbstractDaoImpl;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.jdbc.Expectation;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -22,6 +27,8 @@ import java.util.List;
 @Repository
 public class NotificationsDaoImpl extends AbstractDaoImpl<NotificationsEntity, Integer> implements NotificationsDao {
     Logger schedulerLog = Logger.getLogger(this.getClass().getName());
+    private static EntityManagerFactory emFactory;
+    private static EntityManager em;
 
     LocalDateTime endDate = LocalDateTime.now();
     Date toDate = new Date();
@@ -43,14 +50,30 @@ public class NotificationsDaoImpl extends AbstractDaoImpl<NotificationsEntity, I
 
     @Override
     public void deleteMessage(NotificationsEntity notificationsEntity) {
-        this.delete(notificationsEntity);
+        delete(notificationsEntity);
+    }
+
+    @Override
+    public NotificationsEntity getNotificationByRefAndUser(String userName, String mainRef) throws NotificationsNotFoundException {
+        List<NotificationsEntity> returnMainList = this.getCurrentSession().createCriteria(NotificationsEntity.class)
+                .add(Restrictions.eq("userName", userName))
+                .add(Restrictions.eq("mainListRef", mainRef))
+                .list();
+        if (returnMainList.size() == 0 ) {
+            throw new NotificationsNotFoundException("No Notifications found:");
+        }
+        else {
+            return returnMainList.get(0);
+        }
+
     }
 
 
     @Override
-    public List<NotificationsEntity> getUserNotifications(int userId) throws NotificationsNotFoundException {
+    public List<NotificationsEntity> getUserNotifications(String username) throws NotificationsNotFoundException {
         List<NotificationsEntity> returnMainList = this.getCurrentSession().createCriteria(NotificationsEntity.class)
-                .add(Restrictions.eq("userId", userId))
+                .add(Restrictions.eq("userName", username))
+                .add(Restrictions.eq("status", 0))
                 .list();
         if (returnMainList.size() == 0 ) {
             throw new NotificationsNotFoundException("No Notifications found:");
@@ -59,5 +82,7 @@ public class NotificationsDaoImpl extends AbstractDaoImpl<NotificationsEntity, I
             return returnMainList;
         }
     }
+
+
 }
 

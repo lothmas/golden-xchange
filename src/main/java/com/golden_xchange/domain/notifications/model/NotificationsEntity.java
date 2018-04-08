@@ -1,17 +1,19 @@
 package com.golden_xchange.domain.notifications.model;
 
 import javax.persistence.*;
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "notifications", catalog = "")
 public class NotificationsEntity {
     private int id;
-    private int userId;
+    private String userName ;
     private String message;
     private Date creationDate;
     private int status;
+    private String mainListRef;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -24,13 +26,13 @@ public class NotificationsEntity {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = false, length = 45)
-    public int getUserId() {
-        return userId;
+    @Column(name = "user_name", nullable = false, length = 45)
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserName(String userId) {
+        this.userName = userId;
     }
 
     @Basic
@@ -63,6 +65,16 @@ public class NotificationsEntity {
         this.status = status;
     }
 
+    @Basic
+    @Column(name = "main_list_reference", nullable = false, length = 25)
+    public String getMainListRef() {
+        return mainListRef;
+    }
+
+    public void setMainListRef(String mainListRef) {
+        this.mainListRef = mainListRef;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,14 +82,9 @@ public class NotificationsEntity {
         NotificationsEntity that = (NotificationsEntity) o;
         return id == that.id &&
                 status == that.status &&
-                Objects.equals(userId, that.userId) &&
                 Objects.equals(message, that.message) &&
                 Objects.equals(creationDate, that.creationDate);
     }
 
-    @Override
-    public int hashCode() {
 
-        return Objects.hash(id, userId, message, creationDate, status);
-    }
 }

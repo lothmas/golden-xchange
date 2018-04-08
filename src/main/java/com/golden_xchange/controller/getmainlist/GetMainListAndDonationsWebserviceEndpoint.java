@@ -75,6 +75,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             throws Exception {
         GetMainListResponse response = new GetMainListResponse();
         model.addAttribute("notifications",session.getAttribute("notifications")) ;
+        model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
 
         try {
             String url = requests.getRequestURI();

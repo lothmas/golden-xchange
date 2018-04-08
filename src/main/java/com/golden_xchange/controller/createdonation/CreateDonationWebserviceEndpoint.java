@@ -5,10 +5,13 @@
 
 package com.golden_xchange.controller.createdonation;
 
+import com.golden_xchange.controller.userlogin.UserLoginWebserviceEndpoint;
 import com.golden_xchange.domain.bankaccounts.service.BankAccountService;
 import com.golden_xchange.domain.mainlist.exception.MainListNotFoundException;
 import com.golden_xchange.domain.mainlist.model.MainListEntity;
 import com.golden_xchange.domain.mainlist.service.MainListService;
+import com.golden_xchange.domain.notifications.model.NotificationsEntity;
+import com.golden_xchange.domain.notifications.service.NotificationsService;
 import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
@@ -48,6 +51,10 @@ public class CreateDonationWebserviceEndpoint {
     @Autowired
     BankAccountService bankAccountService;
 
+    @Autowired
+    NotificationsService notificationsService;
+
+
     public CreateDonationWebserviceEndpoint() {
     }
 
@@ -59,6 +66,7 @@ public class CreateDonationWebserviceEndpoint {
         Date utilDate = new Date();
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp sqlDate = new Timestamp(utilDate.getTime());
+        model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
         model.addAttribute("notifications",session.getAttribute("notifications")) ;
 
         if(action.equals("1")){
@@ -108,6 +116,7 @@ public class CreateDonationWebserviceEndpoint {
             mainListEntity.setDonationType(0);
             donationService.saveUser(mainListEntity);
             createForSponsor(goldenRichesUsers,request,mainRef);
+
         }
         else{
 
@@ -115,7 +124,39 @@ public class CreateDonationWebserviceEndpoint {
 //                return errorResponse(model, response, session);
 //            }
         }
+
+        try {
+            List<NotificationsEntity> notificationsEntityList = notificationsService.getUserNotifications(request.getPayerUsername());
+            int count = 0;
+            for (NotificationsEntity notificationsEntity : notificationsEntityList) {
+                if (notificationsEntity.getStatus() == 0) {
+                    count++;
+                }
+            }
+            model.addAttribute("notificationCount", count);
+            session.setAttribute("notificationCount", count);
+            model.addAttribute("notifications", notificationsEntityList);
+            session.setAttribute("notifications", notificationsEntityList);
+        } catch (Exception exp) {
+            model.addAttribute("notifications", new NotificationsEntity());
+            session.setAttribute("notifications", new NotificationsEntity());
+            model.addAttribute("notificationCount", 0);
+            session.setAttribute("notificationCount", 0);
+        }
+
+
         return "redirect:/current_donations";
+    }
+
+    private void createNotificationMessage(CreateDonationRequest request, MainListEntity mainListEntity) {
+        NotificationsEntity notificationsEntity=new NotificationsEntity();
+        notificationsEntity.setMessage("DepositReference: "+mainListEntity.getDepositReference()+", AmountPaid: "+mainListEntity.getDonatedAmount()+", Status: Pending Payment Confirmation");
+        notificationsEntity.setUserName(request.getPayerUsername());
+        notificationsEntity.setCreationDate(new Date());
+        notificationsEntity.setStatus(0);
+        notificationsEntity.setMainListRef(mainListEntity.getMainListReference());
+        notificationsService.save(notificationsEntity);
+
     }
 
     public MainListEntity createDonationFromExisting(CreateDonationRequest request, MainListEntity createDonation, CreateDonationResponse response, Timestamp sqlDate) throws NoSuchAlgorithmException {
@@ -282,6 +323,8 @@ public class CreateDonationWebserviceEndpoint {
         mainListEntity.setPayerUsername(request.getPayerUsername());
         mainListEntity.setDonationType(1);
         donationService.saveUser(mainListEntity);
+        createNotificationMessage(request, mainListEntity);
+
     }
 }
 

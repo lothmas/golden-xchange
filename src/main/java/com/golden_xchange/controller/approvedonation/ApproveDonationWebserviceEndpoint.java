@@ -9,6 +9,8 @@ import com.golden_xchange.controller.getmainlist.GetMainListResponse;
 import com.golden_xchange.domain.mainlist.exception.MainListNotFoundException;
 import com.golden_xchange.domain.mainlist.model.MainListEntity;
 import com.golden_xchange.domain.mainlist.service.MainListService;
+import com.golden_xchange.domain.notifications.model.NotificationsEntity;
+import com.golden_xchange.domain.notifications.service.NotificationsService;
 import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
@@ -41,6 +43,9 @@ public class ApproveDonationWebserviceEndpoint {
     MainListService mainListService;
     @Autowired
     GoldenRichesUsersService goldenRichesUsersService;
+    @Autowired
+    NotificationsService notificationsService;
+
 
     public ApproveDonationWebserviceEndpoint() {
     }
@@ -49,8 +54,11 @@ public class ApproveDonationWebserviceEndpoint {
     public String handleApproveDonationRequest(ApproveDonationRequest request, HttpServletRequest requests, Model model, HttpSession session,
                                                @RequestParam(value = "approvers", required = false) Integer approvers
     ,@RequestParam(value = "requester", required = false) String requester
-            ,@RequestParam(value = "selectedRow", required = false) String Integer) throws Exception {
+            ,@RequestParam(value = "state", required = false) String depositReferenceCount) throws Exception {
+
+
         model.addAttribute("notifications",session.getAttribute("notifications")) ;
+        model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
 
         Logger LOG = Logger.getLogger(this.getClass().getName());
         String url = requests.getRequestURI();
@@ -80,12 +88,23 @@ public class ApproveDonationWebserviceEndpoint {
                     mainListEntity.setStatus(1);
                     mainListEntity.setUpdatedDate(sqlDate);
                     this.mainListService.saveUser(mainListEntity);
+                    NotificationsEntity notificationsEntity=notificationsService.getNotificationByRefAndUser(mainListEntity.getPayerUsername(),mainListEntity.getMainListReference());
+                    notificationsEntity.setStatus(1);
+                    notificationsService.save(notificationsEntity);
+                    createNotificationMessage(mainListEntity.getUserName(),mainListEntity);
                 }
 
                 try {
-//                    GoldenRichesUsers goldenRichesUsers = this.goldenRichesUsersService.findUserByMemberId(mainListEntity.getUserName());
+                    GoldenRichesUsers goldenRichesUsers1 = this.goldenRichesUsersService.findUserByMemberId(mainListEntity.getUserName());
+                    NotificationsEntity notificationsEntity=new NotificationsEntity();
+                    notificationsEntity.setCreationDate(new Date());
+                    notificationsEntity.setMessage("DepositReference: "+mainListEntity.getDepositReference()+", AmountPaid: "+mainListEntity.getDonatedAmount()+", Status: Pending Your Approval");
+                    notificationsEntity.setStatus(0);
+                    notificationsEntity.setUserName(goldenRichesUsers1.getUserName());
+                    notificationsService.save(notificationsEntity);
                     SendSms send = new SendSms();
-                    send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "Golden Riches: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+
+                    send.send("sendSms.sh", goldenRichesUsers1.getTelephoneNumber(), "Golden Riches: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
                     LOG.info("MSG SENT: Golden Riches: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
                 } catch (Exception var12) {
                     //do nothing skip
@@ -94,6 +113,8 @@ public class ApproveDonationWebserviceEndpoint {
 
                 response.setMessage("Payer Has Approved Payment For Deposit Reference: " + request.getDepositReference());
                 response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
+                getLatestNotifications(model, session, goldenRichesUsers);
+
                 return "redirect:/"+requester;
 
             } else if (request.getApprover() != 2) {
@@ -108,6 +129,12 @@ public class ApproveDonationWebserviceEndpoint {
                 response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
                 List<MainListEntity> donations = this.mainListService.findDonorsByDonationReference(mainListEntity.getDonationReference());
                 List<MainListEntity> paidDonations = this.mainListService.findPaidDonationsPayerName(mainListEntity.getPayerUsername());
+
+                NotificationsEntity notificationsEntity=notificationsService.getNotificationByRefAndUser(mainListEntity.getUserName(),mainListEntity.getMainListReference());
+                notificationsEntity.setStatus(1);
+                notificationsService.save(notificationsEntity);
+
+
 
                 boolean paidAll = true;
                 double amountToPay = 0;
@@ -155,6 +182,7 @@ public class ApproveDonationWebserviceEndpoint {
                         completeDonation.setEnabled(0);
                         this.mainListService.saveUser(completeDonation);
                         LOG.info("DONATION COMPLETED: " + completeDonation.getMainListReference());
+                        getLatestNotifications(model, session, goldenRichesUsers);
                         return "redirect:/"+requester;
                     }
                 }
@@ -166,8 +194,30 @@ public class ApproveDonationWebserviceEndpoint {
             return errorResponse(model, response, session,requester);
         }
 
+        getLatestNotifications(model, session, goldenRichesUsers);
 
         return "redirect:/"+requester;
+    }
+
+    private void getLatestNotifications(Model model, HttpSession session, GoldenRichesUsers goldenRichesUsers) {
+        try {
+            List<NotificationsEntity> notificationsEntityList = notificationsService.getUserNotifications(goldenRichesUsers.getUserName());
+            int count = 0;
+            for (NotificationsEntity notificationsEntity : notificationsEntityList) {
+                if (notificationsEntity.getStatus() == 0) {
+                    count++;
+                }
+            }
+            model.addAttribute("notificationCount", count);
+            session.setAttribute("notificationCount", count);
+            model.addAttribute("notifications", notificationsEntityList);
+            session.setAttribute("notifications", notificationsEntityList);
+        } catch (Exception exp) {
+            model.addAttribute("notifications", new NotificationsEntity());
+            session.setAttribute("notifications", new NotificationsEntity());
+            model.addAttribute("notificationCount", 0);
+            session.setAttribute("notificationCount", 0);
+        }
     }
 
     private String errorResponse(Model model, ApproveDonationResponse response, HttpSession session, String requester) {
@@ -177,6 +227,17 @@ public class ApproveDonationWebserviceEndpoint {
         responses.setMessage(response.getMessage());
         model.addAttribute("response", responses);
         return "redirect:/"+requester;
+
+    }
+
+    private void createNotificationMessage(String username, MainListEntity mainListEntity) {
+        NotificationsEntity notificationsEntity=new NotificationsEntity();
+        notificationsEntity.setMessage("DepositReference: "+mainListEntity.getDepositReference()+", AmountPaid: "+mainListEntity.getDonatedAmount()+", Status: Pending Approval");
+        notificationsEntity.setUserName(username);
+        notificationsEntity.setCreationDate(new Date());
+        notificationsEntity.setStatus(0);
+        notificationsEntity.setMainListRef(mainListEntity.getMainListReference());
+        notificationsService.save(notificationsEntity);
 
     }
 }

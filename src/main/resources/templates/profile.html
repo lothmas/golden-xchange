@@ -31,7 +31,7 @@
 	<script src="../assets/plugins/pace/pace.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
 </head>
-<body th:each="result, rowStat : ${notifications}">
+<body>
 	<!-- begin #page-loader -->
 	<div id="page-loader" class="fade show"><span class="spinner"></span></div>
 	<!-- end #page-loader -->
@@ -39,61 +39,7 @@
 	<!-- begin #page-container -->
 	<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
 		<!-- begin #header -->
-		<div id="header" class="header navbar-default">
-			<!-- begin navbar-header -->
-			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Golden</b> -Xchange</a>
-				<button type="button" class="navbar-toggle" data-click="sidebar-toggled">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<!-- end navbar-header -->
-
-			<!-- begin header-nav -->
-			<ul class="navbar-nav navbar-right">
-
-				<li class="dropdown">
-					<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
-						<i class="fa fa-bell"></i>
-						<span class="label" th:text="${rowStat.count}"/>
-					</a>
-					<ul class="dropdown-menu media-list dropdown-menu-right">
-						<li class="dropdown-header" th:text="${'NOTIFICATIONS'+'('+ rowStat.count+')'}"/>
-						<li class="media">
-							<a href="javascript:;">
-								<div class="media-left">
-									<i class="fa fa-envelope media-object bg-silver-darker"></i>
-									<i class="fab fa-facebook-messenger text-primary media-object-icon"></i>
-								</div>
-								<div class="media-body">
-									<h6 class="media-heading">John Smith</h6>
-									<p th:text="${result.message}"></p>
-									<div class="text-muted f-s-11" th:text="${result.creationDate}"/>
-								</div>
-							</a>
-						</li>
-					</ul>
-				</li>
-				<li class="dropdown navbar-user">
-					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
-							 alt="no profile pic set"/>
-						<span class="d-none d-md-inline" th:text="${profile.userName}"></span> <b class="caret"></b>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right">
-						<a href="javascript:;" class="dropdown-item">Edit Profile</a>
-						<a href="javascript:;" class="dropdown-item"><span class="badge badge-danger pull-right">2</span> Inbox</a>
-						<a href="javascript:;" class="dropdown-item">Calendar</a>
-						<a href="javascript:;" class="dropdown-item">Setting</a>
-						<div class="dropdown-divider"></div>
-						<a th:href="@{/logout}" class="dropdown-item">Log Out</a>
-					</div>
-				</li>
-			</ul>
-			<!-- end header navigation right -->
-		</div>
+		<div class="container" th:include="fragments :: notifications" />
 		<!-- end #header -->
 		
 		<!-- begin #sidebar -->
@@ -496,8 +442,7 @@
 									<tr class="highlight">
 										<td class="field">&nbsp;</td>
 										<td class="p-t-10 p-b-10">
-											<button type="submit" class="btn btn-primary width-150">Update</button>
-											<button type="submit" class="btn btn-white btn-white-without-border width-150 m-l-5">Cancel</button>
+											<button type="button"  class="btn btn-info"><span class="badge">info</span> To Update any info Contact System Administrator on Live Chat and make a Request </button>
 										</td>
 									</tr>
 								</tbody>

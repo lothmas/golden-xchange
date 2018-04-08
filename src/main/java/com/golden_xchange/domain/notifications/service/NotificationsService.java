@@ -11,10 +11,12 @@ import com.golden_xchange.domain.notifications.model.NotificationsEntity;
 import java.util.List;
 
 public interface NotificationsService {
-    List<NotificationsEntity> getUserNotifications(int userID)  throws NotificationsNotFoundException;
+    List<NotificationsEntity> getUserNotifications(String userID)  throws NotificationsNotFoundException;
 
     void save(NotificationsEntity notificationsEntity);
 
     void deleteMessage(NotificationsEntity notificationsEntity);
+
+    NotificationsEntity getNotificationByRefAndUser(String userName,String mainRef)  throws NotificationsNotFoundException;
 }
 

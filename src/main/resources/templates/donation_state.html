@@ -5,349 +5,197 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <!--<![endif]-->
 <head>
-	<meta charset="utf-8" />
-	<title>Golden-Xchange | Status</title>
-	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
-	<meta content="" name="description" />
-	<meta content="" name="author" />
+    <meta charset="utf-8"/>
+    <title>Golden-Xchange | Status</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
 
-	<!-- ================== BEGIN BASE CSS STYLE ================== -->
-	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-	<link href="../assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/font-awesome/5.0/css/fontawesome-all.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/animate/animate.min.css" rel="stylesheet" />
-	<link href="../assets/css/default/style.min.css" rel="stylesheet" />
-	<link href="../assets/css/default/style-responsive.min.css" rel="stylesheet" />
-	<link href="../assets/css/default/theme/default.css" rel="stylesheet" id="theme" />
-	<!-- ================== END BASE CSS STYLE ================== -->
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"/>
+    <link href="../assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/font-awesome/5.0/css/fontawesome-all.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/animate/animate.min.css" rel="stylesheet"/>
+    <link href="../assets/css/default/style.min.css" rel="stylesheet"/>
+    <link href="../assets/css/default/style-responsive.min.css" rel="stylesheet"/>
+    <link href="../assets/css/default/theme/default.css" rel="stylesheet" id="theme"/>
+    <!-- ================== END BASE CSS STYLE ================== -->
 
-	<!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-	<link href="../assets/plugins/jquery-jvectormap/jquery-jvectormap.css" rel="stylesheet" />
-	<link href="../assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
-    <link href="../assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" />
-	<!-- ================== END PAGE LEVEL STYLE ================== -->
+    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
+    <link href="../assets/plugins/jquery-jvectormap/jquery-jvectormap.css" rel="stylesheet"/>
+    <link href="../assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet"/>
+    <link href="../assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
+    <!-- ================== END PAGE LEVEL STYLE ================== -->
 
-	<!-- ================== BEGIN BASE JS ================== -->
-	<script src="../assets/plugins/pace/pace.min.js"></script>
-	<!-- ================== END BASE JS ================== -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="../assets/plugins/pace/pace.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
 
-	<!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-	<link href="../assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/DataTables/extensions/Buttons/css/buttons.bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/DataTables/extensions/AutoFill/css/autoFill.bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/DataTables/extensions/ColReorder/css/colReorder.bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css" rel="stylesheet" />
-	<link href="../assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css" rel="stylesheet" />
-	<!-- ================== END PAGE LEVEL STYLE ================== -->
+    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
+    <link href="../assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/DataTables/extensions/Buttons/css/buttons.bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/DataTables/extensions/AutoFill/css/autoFill.bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/DataTables/extensions/ColReorder/css/colReorder.bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css" rel="stylesheet"/>
+    <link href="../assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css" rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- ================== END PAGE LEVEL STYLE ================== -->
 
 </head>
 <body>
-	<!-- begin #page-loader -->
-	<div id="page-loader" class="fade show"><span class="spinner"></span></div>
-	<!-- end #page-loader -->
+<!-- begin #page-loader -->
+<div id="page-loader" class="fade show"><span class="spinner"></span></div>
+<!-- end #page-loader -->
 
-	<!-- begin #page-container -->
-	<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
-		<!-- begin #header -->
-		<div id="header" class="header navbar-default">
-			<!-- begin navbar-header -->
-			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Golden</b> -Xchange</a>
-				<button type="button" class="navbar-toggle" data-click="sidebar-toggled">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<!-- end navbar-header -->
+<!-- begin #page-container -->
+<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+    <!-- begin #header -->
+    <div class="container" th:include="fragments :: notifications"/>
 
-			<!-- begin header-nav -->
-			<ul class="navbar-nav navbar-right">
+    <!-- end #header -->
 
-				<li class="dropdown">
-					<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
-						<i class="fa fa-bell"></i>
-						<span class="label">5</span>
-					</a>
-					<ul class="dropdown-menu media-list dropdown-menu-right">
-						<li class="dropdown-header">NOTIFICATIONS (5)</li>
-						<li class="media">
-							<a href="javascript:;">
-								<div class="media-left">
-									<i class="fa fa-bug media-object bg-silver-darker"></i>
-								</div>
-								<div class="media-body">
-									<h6 class="media-heading">Server Error Reports <i class="fa fa-exclamation-circle text-danger"></i></h6>
-									<div class="text-muted f-s-11">3 minutes ago</div>
-								</div>
-							</a>
-						</li>
-						<li class="media">
-							<a href="javascript:;">
-								<div class="media-left">
-									<img src="../assets/img/user/user-1.jpg" class="media-object" alt="" />
-									<i class="fab fa-facebook-messenger text-primary media-object-icon"></i>
-								</div>
-								<div class="media-body">
-									<h6 class="media-heading">John Smith</h6>
-									<p>Quisque pulvinar tellus sit amet sem scelerisque tincidunt.</p>
-									<div class="text-muted f-s-11">25 minutes ago</div>
-								</div>
-							</a>
-						</li>
-						<li class="media">
-							<a href="javascript:;">
-								<div class="media-left">
-									<img src="../assets/img/user/user-2.jpg" class="media-object" alt="" />
-									<i class="fab fa-facebook-messenger text-primary media-object-icon"></i>
-								</div>
-								<div class="media-body">
-									<h6 class="media-heading">Olivia</h6>
-									<p>Quisque pulvinar tellus sit amet sem scelerisque tincidunt.</p>
-									<div class="text-muted f-s-11">35 minutes ago</div>
-								</div>
-							</a>
-						</li>
-						<li class="media">
-							<a href="javascript:;">
-								<div class="media-left">
-									<i class="fa fa-plus media-object bg-silver-darker"></i>
-								</div>
-								<div class="media-body">
-									<h6 class="media-heading"> New User Registered</h6>
-									<div class="text-muted f-s-11">1 hour ago</div>
-								</div>
-							</a>
-						</li>
-						<li class="media">
-							<a href="javascript:;">
-								<div class="media-left">
-									<i class="fa fa-envelope media-object bg-silver-darker"></i>
-									<i class="fab fa-google text-warning media-object-icon f-s-14"></i>
-								</div>
-								<div class="media-body">
-									<h6 class="media-heading"> New Email From John</h6>
-									<div class="text-muted f-s-11">2 hour ago</div>
-								</div>
-							</a>
-						</li>
-						<li class="dropdown-footer text-center">
-							<a href="javascript:;">View more</a>
-						</li>
-					</ul>
-				</li>
-				<li class="dropdown navbar-user">
-					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
-							 alt="no profile pic set"/>
-						<span class="d-none d-md-inline" th:text="${profile.userName}"></span> <b class="caret"></b>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right">
-						<a href="javascript:;" class="dropdown-item">Edit Profile</a>
-						<a href="javascript:;" class="dropdown-item"><span class="badge badge-danger pull-right">2</span> Inbox</a>
-						<a href="javascript:;" class="dropdown-item">Calendar</a>
-						<a href="javascript:;" class="dropdown-item">Setting</a>
-						<div class="dropdown-divider"></div>
-						<a th:href="@{/logout}" class="dropdown-item">Log Out</a>
-					</div>
-				</li>
-			</ul>
-			<!-- end header navigation right -->
-		</div>
-		<!-- end #header -->
+    <!-- begin #sidebar -->
+    <div id="sidebar" class="sidebar">
+        <!-- begin sidebar scrollbar -->
+        <div data-scrollbar="true" data-height="100%">
+            <!-- begin sidebar user -->
+            <ul class="nav">
+                <li class="nav-profile">
+                    <a href="javascript:;" data-toggle="nav-profile">
+                        <div class="cover with-shadow"></div>
+                        <div class="image">
+                            <img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
+                                 alt="no profile pic set"/>
+                        </div>
+                        <div class="info">
+                            <b class="caret pull-right"></b>
+                            <span th:text="${profile.getUserName()}"></span>
+                            <small th:text="${profile.getFirstName() +'  '+profile.getSurname()}">Front end developer
+                            </small>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <ul class="nav nav-profile">
+                        <li><a href="javascript:;"><i class="fa fa-cog"></i> Settings</a></li>
+                        <li><a href="javascript:;"><i class="fa fa-pencil-alt"></i> Send Feedback</a></li>
+                        <li><a href="javascript:;"><i class="fa fa-question-circle"></i> Helps</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end sidebar user -->
+            <!-- begin sidebar nav -->
+            <ul class="nav">
+                <li class="nav-header">Navigation</li>
+                <li><a href="profile"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>
+                <li><a href="new_donation"><i class="fa fa-image"></i> <span>CREATE DONATION</span></a></li>
+                <li><a href="current_donations"><i class="fa fa-clock"></i> <span>CURRENT DONATION</span></a></li>
+                <li><a href="donation_state"><i class="fa fa-table" aria-hidden="true"></i>
+                    <span>ALL DONATIONS</span></a></li>
+                <!-- begin sidebar minify button -->
+                <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i
+                        class="fa fa-angle-double-left"></i></a></li>
+                <!-- end sidebar minify button -->
+            </ul>
+            <!-- end sidebar nav -->
+        </div>
+        <!-- end sidebar scrollbar -->
+    </div>
+    <div class="sidebar-bg"></div>
+    <!-- end #sidebar -->
 
-		<!-- begin #sidebar -->
-		<div id="sidebar" class="sidebar">
-			<!-- begin sidebar scrollbar -->
-			<div data-scrollbar="true" data-height="100%">
-				<!-- begin sidebar user -->
-				<ul class="nav">
-					<li class="nav-profile">
-						<a href="javascript:;" data-toggle="nav-profile">
-							<div class="cover with-shadow"></div>
-							<div class="image">
-								<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
-									 alt="no profile pic set"/>
-							</div>
-							<div class="info">
-								<b class="caret pull-right"></b>
-								<span th:text="${profile.getUserName()}"></span>
-								<small th:text="${profile.getFirstName() +'  '+profile.getSurname()}">Front end developer</small>
-							</div>
-						</a>
-					</li>
-					<li>
-						<ul class="nav nav-profile">
-							<li><a href="javascript:;"><i class="fa fa-cog"></i> Settings</a></li>
-							<li><a href="javascript:;"><i class="fa fa-pencil-alt"></i> Send Feedback</a></li>
-							<li><a href="javascript:;"><i class="fa fa-question-circle"></i> Helps</a></li>
-						</ul>
-					</li>
-				</ul>
-				<!-- end sidebar user -->
-				<!-- begin sidebar nav -->
-				<ul class="nav">
-					<li class="nav-header">Navigation</li>
-					<li><a href="profile"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>
-					<li><a href="new_donation"><i class="fa fa-image"></i> <span>CREATE DONATION</span></a></li>
-					<li><a href="current_donations"><i class="fa fa-clock"></i> <span>CURRENT DONATION</span></a></li>
-					<li><a href="donation_state"><i class="fa fa-table" aria-hidden="true"></i> <span>ALL DONATIONS</span></a></li>
-					<!-- begin sidebar minify button -->
-					<li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
-					<!-- end sidebar minify button -->
-				</ul>
-				<!-- end sidebar nav -->
-			</div>
-			<!-- end sidebar scrollbar -->
-		</div>
-		<div class="sidebar-bg"></div>
-		<!-- end #sidebar -->
+    <!-- begin #content -->
+    <div id="content" class="content">
+        <!-- begin breadcrumb -->
+        <!--<ol class="breadcrumb pull-right">-->
+        <!--<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>-->
+        <!--<li class="breadcrumb-item active">Dashboard</li>-->
+        <!--</ol>-->
+        <!-- end breadcrumb -->
+        <!-- begin page-header -->
+        <h1 class="page-header">All Latest Active Donations Status
+            <small>GOLDEN-XCHANGE</small>
+        </h1>
+        <!-- end page-header -->
 
-		<!-- begin #content -->
-		<div id="content" class="content">
-			<!-- begin breadcrumb -->
-			<!--<ol class="breadcrumb pull-right">-->
-				<!--<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>-->
-				<!--<li class="breadcrumb-item active">Dashboard</li>-->
-			<!--</ol>-->
-			<!-- end breadcrumb -->
-			<!-- begin page-header -->
-			<h1 class="page-header">All Latest Active Donations Status <small>GOLDEN-XCHANGE</small></h1>
-			<!-- end page-header -->
+        <!-- begin row -->
+        <div class="container-fluid hidden-xs hidden-sm" th:include="fragments :: desktopTabs"/>
 
-			<!-- begin row -->
-			<div class="row">
-				<!-- begin col-3 -->
-				<div class="col-lg-3 col-md-6">
-					<div class="widget widget-stats bg-yellow-darker">
-						<div class="stats-icon"><i class="fa fa-user"></i></div>
-						<div class="stats-info">
-							<h4>Profile</h4>
-							<p>User Details</p>
-						</div>
-						<div class="stats-link">
-							<a href="profile">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
-				<!-- end col-3 -->
-				<!-- begin col-3 -->
-				<div class="col-lg-3 col-md-6">
-					<div class="widget widget-stats bg-orange">
-						<div class="stats-icon"><i class="fa fa-file"></i></div>
-						<div class="stats-info">
-							<h4>Give To Receive</h4>
-							<p>New Donation</p>
-						</div>
-						<div class="stats-link">
-							<a href="new_donation">Donate <i class="fa fa-arrow-alt-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
-				<!-- end col-3 -->
-				<!-- begin col-3 -->
-				<div class="col-lg-3 col-md-6">
-					<div class="widget widget-stats bg-purple">
-						<div class="stats-icon"><i class="fa fa-clock"></i></div>
-						<div class="stats-info">
-							<h4>Tracking Newly Created Donations </h4>
-							<p>Latest Donation</p>
-						</div>
-						<div class="stats-link">
-							<a href="current_donations">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
-				<!-- end col-3 -->
-				<!-- begin col-3 -->
-				<div class="col-lg-3 col-md-6">
-					<div class="widget widget-stats bg-black-lighter">
-						<div class="stats-icon"><i class="fa fa-table" aria-hidden="false"></i></div>
-						<div class="stats-info">
-							<h4>All Latest Donation Status</h4>
-							<p>All Donations </p>
-						</div>
-						<div class="stats-link">
-							<a href="donation_state">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
+        <!-- end row -->
+        <!-- begin row -->
+        <div class="row">
+            <!-- begin col-8 -->
 
+            <div class="col-lg-12">
+                <form action="#" data-th-action="@{./approveDonation}" th:object="${register}" method="post"
+                      enctype="multipart/form-data" class="margin-bottom-0">
+                    <input name="requester" th:value="donation_state" type="hidden"/>
 
-				<!-- end col-3 -->
-			</div>
-			<!-- end row -->
-			<!-- begin row -->
-			<div class="row">
-				<!-- begin col-8 -->
-
-				<div class="col-lg-12">
-                    <form action="#" data-th-action="@{./approveDonation}" th:object="${register}" method="post"
-                          enctype="multipart/form-data" class="margin-bottom-0">
-						<input name="requester" th:value="donation_state" type="hidden"/>
-
-						<!-- begin panel -->
-					<div class="panel panel-inverse" data-sortable-id="table-basic-7">
-						<div th:if="${response.statusCode!=200}" class="alert alert-warning" >
-							<strong>Warning!</strong> <span th:text="${response.message}"></span>
-						</div>	<!-- begin panel-heading -->
-                        <div th:if="${response.statusCode==200}" class="alert alert-success" >
+                    <!-- begin panel -->
+                    <div class="panel panel-inverse" data-sortable-id="table-basic-7">
+                        <div th:if="${response.statusCode!=200}" class="alert alert-warning">
                             <strong>Warning!</strong> <span th:text="${response.message}"></span>
-                        </div>	<!-- begin panel-heading -->
-						<div class="panel-heading">
-							<div class="panel-heading-btn">
-								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>-->
-								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>-->
-								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>-->
-								<!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>-->
-							</div>
-							<h4 class="panel-title">Donation Status</h4>
-						</div>
-						<!-- end panel-heading -->
-						<!-- begin panel-body -->
-						<div class="panel-body">
-							<!-- begin table-responsive -->
+                        </div>    <!-- begin panel-heading -->
+                        <div th:if="${response.statusCode==200}" class="alert alert-success">
+                            <strong>Warning!</strong> <span th:text="${response.message}"></span>
+                        </div>    <!-- begin panel-heading -->
+                        <div class="panel-heading">
+                            <div class="panel-heading-btn">
+                                <!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>-->
+                                <!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>-->
+                                <!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>-->
+                                <!--<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>-->
+                            </div>
+                            <h4 class="panel-title">Donation Status</h4>
+                        </div>
+                        <!-- end panel-heading -->
+                        <!-- begin panel-body -->
+                        <div class="panel-body">
+                            <!-- begin table-responsive -->
 
-							<table id="data-table-select" class="table table-striped table-bordered">
-									<thead>
-									<tr>
-										<!--<th></th>-->
-										<!--<th width="1%" data-orderable="false">Donation Type</th>-->
-										<th>Payer Username</th>
-										<th>Deposit Reference</th>
-										<th>Bank Name</th>
-										<th>Branch Number</th>
-										<th>Account Type</th>
-										<th>Account Number</th>
-										<th>Account Holder Name</th>
-										<th>Donation Amount</th>
-										<!--<th width="1%"></th>-->
-										<th>Donation Status</th>
-									</tr>
-									</thead>
-									<th:block th:each="result, rowStat : ${response.returnData}" th:name="action" th:attr="action=${rowStat.index}">
-									<tr >
-										<!--<td class="with-img">-->
-											<!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
-										<!--</td>-->
-										<!--<td width="1%" class="f-s-600 text-inverse" th:text="${rowStat.count}"/>-->
-										<!--<td width="1%" class="with-img" th:if="${result.donationType==1}"><img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" /></td>-->
-										<!--<td width="1%" class="with-img" th:if="${result.donationType!=1}"><img src="../assets/img/user/user-2.jpg" class="img-rounded height-30" /></td>-->
-										<td th:text="${result.payerUsername}"/>
-										<td th:text="${result.depositReference}"/>
-										<td th:text="${result.bankName}"/>
-										<td th:text="${result.branchNumber}"/>
-										<td th:text="${result.accountType}"/>
-										<td th:text="${result.accountNumber}"/>
-										<td th:text="${result.accountHolderName}"/>
-										<td th:text="${result.amount}"/>
+                            <table id="data-table-select" class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <!--<th></th>-->
+                                    <th width="1%" data-orderable="false">Donation Type</th>
+                                    <th>Payer Username</th>
+                                    <th>Deposit Reference</th>
+                                    <th>Bank Name</th>
+                                    <th>Branch Number</th>
+                                    <th>Account Type</th>
+                                    <th>Account Number</th>
+                                    <th>Account Holder Name</th>
+                                    <th>Donation Amount</th>
+                                    <!--<th width="1%"></th>-->
+                                    <th>Donation Status</th>
+                                </tr>
+                                </thead>
+                                <th:block th:each="result, rowStat : ${response.returnData}" th:name="action"
+                                          th:attr="action=${rowStat.index}">
+                                    <tr>
+                                        <!--<td class="with-img">-->
+                                        <!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
+                                        <!--</td>-->
+                                        <!--<td width="1%" class="f-s-600 text-inverse" th:text="${rowStat.count}"/>-->
+                                        <td width="1%" class="with-img" th:if="${result.donationType==1}"><img
+                                                src="../assets/img/user/user-1.jpg" class="img-rounded height-30"/></td>
+                                        <td width="1%" class="with-img" th:if="${result.donationType!=1}"><img
+                                                src="../assets/img/user/user-2.jpg" class="img-rounded height-30"/></td>
+                                        <td th:text="${result.payerUsername}"/>
+                                        <td th:text="${result.depositReference}"/>
+                                        <td th:text="${result.bankName}"/>
+                                        <td th:text="${result.branchNumber}"/>
+                                        <td th:text="${result.accountType}"/>
+                                        <td th:text="${result.accountNumber}"/>
+                                        <td th:text="${result.accountHolderName}"/>
+                                        <td th:text="${result.amount}"/>
 
 
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==0}">
-                                            <button disabled="disabled"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-muted btn-sm text-left">Pending Payment</button>
+                                            <button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-muted btn-sm text-left">Pending Payment</button>
 											<input name="approver"  type="hidden" th:value="1"/>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType==0}">
@@ -360,203 +208,237 @@
 											<h4><p  class="text-danger " align="center" th:text="${'R'+result.maturityAmount}"/></h4>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==2} ">
-											<button   type="button" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPayment">Confirm Payment</button>
+											<button  style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}">Confirm Payment</button>
 											<input name="approver"  type="hidden" th:value="1"/>
-											<input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>
-                                            <div class="modal fade" id="confirmPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="confirmPaymentTitle">Confirm Payment (CONFIRMATION)</h5>
-
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <h4><div class="modal-body" >
-                                                            <p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>
-
-                                                            <p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>
-                                                            <p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>
-
-                                                        </div>
-                                                        </h4>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-info">Confirm Payment</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==1}  ">
-											<button  type="button" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPayment1">Confirm Payment</button>
-											<!--<input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>-->
-											<input name="approver"  type="hidden" th:value="1"/>
-                                            <input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>
-                                            <div class="modal fade" id="confirmPayment1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="confirmPaymentTitle1">Confirm Payment (CONFIRMATION)</h5>
-
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <h4><div class="modal-body" >
-                                                            <p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>
-
-                                                            <p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>
-                                                            <p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>
-
-                                                        </div>
-                                                        </h4>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-info">Confirm Payment</button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+											<button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}">Confirm Payment</button>
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType!=0}">
-											<button  disabled="true" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
+											<button style="width: 98%" disabled="true" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
 										</td>
 										<!--<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.username.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >-->
-											<!--<button  name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>-->
+											<!--<button style="width: 98%" name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>-->
 										<!--</td>-->
 										<td class="with-btn" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >
 											<button name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-light bg-dark btn-sm text-white">Waiting Confirmation</button>
 											<!--<input name="approver"  type="hidden" th:value="1"/>-->
 										</td>
 										<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1}" >
-                                            <button   type="button" class="btn btn-danger btn-sm text-left" data-toggle="modal" data-target="#approveDonation">Approve Donation</button>
+                                            <button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-danger btn-sm text-left">Approve Donation</button>
 											<input name="approvers"  type="hidden" th:value="2"/>
-											<input name="depositReference"  type="hidden"  th:value="${result.depositReference}"/>
-
 										</td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}" >
-                                            <button  disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white">Completed</button>
+                                            <button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white">Completed</button>
                                         </td>
 										<td class="with-btn" nowrap="nowrap" th:if="${result.status==3}" >
-											<button  disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white" >Completed</button>
+											<button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white" >Completed</button>
 										</td>
+
 									</tr>
 
-										<div class="modal fade" id="approveDonation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-										<div class="modal-dialog modal-dialog-centered" role="document">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title" id="approveDonationTitle">Approve Donation (CONFIRMATION)</h5>
-
-													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<h4><div class="modal-body" >
-													<p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>
-
-													<p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>
-													<p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>
 
 
-												</div>
-												</h4>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-													<button type="submit" class="btn btn-danger">Approve Donation</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									</th:block>
-								</table>
+                                    <div class="modal fade" id="confirmPayment1" tabindex="-1" role="dialog"
+                                         aria-labelledby="confirmPaymentLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header" align="center">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <h4 class="modal-title" id="confirmPaymentLabel">Confirm Donation
+                                                        Payment</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label for="payerUsername" class="control-label">PayerUsername:<input
+                                                                    disabled="true" type="text" class="form-control"
+                                                                    id="payerUsername"/></label>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="depositReference" class="control-label">DepositReference:<input
+                                                                    disabled="true" type="text" class="form-control"
+                                                                    id="depositReference"
+                                                            /></label>
+                                                            <input name="approver"  type="hidden" th:value="1"/>
+                                                            <!--<input  type="hidden" />-->
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="donationAmount" class="control-label">DonationAmount:<input
+                                                                    disabled="true" type="text" class="form-control"
+                                                                    id="donationAmount"/></label>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="approver" class="control-label"><input
+                                                                    disabled="true" type="hidden" class="form-control"
+                                                                    id="approver"/></label>
+                                                            <!--<label for="depositReferenceCount"-->
+                                                                   <!--class="control-label"><input disabled="true"-->
+                                                                                                <!--type="hidden"-->
+                                                                                                <!--class="form-control"-->
+                                                                                                <!--id="depositReferenceCount" name="depositReferenceCount" th:value="${result.depositReference}"/></label>-->
+
+
+                                                        </div>
+
+
+                                                        <!--<p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>-->
+
+                                                        <!--<p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>-->
+                                                        <!--<p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>-->
+
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        Close
+                                                        <button onclick='this.form.submit()' name="action" value="1" type="button" class="btn btn-primary">Confirm Pyment</button>
+
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </table>
 
                             <!-- Modal -->
 
 
-							<!-- end table-responsive -->
+                            <!-- end table-responsive -->
 
-						</div>
-						<!--<div th:if="sponsorResponse!=1" align="center">-->
-						<!--<div class="alert alert-info col-lg-12" >-->
-							<!--<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List and wait approval by sponsors</span>-->
-						<!--</div>	&lt;!&ndash; begin panel-heading &ndash;&gt;-->
-						<!--<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:20%; height:20%"/>-->
-						<!--</div>-->
-						<!-- end panel-body -->
-						<!-- begin hljs-wrapper -->
+                        </div>
+                        <!--<div th:if="sponsorResponse!=1" align="center">-->
+                        <!--<div class="alert alert-info col-lg-12" >-->
+                        <!--<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List and wait approval by sponsors</span>-->
+                        <!--</div>	&lt;!&ndash; begin panel-heading &ndash;&gt;-->
+                        <!--<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:20%; height:20%"/>-->
+                        <!--</div>-->
+                        <!-- end panel-body -->
+                        <!-- begin hljs-wrapper -->
 
-						<!-- end hljs-wrapper -->
-					</div>
-					<!-- end panel --> </form>
-				</div>
-
-
-
-				<!-- begin col-4 -->
-
-				<!-- end col-4 -->
-			</div>
-			<!-- end row -->
-		</div>
-		<!-- end #content -->
-
-        <!-- begin theme-panel -->
-
-        <!-- end theme-panel -->
-
-		<!-- begin scroll to top btn -->
-		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
-		<!-- end scroll to top btn -->
-	</div>
-	<!-- end page container -->
-
-	<!-- ================== BEGIN BASE JS ================== -->
-	<script src="../assets/plugins/jquery/jquery-3.2.1.min.js"></script>
-	<script src="../assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-	<script src="../assets/plugins/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-	<!--[if lt IE 9]>
-		<script src="../assets/crossbrowserjs/html5shiv.js"></script>
-		<script src="../assets/crossbrowserjs/respond.min.js"></script>
-		<script src="../assets/crossbrowserjs/excanvas.min.js"></script>
-	<![endif]-->
-	<script src="../assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-	<script src="../assets/plugins/js-cookie/js.cookie.js"></script>
-	<script src="../assets/js/theme/default.min.js"></script>
-	<script src="../assets/js/apps.min.js"></script>
-	<!-- ================== END BASE JS ================== -->
-
-	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
-	<script src="../assets/plugins/gritter/js/jquery.gritter.js"></script>
-	<script src="../assets/plugins/flot/jquery.flot.min.js"></script>
-	<script src="../assets/plugins/flot/jquery.flot.time.min.js"></script>
-	<script src="../assets/plugins/flot/jquery.flot.resize.min.js"></script>
-	<script src="../assets/plugins/flot/jquery.flot.pie.min.js"></script>
-	<script src="../assets/plugins/sparkline/jquery.sparkline.js"></script>
-	<script src="../assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js"></script>
-	<script src="../assets/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-	<script src="../assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script src="../assets/js/demo/dashboard.min.js"></script>
-	<!-- ================== END PAGE LEVEL JS ================== -->
+                        <!-- end hljs-wrapper -->
+                    </div>
+                    <!-- end panel --> </form>
+            </div>
 
 
-	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
-	<script src="../assets/plugins/DataTables/media/js/jquery.dataTables.js"></script>
-	<script src="../assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js"></script>
-	<script src="../assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js"></script>
-	<script src="../assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
-	<script src="../assets/js/demo/table-manage-select.demo.min.js"></script>
-	<!-- ================== END PAGE LEVEL JS ================== -->
+            <!-- begin col-4 -->
 
-	<script>
-		$(document).ready(function() {
-			App.init();
-			// Dashboard.init();
-            TableManageTableSelect.init();
-        });
-	</script>
+            <!-- end col-4 -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end #content -->
+
+    <!-- begin theme-panel -->
+
+    <!-- end theme-panel -->
+
+    <!-- begin scroll to top btn -->
+    <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i
+            class="fa fa-angle-up"></i></a>
+    <!-- end scroll to top btn -->
+</div>
+<!-- end page container -->
+
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="../assets/plugins/jquery/jquery-3.2.1.min.js"></script>
+<script src="../assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="../assets/plugins/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<!--[if lt IE 9]>
+<script src="../assets/crossbrowserjs/html5shiv.js"></script>
+<script src="../assets/crossbrowserjs/respond.min.js"></script>
+<script src="../assets/crossbrowserjs/excanvas.min.js"></script>
+<![endif]-->
+<script src="../assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="../assets/plugins/js-cookie/js.cookie.js"></script>
+<script src="../assets/js/theme/default.min.js"></script>
+<script src="../assets/js/apps.min.js"></script>
+<!-- ================== END BASE JS ================== -->
+
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script src="../assets/plugins/gritter/js/jquery.gritter.js"></script>
+<script src="../assets/plugins/flot/jquery.flot.min.js"></script>
+<script src="../assets/plugins/flot/jquery.flot.time.min.js"></script>
+<script src="../assets/plugins/flot/jquery.flot.resize.min.js"></script>
+<script src="../assets/plugins/flot/jquery.flot.pie.min.js"></script>
+<script src="../assets/plugins/sparkline/jquery.sparkline.js"></script>
+<script src="../assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js"></script>
+<script src="../assets/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<script src="../assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="../assets/js/demo/dashboard.min.js"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+
+
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script src="../assets/plugins/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="../assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="../assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js"></script>
+<script src="../assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="../assets/js/demo/table-manage-select.demo.min.js"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+
+<script>
+    $(document).ready(function () {
+        App.init();
+        // Dashboard.init();
+        TableManageTableSelect.init();
+    });
+</script>
+<script>
+    $('#confirmPayment1').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        var recipient1 = button.data('whatever1') // Extract info from data-* attributes
+        var recipient4 = button.data('whatever') // Extract info from data-* attributes
+
+        var recipient2 = button.data('whatever2') // Extract info from data-* attributes
+        var recipient3 = button.data('whatever3') // Extract info from data-* attributes
+
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        // modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('#depositReference').val(recipient)
+        modal.find('#payerUsername').val(recipient1)
+        modal.find('#donationAmount').val('R ' + recipient2)
+        modal.find('#approver').val(1)
+        document.getElementById('depositReference').value =recipient4;
+        console.log(recipient4);
+    })
+</script>
+<script>
+    function setModalData()
+    {
+        depositReference = document.getElementById("depositReference1").value;
+        payerUsername = document.getElementById("payerUsername").value;
+        donationAmount = document.getElementById("donationAmount").value;
+
+
+        document.getElementById("depositReference").innerHTML = depositReference;
+        document.getElementById("payerUsername").innerHTML = payerUsername;
+        document.getElementById("donationAmount").innerHTML = donationAmount;
+        console.log(depositReference)
+    };
+</script>
+<script>
+    $('button.btnDelete').on('click', function (e) {
+        e.preventDefault();
+        var id = $(this).closest('tr').data('id');
+        $('#myModal').data('id', id).modal('show');
+    });
+
+    $('#btnDelteYes').click(function () {
+        var id = $('#myModal').data('id');
+        $('[data-id=' + id + ']').remove();
+        $('#myModal').modal('hide');
+    });
+</script>
 </body>
 </html>

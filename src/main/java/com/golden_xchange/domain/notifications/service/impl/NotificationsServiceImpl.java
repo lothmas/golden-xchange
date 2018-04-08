@@ -30,18 +30,32 @@ public class NotificationsServiceImpl implements NotificationsService {
 
 
     @Override
-    public List<NotificationsEntity> getUserNotifications(int userId) throws NotificationsNotFoundException{
+    public List<NotificationsEntity> getUserNotifications(String userId) throws NotificationsNotFoundException{
         return this.notificationsDao.getUserNotifications(userId);
     }
 
+
     @Override
+    @Transactional(
+            readOnly = false
+    )
     public void save(NotificationsEntity notificationsEntity) {
-
+        this.notificationsDao.save(notificationsEntity);
     }
 
     @Override
+    @Transactional(
+            readOnly = false
+    )
     public void deleteMessage(NotificationsEntity notificationsEntity) {
-
+            this.notificationsDao.deleteMessage(notificationsEntity);
     }
+
+    @Override
+    public NotificationsEntity getNotificationByRefAndUser(String userName, String mainRef) throws NotificationsNotFoundException {
+        return this.notificationsDao.getNotificationByRefAndUser(userName,mainRef);
+    }
+
+
 }
 

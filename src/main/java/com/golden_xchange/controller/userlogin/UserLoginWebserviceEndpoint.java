@@ -15,6 +15,7 @@ import com.golden_xchange.domain.utilities.Enums;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +76,7 @@ public class UserLoginWebserviceEndpoint {
                 return errorResponse(model, response);
             }
 
-            goldenRichesUsers= goldenRichesUsersService.findGoldenRichesUsersByEmailAndPassword(username, password);
+            goldenRichesUsers = goldenRichesUsersService.findGoldenRichesUsersByEmailAndPassword(username, password);
             model.addAttribute("profile", goldenRichesUsers);
             session.setAttribute("profile", goldenRichesUsers);
 
@@ -83,12 +84,12 @@ public class UserLoginWebserviceEndpoint {
 
             try {
 
-                goldenRichesUsers = goldenRichesUsersService.findGoldenRichesUsersByUsernameAndPassword(username, password) ;
+                goldenRichesUsers = goldenRichesUsersService.findGoldenRichesUsersByUsernameAndPassword(username, password);
                 response.setMessage("User: " + goldenRichesUsers.getUserName() + " Successfully LoggedIn");
                 response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
                 model.addAttribute("profile", goldenRichesUsers);
                 session.setAttribute("profile", goldenRichesUsers);
-                getNotifications(model, goldenRichesUsers,session);
+                getNotifications(model, goldenRichesUsers, session);
 
                 return "profile";
             } catch (GoldenRichesUsersNotFoundException | NoSuchAlgorithmException unf) {
@@ -102,19 +103,29 @@ public class UserLoginWebserviceEndpoint {
         response.setMessage("User: " + goldenRichesUsers.getUserName() + " Successfully LoggedIn");
         response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
 
-        getNotifications(model, goldenRichesUsers,session);
+        getNotifications(model, goldenRichesUsers, session);
         return "profile";
     }
 
-    private void getNotifications(Model model, GoldenRichesUsers goldenRichesUsers,HttpSession session) {
+    public void getNotifications(Model model, GoldenRichesUsers goldenRichesUsers, HttpSession session) {
         try {
-            List<NotificationsEntity> notificationsEntityList=notificationsService.getUserNotifications(goldenRichesUsers.getId());
-          model.addAttribute("notifications",notificationsEntityList) ;
-          session.setAttribute("notifications",notificationsEntityList);
+            List<NotificationsEntity> notificationsEntityList = notificationsService.getUserNotifications(goldenRichesUsers.getUserName());
+            int count = 0;
+            for (NotificationsEntity notificationsEntity : notificationsEntityList) {
+                if (notificationsEntity.getStatus() == 0) {
+                    count++;
+                }
+            }
+            model.addAttribute("notificationCount", count);
+            session.setAttribute("notificationCount", count);
+            model.addAttribute("notifications", notificationsEntityList);
+            session.setAttribute("notifications", notificationsEntityList);
+        } catch (Exception exp) {
+            model.addAttribute("notifications", new NotificationsEntity());
+            session.setAttribute("notifications", new NotificationsEntity());
+            model.addAttribute("notificationCount", 0);
+            session.setAttribute("notificationCount", 0);
         }
-        catch (Exception exp){
-            model.addAttribute("notifications",new NotificationsEntity()) ;
-            session.setAttribute("notifications",new NotificationsEntity());        }
     }
 
     private String errorResponse(Model model, UserLoginResponse response) {

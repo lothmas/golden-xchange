@@ -69,6 +69,9 @@ public class Controller {
             if (url.contains("profile")) {
                 model.addAttribute("profile",session.getAttribute("profile"));
                 model.addAttribute("response",new CreateDonationResponse());
+                model.addAttribute("notifications",session.getAttribute("notifications")) ;
+                model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
+
                 return "profile";
             }
             if (url.contains("dashboard")) {
@@ -78,6 +81,9 @@ public class Controller {
                 try {
                     model.addAttribute("profile",session.getAttribute("profile"));
                     model.addAttribute("response",new CreateDonationResponse());
+                    model.addAttribute("notifications",session.getAttribute("notifications")) ;
+                    model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

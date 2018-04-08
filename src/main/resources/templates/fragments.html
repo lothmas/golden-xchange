@@ -1,0 +1,233 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div th:fragment="head">
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<link rel="icon" href="img/fnb-logo.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link href="css/bsg.css" rel="stylesheet" />
+	</div>
+
+	<div th:fragment="notifications">
+		<div id="header" class="header navbar-default">
+			<!-- begin navbar-header -->
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Golden</b> -Xchange</a>
+				<button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<!-- end navbar-header -->
+
+			<!-- begin header-nav -->
+			<ul class="navbar-nav navbar-right">
+
+				<li class="dropdown" >
+					<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
+						<i class="fa fa-bell"></i>
+						<span class="label" th:text="${notificationCount}"/>
+					</a>
+					<ul class="dropdown-menu media-list dropdown-menu-right" >
+						<li class="dropdown-header" th:text="${'NOTIFICATIONS ('+notificationCount}+')'"/>
+						<li class="media" th:each="notifications, rowStat : ${notifications}">
+							<a href="javascript:;" th:if="${null!=notifications.message}">
+								<div class="media-left">
+									<i th:if="${notifications.status==1}" class="fa fa-envelope media-object bg-silver-darker"></i>
+									<i th:if="${notifications.status==0}" class="fa fa-envelope media-object bg-warning"></i>
+
+									<i class="fab fa-facebook-messenger text-primary media-object-icon"></i>
+								</div>
+								<div class="media-body">
+									<div th:if="${notifications.status==1}"><h6  class="media-heading">Actioned  <i class="fa fa fa-envelope-open text-success"></i></h6></div>
+									<div th:if="${notifications.status==0}"><h6  class="media-heading">Pending Action   <i class="fa fa-envelope text-info"></i></h6></div>
+
+									<div th:each="msg : ${#strings.arraySplit(notifications.message, ',')}">
+										<p th:text="${msg}"></p>
+									</div>
+									<div class="text-muted f-s-11" th:text="${notifications.creationDate}"/>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="dropdown navbar-user">
+					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+						<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
+							 alt="no profile pic set"/>
+						<span class="d-none d-md-inline" th:text="${profile.userName}"></span> <b class="caret"></b>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right">
+						<div class="dropdown-divider"></div>
+						<a th:href="@{/logout}" class="dropdown-item">Log Out</a>
+					</div>
+				</li>
+			</ul>
+			<!-- end header navigation right -->
+		</div>
+	</div>
+
+	<div class="container-fluid hidden-xs hidden-sm" th:fragment="desktopTabs">
+		<div class="row">
+			<!-- begin col-3 -->
+			<div class="col-lg-3 col-md-6">
+				<div class="widget widget-stats bg-yellow-darker">
+					<div class="stats-icon"><i class="fa fa-user"></i></div>
+					<div class="stats-info">
+						<h4>Profile</h4>
+						<p>User Details</p>
+					</div>
+					<div class="stats-link">
+						<a href="profile">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- end col-3 -->
+			<!-- begin col-3 -->
+			<div class="col-lg-3 col-md-6">
+				<div class="widget widget-stats bg-orange">
+					<div class="stats-icon"><i class="fa fa-file"></i></div>
+					<div class="stats-info">
+						<h4>Give To Receive</h4>
+						<p>New Donation</p>
+					</div>
+					<div class="stats-link">
+						<a href="new_donation">Donate <i class="fa fa-arrow-alt-circle-right"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- end col-3 -->
+			<!-- begin col-3 -->
+			<div class="col-lg-3 col-md-6">
+				<div class="widget widget-stats bg-purple">
+					<div class="stats-icon"><i class="fa fa-clock"></i></div>
+					<div class="stats-info">
+						<h4>Tracking Newly Created Donations </h4>
+						<p>Latest Donation</p>
+					</div>
+					<div class="stats-link">
+						<a href="current_donations">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- end col-3 -->
+			<!-- begin col-3 -->
+			<div class="col-lg-3 col-md-6">
+				<div class="widget widget-stats bg-black-lighter">
+					<div class="stats-icon"><i class="fa fa-table" aria-hidden="true"></i></div>
+					<div class="stats-info">
+						<h4>All Latest Donation Status</h4>
+						<p>All Donations </p>
+					</div>
+					<div class="stats-link">
+						<a href="donation_state">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- end col-3 -->
+		</div>
+	</div>
+
+	<div th:fragment="menu (activeMenuItem, title)">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a href="index" class="navbar-left"><img src="img/fnb-logo.png"/></a>
+				</div>
+				<div class="navbar-collapse collapse sidebar-navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li th:classappend="${activeMenuItem=='index'}?'active'"><a href="index">Home</a></li>
+						<li  class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dashboard <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="batch-dashboard">Batch-Dashboard</a></li>
+								<li><a href="realtime-dashboard">RealTime-Dashboard</a></li>
+							</ul>
+						</li>
+						<li th:classappend="${activeMenuItem=='generate-report'}?'active'"><a href="generate-report">Generate Report</a></li>
+						<li th:classappend="${activeMenuItem=='faq'}?'active'"><a href="faq">FAQ</a></li>
+						<li th:classappend="${activeMenuItem=='contacts'}?'active'"><a href="contacts">Contact Us</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</nav>
+	</div>
+	
+	<div th:fragment="internalMenu (activeMenuItem, title)">
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+			 	<div class="navbar-header">
+					<a href="index" class="navbar-left"><img src="img/fnb-logo.png"/></a>
+			 	</div>
+			 	<div id="navbar" class="navbar-collapse collapse">
+
+					<ul class="nav navbar-nav">
+						<li th:classappend="${activeMenuItem=='configuration'}?'active'"><a href="configuration">Configuration Generator</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>		
+		<h3 th:if="${title != ''}" th:text="${title}"></h3>
+		<hr th:if="${title != ''}"/>
+	</div>
+	
+	<div th:fragment="validation (type)">
+		<div id="validationPanel" class="panel panel-default">		
+			<div id="validationPanelHeading" class="panel-heading" th:text="#{${type} + '.validation.name'}"></div>
+			<div class="panel-body">
+				<p th:text="#{${type} + '.validation.statement'}"></p>
+				<img th:src="'img/' + ${type} + '-validation.png'" class="center-block" style="max-width:740px"/>
+				<p/>
+				<p th:text="#{${type} + '.validation.reason'}"></p>
+			</div>
+		</div>
+	</div>
+	
+	<div th:fragment="faqPanel (title, body, index)">
+		<div class="panel-group">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<a th:href="${'#faq'+index}" th:text="${title}" data-toggle="collapse">aaaaa</a>
+				</div>
+				<div th:id="${'faq'+index}" class="panel-collapse collapse">
+					<div class="container">
+						<div class="col-md-12">
+							<p class="text-justified" th:text="${body}">zzzzzz</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:fragment="footer">
+		<hr/>
+		<footer>
+			<p>Powered by the FNB Integration Layer.</p>
+		</footer>
+	</div>
+
+	<div th:fragment="downloadButton (downloadId)">		
+		<th:block th:if="${downloadId}!=null">			
+			<div id="downloadDiv" class="hidden"/>
+			<div class="alert alert-warning alert-dismissible" role="alert">
+  				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	  			<p>If the download does not start automatically, please make use this <a id="downloadId" th:attr="data-downloadId=${downloadId}" th:href="@{download(downloadId=${downloadId})}">download</a> link.</p>
+			</div>			
+		</th:block>
+	</div>
+	
+</body>
+
+</html>
