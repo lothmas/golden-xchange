@@ -1,5 +1,5 @@
 /*
-Template Name: Color Admin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3 & 4
+Template Name: Golden-Xchange - Responsive Admin Dashboard Template build with Twitter Bootstrap 3 & 4
 Version: 4.0.0
 Author: Sean Ngu
 Website: http://www.seantheme.com/color-admin-v4.0/admin/
@@ -728,8 +728,8 @@ var handleResetLocalStorage = function() {
         '                <div class="alert alert-info m-b-0">Would you like to RESET all your saved widgets and clear Local Storage?</div>'+
         '            </div>'+
         '            <div class="modal-footer">'+
-        '                <a href="javascript:;" class="btn btn-sm btn-default" data-dismiss="modal"><i class="fa fa-times"></i> No</a>'+
-        '                <a href="javascript:;" class="btn btn-sm btn-inverse" data-click="confirm-reset-local-storage"><i class="fa fa-check"></i> Yes</a>'+
+        '                <a href="#" class="btn btn-sm btn-default" data-dismiss="modal"><i class="fa fa-times"></i> No</a>'+
+        '                <a href="#" class="btn btn-sm btn-inverse" data-click="confirm-reset-local-storage"><i class="fa fa-check"></i> Yes</a>'+
         '            </div>'+
         '        </div>'+
         '    </div>'+

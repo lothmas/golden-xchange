@@ -33,14 +33,14 @@
 			<ul class="navbar-nav navbar-right">
 
 				<li class="dropdown" >
-					<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
+					<a href="#" data-toggle="dropdown" class="dropdown-toggle f-s-14">
 						<i class="fa fa-bell"></i>
 						<span class="label" th:text="${notificationCount}"/>
 					</a>
 					<ul class="dropdown-menu media-list dropdown-menu-right" >
 						<li class="dropdown-header" th:text="${'NOTIFICATIONS ('+notificationCount}+')'"/>
 						<li class="media" th:each="notifications, rowStat : ${notifications}">
-							<a href="javascript:;" th:if="${null!=notifications.message}">
+							<a href="#" th:if="${null!=notifications.message}">
 								<div class="media-left">
 									<i th:if="${notifications.status==1}" class="fa fa-envelope media-object bg-silver-darker"></i>
 									<i th:if="${notifications.status==0}" class="fa fa-envelope media-object bg-warning"></i>
@@ -61,7 +61,7 @@
 					</ul>
 				</li>
 				<li class="dropdown navbar-user">
-					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
 							 alt="no profile pic set"/>
 						<span class="d-none d-md-inline" th:text="${profile.userName}"></span> <b class="caret"></b>
