@@ -77,6 +77,8 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
             if(this.inputValidation(request, response)) {
                 return registerResponse(model, response);
             } else {
+
+
                 goldenRichesUsers.setAccountNumber(request.getAccountNumber());
                 goldenRichesUsers.setBankName(request.getBankName());
                 goldenRichesUsers.setBranchNumber(request.getBranchNumber());
@@ -96,7 +98,13 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 else{
                     goldenRichesUsers.setProfilePic(defaultImage());
                 }
-                goldenRichesUsers.setReferenceUser(request.getReferenceUser());
+
+                if(!request.getReferenceUser().equals("")){
+                    goldenRichesUsers.setReferenceUser(request.getReferenceUser());
+                }
+                else{
+                    goldenRichesUsers.setReferenceUser("admin");
+                }
                 this.goldenRichesUsersService.saveUser(goldenRichesUsers);
                 response.setMessage("User " + request.getUserName() + " Was Successfully Created");
                 response.setStatusCode(StatusCodeEnum.CREATED.getStatusCode());
