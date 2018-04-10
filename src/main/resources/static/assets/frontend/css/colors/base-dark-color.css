@@ -1,0 +1,921 @@
+/*=================================================================================================
+Project:  Blockus
+Version:  1.1.0
+Last change:  07/10/2016
+Design by:  TemplatesPRO.com.br
+---------------------------------------------------------------------------------------------------
+
+INDEX:
+01) LINKS AND BUTTONS
+02) FORMS
+03) PRELOADER
+04) ALERTS
+05) MODAL
+06) NAVBAR - NAVBAR TOGGLE - NAVBAR COLLAPSE
+07) SECTIONS
+08) FOOTER
+09) SLIDERS
+10) HOME
+11) FEATURES
+12) OVERVIEW
+13) GALLERY
+14) TESTIMONIALS
+15) PRICES
+16) TEAM
+17) BLOG
+18) CONTACT
+--- BLOG ---
+19) BLOG GENERAL
+20) SIDEBAR - MODULE SEARCH
+21) SIDEBAR - MODULE CALENDAR
+22) SIDEBAR - MODULE MENU CATEGORIES
+23) SIDEBAR - MODULE RECENT POSTS
+24) SIDEBAR - MODULE ARCHIVES
+25) SIDEBAR - MODULE RECENT COMMENTS
+26) SIDEBAR - MODULE TAG
+27) CONTENT - MODULE CATEGORIES
+28) CONTENT - BLOG META
+29) CONTENT - MODULE RELATED POSTS
+30) CONTENT - MODULE AUTHOR POSTS
+31) CONTENT - PAGINATION
+32) CONTENT - MODULE COMMENTS
+---------------------------------------------------------------------------------------------------
+
+PALLETE:
+Social Icons:
+#0077b5 > Linkedin
+#3b5998 > Facebook
+#2daddc > Twitter
+#d14836 > Google Plus
+#e52d27 > Youtube
+
+Alerts:
+#c00 > Alert error
+#090 > Alert success
+=================================================================================================*/
+
+
+/*------------------------------------------------------------------------------------------------
+ 01) LINKS AND BUTTONS
+ ------------------------------------------------------------------------------------------------*/
+a:focus,
+button:focus,
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  border-color: #eee;
+}
+
+button.close {
+  background-color: transparent;
+}
+
+
+/*------------------------------------------------------------------------------------------------
+ 02) FORMS
+ ------------------------------------------------------------------------------------------------*/
+.form-control { background-color: #eee; }
+
+.form-control:focus {
+  border-color: #ccc;
+  background-color: #f3f3f3;
+}
+
+::-webkit-input-placeholder { color:#888 !important; } /* Chrome/Opera/Safari */
+:-moz-placeholder { color:#888 !important; } /* Firefox 18- */
+::-moz-placeholder { color:#888 !important; }  /* Firefox 19+ */
+:-ms-input-placeholder { color:#888 !important; } /* IE10 + */
+/* Polyfill IE9 */
+.-placeholder { color: #888; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 03) PRELOADER
+ ------------------------------------------------------------------------------------------------*/
+.preloader { background-color: #fff; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 04) ALERTS
+ ------------------------------------------------------------------------------------------------*/
+.alert { color: #fff; }
+.alert-danger { background-color: #c00; }
+.alert-success { background-color: #090; }
+
+.alert>.close:focus,
+.alert>.close:hover { color: #fff; }
+
+.alert+.alert-overlay { background-color: #fff; }
+.modal.fade.in~.alerts>.alert-overlay { background-color: transparent; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 05) MODAL
+ ------------------------------------------------------------------------------------------------*/
+@media (min-width: 768px) {
+  .modal-backdrop { background-color: #fff; }
+}
+
+/* Modal Header
+ ......................................*/
+.modal-header {
+  border-bottom-color: #ddd;
+  background-color: #eee;
+}
+
+/* Modal Subheader
+ ......................................*/
+.gallery-modal .modal-subheader { border-bottom-color: #ddd; }
+
+.gallery-modal .modal-subtitle { border-right-color: #ddd; }
+
+.gallery-modal .btn-info-project { border-left-color: #ddd; }
+.gallery-modal .btn-info-project:focus {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  background-color: #fff;
+}
+.gallery-modal .btn-info-project.collapsed { background-color: #eee; }
+
+/* Modal Video (SLIDESHOW)
+ ......................................*/
+.slideshow-modal .embed-responsive:before { color: #fff; }
+
+/* Modal Form (SLIDESHOW)
+ ......................................*/
+.slideshow-modal .modal-content {
+  background-color: rgba(0,0,0,.9);
+}
+
+.slideshow-modal .panel { box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+
+.slideshow-modal .panel-heading { border-color: transparent; }
+.slideshow-modal .panel-heading h3 { color: #fff; }
+
+.slideshow-modal .btn {
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Modal Info (GALLERY)
+ ......................................*/
+.gallery-modal .title-info-modal { color: #fff; }
+.gallery-modal p.content-info-modal { background-color: #eee; }
+.gallery-modal ul.content-info-modal { background-color: #eee; }
+.gallery-modal ul.content-info-modal>li { background-color: #ddd; }
+.gallery-modal .detail-info-modal {
+  border-color: #eee;
+  background-color: #ddd;
+}
+.gallery-modal .detail-info-modal>a { color: #666; }
+.gallery-modal .detail-info-modal>a:focus,
+.gallery-modal .detail-info-modal>a:hover { color: #333; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 06) NAVBAR - NAVBAR TOGGLE - NAVBAR COLLAPSE
+ ------------------------------------------------------------------------------------------------*/
+/* Home
+ ......................................*/
+.navbar { background-color: #fff; }
+
+@media(min-width:768px) {
+  .navbar { background-color: rgba(0,0,0,.07); }
+}
+
+.navbar-default .navbar-nav>li>a { color: #333; }
+
+@media(min-width:768px) {
+  .navbar-default .navbar-nav>li>a:focus,
+  .navbar-default .navbar-nav>li>a:hover {
+    color: #fff;
+    background-color: rgba(0,0,0,.7);
+  }
+}
+
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:hover { color: #fff; }
+
+/* Internal
+ ......................................*/
+.top-nav-collapse { background-color: #eee; }
+.top-nav-collapse .navbar-collapse { border-color: #ddd; }
+
+.top-nav-collapse .navbar-nav>li>a { color: #333; }
+
+@media(min-width:768px) {
+  .top-nav-collapse .navbar-nav>li>a:focus,
+  .top-nav-collapse .navbar-nav>li>a:hover {
+    color: #fff;
+    background-color: rgba(0,0,0,.7);
+  }
+}
+
+.top-nav-collapse .navbar-nav>.active>a,
+.top-nav-collapse .navbar-nav>.active>a:focus,
+.top-nav-collapse .navbar-nav>.active>a:hover { color: #fff; }
+
+/* Toggle
+ ......................................*/
+.navbar-toggle {
+  border-color: transparent !important;
+  background-color: transparent!important;
+}
+.navbar-toggle .icon-bar { background-color: #333 !important; }
+
+/* Collapse
+ ......................................*/
+.navbar-collapse { box-shadow: 0 4px 0 0 rgba(0,0,0,.03); }
+
+
+/*------------------------------------------------------------------------------------------------
+ 07) SECTIONS
+ ------------------------------------------------------------------------------------------------*/
+.section-header {
+  border-top-color: #ddd;
+  border-bottom-color: #ddd;
+}
+.section-title { border-right-color: #ddd; }
+
+section .section-content { background-color: #fff; }
+
+@media (min-width: 768px) {
+  section .section-content { background-color: transparent; }
+}
+
+
+/*------------------------------------------------------------------------------------------------
+ 08) FOOTER
+ ------------------------------------------------------------------------------------------------*/
+.footer {
+  color: #999;
+  background-color: #333;
+}
+
+.footer a { color: #ccc; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 09) SLIDERS
+ ------------------------------------------------------------------------------------------------*/
+.slick-loading .slick-list { background-color: #fff; }
+
+@media (max-width: 767px) and (orientation: landscape) {
+  .slick-list { background-color: #fff; }
+}
+
+@media (min-width: 768px) {
+  .slide-testimonials-bloquotes .slick-track { background-color: transparent !important; }
+}
+
+/* Carousel Controls
+ ......................................*/
+.slick-prev:before,
+.slick-next:before { color: #333; }
+
+/* Bloquote
+ ......................................*/
+.slick-slider blockquote p:before { color: #fff; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 10) HOME
+ ------------------------------------------------------------------------------------------------*/
+.slideshow { background-color: #aaa; }
+
+.slideshow .item:before,
+.firefox .slideshow .item.active:before,
+.internetexplorer .slideshow .item.active:before {
+  background: -webkit-linear-gradient(top, rgba(255,255,255,.7) 0%,rgba(255,255,255,1) 85%);
+  background: -webkit-linear-gradient(top, rgba(255,255,255,.7) 0%, rgba(255,255,255,1) 85%);
+  background: linear-gradient(to bottom, rgba(255,255,255,.7) 0%,rgba(255,255,255,1) 85%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#08ffffff', endColorstr='#ffffff',GradientType=0 );
+}
+  .firefox .slideshow .item:before,
+  .internetexplorer .slideshow .item:before { background: transparent; }
+
+@media (min-width: 768px) {
+  .slideshow .item:before,
+  .firefox .slideshow .item.active:before,
+  .internetexplorer .slideshow .item.active:before {
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 90%);
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%, rgba(255,255,255,1) 90%);
+    background: linear-gradient(to bottom, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 90%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#08ffffff', endColorstr='#ffffff',GradientType=0 );
+  }
+  .firefox .slideshow .item:before,
+  .internetexplorer .slideshow .item:before { background: transparent; }
+}
+
+@media (min-width: 992px) {
+  .slideshow .item:before,
+  .firefox .slideshow .item.active:before,
+  .internetexplorer .slideshow .item.active:before {
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 84%);
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%, rgba(255,255,255,1) 84%);
+    background: linear-gradient(to bottom, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 84%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#08ffffff', endColorstr='#ffffff',GradientType=0 );
+  }
+  .firefox .slideshow .item:before,
+  .internetexplorer .slideshow .item:before { background: transparent; }
+}
+
+@media (min-width: 1200px) {
+  .slideshow .item:before,
+  .firefox .slideshow .item.active:before,
+  .internetexplorer .slideshow .item.active:before {
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 90%);
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%, rgba(255,255,255,1) 90%);
+    background: linear-gradient(to bottom, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 90%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#08ffffff', endColorstr='#ffffff',GradientType=0 );
+  }
+  .firefox .slideshow .item:before,
+  .internetexplorer .slideshow .item:before { background: transparent; }
+}
+
+@media (min-width: 1200px) and (min-height: 600px) and (max-height: 800px) {
+  .slideshow .item:before,
+  .firefox .slideshow .item.active:before,
+  .internetexplorer .slideshow .item.active:before {
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 85%);
+    background: -webkit-linear-gradient(top, rgba(255,255,255,.6) 0%, rgba(255,255,255,1) 85%);
+    background: linear-gradient(to bottom, rgba(255,255,255,.6) 0%,rgba(255,255,255,1) 85%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#08ffffff', endColorstr='#ffffff',GradientType=0 );
+  }
+  .firefox .slideshow .item:before,
+  .internetexplorer .slideshow .item:before { background: transparent; }
+}
+
+/* Slideshow - Objects
+ .................................................................................*/
+.slideshow h1.slideshow-object {
+  color: #333;
+  text-shadow: 0 2px 5px rgba(0,0,0,.5);
+}
+
+.slideshow ul.slideshow-object,
+.slideshow p.slideshow-object {
+  color: #777;
+  text-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.slideshow ul.slideshow-object>li:before {
+  background-color: #888;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.5);
+}
+
+.slideshow .btn {
+  color: initial;
+  background-color: transparent;
+}
+.slideshow .btn:focus,
+.slideshow .btn:hover {
+  border-color: transparent;
+  color: #fff;
+}
+
+.slideshow .btn-fill {
+  border-color: transparent;
+  color: #fff !important;
+}
+
+.slideshow .btn-icon svg { fill: #333; }
+.slideshow .btn-icon:focus svg,
+.slideshow .btn-icon:hover svg { fill: #fff; }
+
+/* Video
+ ......................................*/
+.slideshow iframe { box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+
+/* Subscription Form
+ ......................................*/
+.slideshow .panel { box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+
+.slideshow .panel-heading { border-color: transparent; }
+.slideshow .panel-heading h3 { color: #fff; }
+
+/* Slideshow - Indicators
+ .................................................................................*/
+.slideshow .carousel-indicators { box-shadow: inset 0 3px 5px 0 rgba(0,0,0,.07); }
+
+.slideshow .carousel-indicators>li { background-color: transparent; }
+
+.slideshow .carousel-indicators>li.active { background-color: #fff; }
+.slideshow .carousel-indicators>li.active>a { color: #333; }
+.slideshow .carousel-indicators>li.active:hover>a { color: #333; }
+
+.slideshow .carousel-indicators>li .icon { fill: #bbb; }
+.slideshow .carousel-indicators>li:hover .icon { fill: #fff; }
+.slideshow .carousel-indicators>li.active .indicators-icon>span>.icon { fill: #fff; }
+
+.slideshow .indicators-icon span { border-color: #bbb; }
+.slideshow .carousel-indicators>li:hover .indicators-icon span { border-color: #fff; }
+
+.slideshow .carousel-indicators>li>a {
+  color: #ccc;
+  background-color: transparent;
+}
+.slideshow .carousel-indicators>li:hover>a { color: #fff; }
+.slideshow .carousel-indicators>li>a:hover { background-color: transparent; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 11) FEATURES
+ ------------------------------------------------------------------------------------------------*/
+.features .icon { fill: #fff; }
+
+/* Features - Accordion
+ .................................................................................*/
+.features label { color: #fff; }
+
+.features .icon-stats { fill: #fff; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 12) OVERVIEW
+ ------------------------------------------------------------------------------------------------*/
+/* Overview - Collapse
+ .................................................................................*/
+.overview .panel-title {
+  color: #fff;
+  box-shadow: inset -40px 0 0 rgba(0,0,0,.07);
+}
+.overview .panel-title>a:focus,
+.overview .panel-title>a:hover { background-color: transparent; }
+.overview .panel-title .icn { fill: rgba(255,255,255,.7); }
+
+.overview .panel-group .panel-heading+.panel-collapse>.list-group,
+.overview .panel-group .panel-heading+.panel-collapse>.panel-body { background-color: #eee; }
+
+@media (min-width: 768px) {
+  .overview .panel-title { box-shadow: inset -50px 0 0 rgba(0,0,0,.07); }
+}
+
+/* Overview - Tabs Content
+ .................................................................................*/
+.overview .overview-tabs>li>a {
+  border-bottom-color: #eee;
+  background-color: #ddd;
+}
+
+.overview .overview-tabs>li>a>.icon-overview { fill: #333; }
+.overview .overview-tabs>li.active>a>.icon-overview { fill: #fff; }
+
+/* Donuts Chart
+ ......................................*/
+.overview .overview-chart g path:hover { fill: #ccc !important; }
+
+.doughnutTip {
+  color: #ddd;
+  text-shadow: 0 1px 0 #000;
+  background: rgba(0,0,0,.8);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.doughnutTip:after {
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border-top-color: rgba(0,0,0,.8);
+}
+
+.overview .doughnutSummary {
+  color: #333;
+  background-color: #eee;
+}
+
+/* Overview - Newsletter
+ .................................................................................*/
+.overview .section-footer { border-top-color: #fff; }
+
+.overview .newsletter { color: #fff; }
+
+.overview .icon-newsletter { fill: #fff; }
+
+.overview .newsletter .input-group-addon {
+  border-color: transparent;
+  background-color: #fff;
+}
+
+.overview .newsletter .icon-input-newsletter { fill: #333; }
+
+.overview .newsletter .form-control {
+  border-color: transparent;
+  background-color: #fff;
+}
+.overview .newsletter .form-control:focus {
+  border-color: transparent;
+  background-color: #fff;
+}
+
+.overview .newsletter .btn {
+  border-color: transparent;
+  color: #333;
+  background-color: #e8e8e8;
+}
+.overview .newsletter .btn:hover { background-color: #ddd; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 13) GALLERY
+ ------------------------------------------------------------------------------------------------*/
+.gallery .filter-button-group>.btn:focus,
+.gallery .filter-button-group>.btn:hover,
+.gallery .filter-button-group>.btn.active { background-color: #eee; }
+
+/* Thumbnail
+ ......................................*/
+.gallery .thumb-overlay { background-color: #000; }
+
+.gallery .thumb-icons .glyphicon { color: #fff; }
+
+.gallery .icon-gallery { fill: #fff; }
+
+.gallery .thumb-title { color: #fff; }
+
+/* Modal Zoom
+ ......................................*/
+.gallery .blueimp-gallery>.prev>.icn,
+.gallery .blueimp-gallery>.next>.icn { fill: #fff; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 14) TESTIMONIALS
+ ------------------------------------------------------------------------------------------------*/
+/* Testimonials - Testimonials Carousel
+ .................................................................................*/
+.testimonials blockquote { color: #fff; }
+.testimonials blockquote:before {
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+/* Testimonials - Thumbs Carousel
+ .................................................................................*/
+.testimonials .media-body,
+.testimonials .media-left,
+.testimonials .media-right { background-color: #eee; }
+
+.testimonials .media-text { color: #999; }
+.testimonials .testimonials-company { color: #aaa; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 15) PRICES
+ ------------------------------------------------------------------------------------------------*/
+.prices .panel { background-color: transparent; }
+.prices .slick-current .panel { box-shadow: 0 0 0 1px #ddd; }
+
+.prices .panel-heading { background-color: transparent; }
+
+.prices .price { color: #fff; }
+.prices .per-month { color: #fff; }
+
+.prices .plan-features>li {
+  border-bottom-color: #eee;
+  color: #333;
+}
+.prices .panel-popular .plan-features>li { border-bottom-color: #ddd; }
+
+.prices .panel-footer { background-color: #eee; }
+.prices .panel-footer .btn { color: #fff; }
+.prices .panel-footer .btn:focus,
+.prices .panel-footer .btn:hover { border-color: transparent; }
+
+@media (min-width: 768px) {
+  .prices .panel { border-color: #ddd; }
+
+  .prices .panel-popular { background-color: transparent; }
+
+  .prices .panel-body { border-left-color: #ddd; }
+
+  .prices .plan-features>li { border-bottom-color: #ddd; }
+}
+
+@media (min-width: 992px) {
+  .prices .plan-features>li { border-bottom-color: #eee; }
+
+  .prices .panel-footer {
+    border-top-color: #ddd;
+    background-color: #eee;
+  }
+}
+
+
+/*------------------------------------------------------------------------------------------------
+ 16) TEAM
+ ------------------------------------------------------------------------------------------------*/
+.team .team-photo { background-color: #eee; }
+.team .team-photo:hover { background-color: #000; }
+
+.team .team-social .icon-social { fill: #fff; }
+.team .team-photo:hover .team-social:focus .icon-social,
+.team .team-photo:hover .team-social:hover .icon-social { fill: #fff; }
+
+.team .team-photo:focus .linkedin:hover,
+.team .team-photo:focus .linkedin:focus,
+.team .team-photo:hover .linkedin:focus,
+.team .team-photo:hover .linkedin:hover { background-color: #0077b5; }
+
+.team .team-photo:focus .facebook:hover,
+.team .team-photo:focus .facebook:focus,
+.team .team-photo:hover .facebook:focus,
+.team .team-photo:hover .facebook:hover { background-color: #3b5998; }
+
+.team .team-photo:focus .google-plus:hover,
+.team .team-photo:focus .google-plus:focus,
+.team .team-photo:hover .google-plus:focus,
+.team .team-photo:hover .google-plus:hover { background-color: #d14836; }
+
+.team .team-photo:focus .twitter:hover,
+.team .team-photo:focus .twitter:focus,
+.team .team-photo:hover .twitter:focus,
+.team .team-photo:hover .twitter:hover { background-color: #2daddc; }
+
+.team .team-name { color: #fff; }
+.team .team-function { color: #ccc; }
+
+.team .team-wrapper-description { background-color: #eee; }
+  
+.team .team-skills { background-color: #eee; }
+
+/* Progress Bars
+ ......................................*/
+.team .progress { background-color: #ddd; }
+.team .progress-bar { color: #fff; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 17) BLOG
+ ------------------------------------------------------------------------------------------------*/
+.blog .blog-tabs .title { color: #333; }
+.blog .blog-tabs>li.active .title { background-color: #eee; }
+
+.blog .blog-tabs .title a {
+  color: #fff;
+  background-color: transparent;
+}
+.blog .blog-tabs>li.active .title a { color: #333; }
+
+.blog .blog-tabs .published {
+  color: rgba(255,255,255,.7);
+  background-color: rgba(0,0,0,.07);
+}
+.blog .blog-tabs>li.active  .published { color: rgba(0,0,0,.3); }
+
+@media (min-width: 992px) {
+  .blog .blog-tabs .title { border-right: 5px solid #fff; }
+  .blog .blog-tabs>li.active .title { border-right: 5px solid #eee; }
+}
+
+/* Carousel Controls
+ .................................................................................*/
+.blog .wrapper-controls {
+  border-top: 1px solid #fff;
+  background: #fff;
+}
+.blog .wrapper-controls a { background-color: #ddd; }
+.blog .wrapper-controls .icon-angle-left {
+  border-right: 2px solid transparent;
+  fill: #333;
+}
+.blog .wrapper-controls .icon-angle-right {
+  border-left: 2px solid transparent;
+  fill: #333;
+}
+
+@media (min-width: 768px) {
+  .blog .wrapper-controls { border-top: 5px solid #fff; }
+}
+
+@media (min-width: 992px) {
+  .blog .wrapper-controls { border-right: 5px solid #fff; }
+}
+
+/* Article
+ .................................................................................*/
+.blog .tab-content { background-color: #eee; }
+
+.blog .wrapper-post .author { color: #999; }
+.blog .wrapper-post .author a { color: #777; }
+
+/* Article Footer
+ .................................................................................*/
+.blog .footer-post { background-color: rgba(0,0,0,.07); }
+
+.blog .footer-post .comments { color: #333; }
+.blog .footer-post .comments .icn { fill: #333; }
+
+.blog .footer-post .read-more { color: #333; }
+.blog .footer-post .read-more .icn { fill: #fff; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 18) CONTACT
+ ------------------------------------------------------------------------------------------------*/
+.contact .btn {
+  border-color: transparent;
+  color: #fff;
+}
+.contact .btn:focus,
+.contact .btn:hover { border-color: transparent; }
+
+/* Contact - Address
+ .................................................................................*/
+.contact .vcard a { text-shadow: 0 1px 0 rgba(0,0,0,.1); }
+
+/* Contact - Social Icons
+ .................................................................................*/
+.social-icons .btn-social .icon-social,
+.social-icons .btn-social .icon { fill: #fff; }
+.social-icons .btn-social:focus .icon-social,
+.social-icons .btn-social:focus .icon,
+.social-icons .btn-social:hover .icon-social,
+.social-icons .btn-social:hover .icon { fill: #fff; }
+
+.social-icons .facebook:focus,
+.social-icons .facebook:hover { background-color: #3b5998; }
+.social-icons .twitter:focus,
+.social-icons .twitter:hover { background-color: #2daddc; }
+.social-icons .google-plus:focus,
+.social-icons .google-plus:hover { background-color: #d14836; }
+.social-icons .youtube:focus,
+.social-icons .youtube:hover { background-color: #e52d27; }
+.social-icons .instagram:focus,
+.social-icons .instagram:hover { background-color: #3b6994; }
+.social-icons .pinterest:focus,
+.social-icons .pinterest:hover { background-color: #bd081c; }
+
+
+/***********************************************************************************************/
+/*--------------------------------------   B L O G   -------------------------------------------/
+/***********************************************************************************************/
+
+
+/*----------------------------------------------------------------------------------------------
+ 19) BLOG GENERAL
+ ----------------------------------------------------------------------------------------------*/
+@media (min-width: 768px) {
+  .body-blog .sidebar { border-left: 1px solid #eee; }
+}
+
+/* Modules
+ .................................................................................*/
+.module .list-unstyled.collapse>li>svg,
+.module .list-unstyled.collapsing>li>svg { fill: #333; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 20) SIDEBAR - MODULE SEARCH
+ ----------------------------------------------------------------------------------------------*/
+.module-search .input-group-btn>.btn { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 21) SIDEBAR - MODULE CALENDAR
+ ----------------------------------------------------------------------------------------------*/
+.module-calendar .table>caption+thead>tr:first-child>th,
+.module-calendar .table>colgroup+thead>tr:first-child>th,
+.module-calendar .table>thead:first-child>tr:first-child>th,
+.module-calendar .table>caption+thead>tr:first-child>td,
+.module-calendar .table>colgroup+thead>tr:first-child>td,
+.module-calendar .table>thead:first-child>tr:first-child>td { background-color: #eee; }
+
+.module-calendar .table>tbody>tr.active>td,
+.module-calendar .table>tbody>tr.active>th,
+.module-calendar .table>tbody>tr>td.active,
+.module-calendar .table>tbody>tr>th.active,
+.module-calendar .table>tfoot>tr.active>td,
+.module-calendar .table>tfoot>tr.active>th,
+.module-calendar .table>tfoot>tr>td.active,
+.module-calendar .table>tfoot>tr>th.active,
+.module-calendar .table>thead>tr.active>td,
+.module-calendar .table>thead>tr.active>th,
+.module-calendar .table>thead>tr>td.active,
+.module-calendar .table>thead>tr>th.active { color: #fff; }
+
+.module-calendar table a:not(.btn),
+.module-calendar .table a:not(.btn) { text-shadow: 0 1px 0 rgba(0,0,0,.1); }
+
+
+/*----------------------------------------------------------------------------------------------
+ 22) SIDEBAR - MODULE MENU CATEGORIES
+ ----------------------------------------------------------------------------------------------*/
+.module-menu-categories .nav-pills>li>a {
+  color: #333;
+  background-color: transparent;
+}
+.module-menu-categories .nav-pills>li>a:hover { background-color: #eee; }
+.module-menu-categories .nav-pills>li.active>a,
+.module-menu-categories .nav-pills>li.active>a:focus,
+.module-menu-categories .nav-pills>li.active>a:hover { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 23) SIDEBAR - MODULE RECENT POSTS
+ ----------------------------------------------------------------------------------------------*/
+.module-recent-posts a { text-shadow: 0 1px 0 rgba(0,0,0,.1); }
+
+
+/*----------------------------------------------------------------------------------------------
+ 24) SIDEBAR - MODULE ARCHIVES
+ ----------------------------------------------------------------------------------------------*/
+.module-archives a { color: #333; }
+.module-archives .nav>li>a[aria-expanded="false"] { background-color: transparent; }
+.module-archives .nav>li>a:hover { background-color: #eee; }
+
+.module-archives .nav>li>a:hover[aria-expanded="true"],
+.module-archives .nav>li>a[aria-expanded="true"] { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 25) SIDEBAR - MODULE RECENT COMMENTS
+ ----------------------------------------------------------------------------------------------*/
+.module-recent-comments a { text-shadow: 0 1px 0 rgba(0,0,0,.1); }
+
+
+/*----------------------------------------------------------------------------------------------
+ 26) SIDEBAR - MODULE TAG
+ ----------------------------------------------------------------------------------------------*/
+.module-tags .tag {
+  border-color: #eee;
+  background-color: #eee;
+}
+.module-tags .tag:hover { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 27) CONTENT - MODULE CATEGORIES
+ ----------------------------------------------------------------------------------------------*/
+.module-categories .list-grid { border-bottom: 1px solid transparent; }
+
+.module-categories .list-grid>li>a { background-color: #eee; }
+.module-categories .list-grid>li>a:hover { border-color: #eee #eee transparent; }
+.module-categories .list-grid>li.active>a,
+.module-categories .list-grid>li.active>a:focus,
+.module-categories .list-grid>li.active>a:hover { border-bottom-color: transparent; }
+
+.module-categories .list-grid>li.active>a>svg,
+.module-categories .list-grid>li.active>a:focus>svg,
+.module-categories .list-grid>li.active>a:hover>svg { fill: #fff; }
+
+.module-categories .thumb-overlay .published { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 28) CONTENT - BLOG META
+ ----------------------------------------------------------------------------------------------*/
+.blog-meta { background-color: #eee; }
+.blog-meta .blog-tags a { text-shadow: 0 1px 0 rgba(0,0,0,.2); }
+
+
+/*----------------------------------------------------------------------------------------------
+ 29) CONTENT - MODULE RELATED POSTS
+ ----------------------------------------------------------------------------------------------*/
+.module-related-posts .thumb-overlay .published { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 30) CONTENT - MODULE AUTHOR POSTS
+ ----------------------------------------------------------------------------------------------*/
+.module-author-posts .list-grid { border-bottom: 1px solid transparent; }
+
+.module-author-posts .list-grid>li>a { background-color: #eee; }
+.module-author-posts .list-grid>li>a:hover { border-color: #eee #eee transparent; }
+.module-author-posts .list-grid>li.active>a,
+.module-author-posts .list-grid>li.active>a:focus,
+.module-author-posts .list-grid>li.active>a:hover { border-bottom-color: transparent; }
+
+.module-author-posts .list-grid>li.active>a>svg,
+.module-author-posts .list-grid>li.active>a:focus>svg,
+.module-author-posts .list-grid>li.active>a:hover>svg { fill: #fff; }
+
+.module-author-posts .thumb-overlay .published { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 31) CONTENT - PAGINATION
+ ----------------------------------------------------------------------------------------------*/
+.wrapper-pagination .pagination>li>a,
+.wrapper-pagination .pagination>li>span { color: #333; }
+
+.wrapper-pagination .pagination>.active>a,
+.wrapper-pagination .pagination>.active>a:focus,
+.wrapper-pagination .pagination>.active>a:hover,
+.wrapper-pagination .pagination>.active>span,
+.wrapper-pagination .pagination>.active>span:focus,
+.wrapper-pagination .pagination>.active>span:hover { color: #fff; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 32) CONTENT - MODULE COMMENTS
+ ----------------------------------------------------------------------------------------------*/
+.module-blog-comments form .submit-form-blog,
+.module-blog-comments form .submit-form-blog:hover {
+  border-color: transparent;
+  color: #fff;
+}
+
+.module-blog-comments .btn-reply { text-shadow: 0 1px 0 rgba(0,0,0,.1); }

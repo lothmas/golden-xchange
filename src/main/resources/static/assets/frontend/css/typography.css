@@ -1,0 +1,32 @@
+/*=================================================================================================
+Project:  Blockus
+Version:  1.1.0
+Last change:  07/10/2016
+Design by:  TemplatesPRO.com.br
+---------------------------------------------------------------------------------------------------
+
+INDEX:
+01) GENERAL
+=================================================================================================*/
+
+
+/*------------------------------------------------------------------------------------------------
+ 01) GENERAL
+ ------------------------------------------------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Questrial');
+
+body { font-family: 'Questrial', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+
+h1,
+h2,
+h3,
+h4,
+.btn,
+.navbar-default .navbar-nav>li>a,
+.features label>.wrapper-icon .icon-caption,
+.features label>.wrapper-description .title,
+.features label>.wrapper-description .icon-caption,
+.gallery .filter-button-group>.btn,
+.contact .org {
+  font-family: 'Montserrat', sans-serif;
+}

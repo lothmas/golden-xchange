@@ -52,13 +52,13 @@ public class Controller {
         return file_string;
     }
 
-//    @RequestMapping({"/"})
-//    public String getIndex() {
-//        return "index";
-//    }
+    @RequestMapping({"/"})
+    public String getIndex() {
+        return "index";
+    }
 
 
-    @RequestMapping({"/profile","/dashboard","/new_donation"})
+    @RequestMapping({"/profile","/dashboard","/new_donation","/index"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
@@ -88,6 +88,9 @@ public class Controller {
                     e.printStackTrace();
                 }
                 return "new_donation";
+            }
+            if (url.contains("index")) {
+                return "index";
             }
 //            if (url.contains("current_donations")) {
 //

@@ -1,0 +1,444 @@
+/*=================================================================================================
+Project:  Blockus
+Version:  1.1.0
+Last change:  07/10/2016
+Design by:  TemplatesPRO.com.br
+---------------------------------------------------------------------------------------------------
+
+INDEX:
+01) PRELOADER
+02) MODAL
+03) NAVBAR - NAVBAR TOGGLE - NAVBAR COLLAPSE
+04) SLIDERS
+05) HOME
+06) FEATURES
+07) OVERVIEW
+08) GALLERY
+09) TESTIMONIALS
+10) PRICES
+11) TEAM
+12) BLOG
+13) CONTACT
+--- BLOG ---
+14) PAGE DETAIL
+15) SIDEBAR - MODULE SEARCH
+16) SIDEBAR - MODULE CALENDAR
+17) SIDEBAR - MODULE MENU CATEGORIES
+18) SIDEBAR - MODULE RECENT POSTS
+19) SIDEBAR - MODULE ARCHIVES
+20) SIDEBAR - MODULE RECENT COMMENTS
+21) SIDEBAR - MODULE TAG
+22) CONTENT - MODULE CATEGORIES
+23) CONTENT - BLOG META
+24) CONTENT - BLOG AUTHOR INFO
+25) CONTENT - MODULE RELATED POSTS
+26) CONTENT - MODULE AUTHOR POSTS
+27) CONTENT - PAGINATION
+28) CONTENT - MODULE COMMENTS
+---------------------------------------------------------------------------------------------------
+
+PALLETE:
+Main Color:
+#795548
+
+Main Color Variables:
+#704c3f
+#654539
+#856053
+rgba(121, 85, 72, 0.1)
+=================================================================================================*/
+
+
+/*------------------------------------------------------------------------------------------------
+ 01) PRELOADER
+ ------------------------------------------------------------------------------------------------*/
+@-webkit-keyframes color-change {
+  0% {
+    color: #795548;
+    background: #eee;
+  }
+  50% {
+    color: #fff;
+    background: #795548;
+  }
+  100% {
+    color: #795548;
+    background: #eee;
+  }
+}
+        @keyframes color-change {
+          0% {
+            color: #795548;
+            background: #eee;
+          }
+          50% {
+            color: #fff;
+            background: #795548;
+          }
+          100% {
+            color: #795548;
+            background: #eee;
+          }
+        }
+
+
+/*------------------------------------------------------------------------------------------------
+ 02) MODAL
+ ------------------------------------------------------------------------------------------------*/
+/* Modal Form (SLIDESHOW)
+ ......................................*/
+.slideshow-modal .panel-heading { background-color: #795548; }
+
+.slideshow-modal .btn { background-color: #795548; }
+
+/* Modal Info (GALLERY)
+ ......................................*/
+.gallery-modal .title-info-modal { background-color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 03) NAVBAR - NAVBAR TOGGLE - NAVBAR COLLAPSE
+ ------------------------------------------------------------------------------------------------*/
+/* Home
+ ......................................*/
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:hover { background-color: #795548; }
+
+/* Internal
+ ......................................*/
+.top-nav-collapse .navbar-nav>.active>a,
+.top-nav-collapse .navbar-nav>.active>a:focus,
+.top-nav-collapse .navbar-nav>.active>a:hover { background-color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 04) SLIDERS
+ ------------------------------------------------------------------------------------------------*/
+.slide-testimonials-bloquotes .slick-track { background-color: #795548; }
+
+/* Carousel Controls
+ ......................................*/
+.slick-prev:hover:before,
+.slick-next:hover:before { color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 05) HOME
+ ------------------------------------------------------------------------------------------------*/
+/* Slideshow - Objects
+ .................................................................................*/
+.slideshow .btn { border-color: #795548; }
+.slideshow .btn:focus,
+.slideshow .btn:hover { background-color: #704c3f; }
+
+.slideshow .btn-fill { background-color: #795548; }
+
+.slideshow .panel-heading { background-color: #795548; }
+
+/* Slideshow - Indicators
+ .................................................................................*/
+.slideshow .carousel-indicators { background-color: #795548; }
+
+.slideshow .carousel-indicators>li.active { color: #795548; }
+.slideshow .carousel-indicators>li.active .indicators-icon>span,
+.slideshow .carousel-indicators>li.active:hover .indicators-icon>span {
+  border-color: #795548;
+  background-color: #795548;
+}
+
+
+/*------------------------------------------------------------------------------------------------
+ 06) FEATURES
+ ------------------------------------------------------------------------------------------------*/
+.features .feature-block .wrapper-icon:before { background-color: #795548; }
+
+/* Features - Accordion
+ .................................................................................*/
+.features label>.wrapper-icon { background-color: #795548; }
+.features label:nth-child(1)>.wrapper-icon { background-color: #654539; }
+.features label:nth-child(2)>.wrapper-icon { background-color: #704c3f; }
+.features label:nth-child(3)>.wrapper-icon { background-color: #795548; }
+.features label:nth-child(4)>.wrapper-icon { background-color: #856053; }
+
+.features label>.wrapper-description { background-color: #795548; }
+.features label:nth-child(1)>.wrapper-description { background-color: #654539; }
+.features label:nth-child(2)>.wrapper-description { background-color: #704c3f; }
+.features label:nth-child(3)>.wrapper-description { background-color: #795548; }
+.features label:nth-child(4)>.wrapper-description { background-color: #856053; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 07) OVERVIEW
+ ------------------------------------------------------------------------------------------------*/
+/* Overview - Collapse
+ .................................................................................*/
+.overview .panel-default>.panel-heading { background-color: #795548; }
+
+/* Overview - Tabs Content
+ .................................................................................*/
+.overview .overview-tabs>li.active>a { background-color: #795548; }
+
+/* Donuts Chart
+ ......................................*/
+.overview .overview-chart g path[data-order="0"] { fill:#856053; }
+.overview .overview-chart g path[data-order="1"] { fill:#795548; }
+.overview .overview-chart g path[data-order="2"] { fill:#704c3f; }
+.overview .overview-chart g path[data-order="3"] { fill:#654539; }
+
+/* Overview - Newsletter
+ .................................................................................*/
+.overview .section-footer { background-color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 08) GALLERY
+ ------------------------------------------------------------------------------------------------*/
+/* Thumbnail
+ ......................................*/
+.gallery .link-details { background-color: #795548; }
+
+.gallery .link-modal { background-color: #795548; }
+
+.gallery .thumb-title { background-color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 09) TESTIMONIALS
+ ------------------------------------------------------------------------------------------------*/
+/* Testimonials - Testimonials Carousel
+ .................................................................................*/
+.testimonials .slide-testimonials-bloquotes { background-color: #795548; }
+
+.testimonials blockquote { background-color: #795548; }
+.testimonials blockquote:before { border-top-color: #795548; }
+
+/* Testimonials - Thumbs Carousel
+ .................................................................................*/
+.testimonials .testimonials-company:hover { color: #795548; }
+
+/* Testimonials - Logo Clients
+ .................................................................................*/
+.testimonials .section-footer { background-color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 10) PRICES
+ ------------------------------------------------------------------------------------------------*/
+.prices .panel-popular { background-color: rgba(121, 85, 72, 0.1); }
+
+.prices .plan-price { background-color: #795548; }
+
+.prices .panel-footer .btn {
+  border-color: #795548;
+  background-color: #795548;
+}
+.prices .panel-footer .btn:focus,
+.prices .panel-footer .btn:hover { background-color: #704c3f; }
+
+@media (min-width: 768px) {
+  .prices .panel:hover {
+    border-color: #795548;
+    box-shadow: 0 0 0 3px #795548;
+  }
+
+  .prices .panel-popular {
+    border-color: #795548;
+    box-shadow: 0 0 0 1px #795548;
+  }
+  .prices .panel-popular:hover {
+    background-color: rgba(121, 85, 72, 0.1);
+    box-shadow: 0 0 0 5px #795548;
+  }
+}
+
+
+/*------------------------------------------------------------------------------------------------
+ 11) TEAM
+ ------------------------------------------------------------------------------------------------*/
+.team .team-social { background-color: #795548; }
+
+.team .team-name { background-color: #795548; }
+
+/* Progress Bars
+ ......................................*/
+.team .progress-bar { background-color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 12) BLOG
+ ------------------------------------------------------------------------------------------------*/
+.blog .blog-tabs .title { background-color: #795548; }
+
+/* Article Footer
+ .................................................................................*/
+.blog .footer-post .read-more { background-color: #795548; }
+
+
+/*------------------------------------------------------------------------------------------------
+ 13) CONTACT
+ ------------------------------------------------------------------------------------------------*/
+.contact .btn { background-color: #795548; }
+.contact .btn:focus,
+.contact .btn:hover { background-color: #704c3f; }
+
+/* Contact - Address
+ .................................................................................*/
+.contact .vcard a { color: #795548; }
+
+/* Contact - Social Icons
+ .................................................................................*/
+.social-icons .btn-social { background-color: #795548; }
+
+
+/***********************************************************************************************/
+/*--------------------------------------   B L O G   -------------------------------------------/
+/***********************************************************************************************/
+
+
+/*----------------------------------------------------------------------------------------------
+ 14) PAGE DETAIL
+ ----------------------------------------------------------------------------------------------*/
+.blog-detail article h1 { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 15) SIDEBAR - MODULE SEARCH
+ ----------------------------------------------------------------------------------------------*/
+.module-search .input-group-btn>.btn {
+  border-color: #795548;
+  background-color: #795548;
+}
+.module-search .input-group-btn>.btn:hover,
+.module-search .input-group-btn>.btn:focus {
+  border-color: #704c3f;
+  background-color: #704c3f;
+}
+
+
+/*----------------------------------------------------------------------------------------------
+ 16) SIDEBAR - MODULE CALENDAR
+ ----------------------------------------------------------------------------------------------*/
+.module-calendar .table>tbody>tr.active>td,
+.module-calendar .table>tbody>tr.active>th,
+.module-calendar .table>tbody>tr>td.active,
+.module-calendar .table>tbody>tr>th.active,
+.module-calendar .table>tfoot>tr.active>td,
+.module-calendar .table>tfoot>tr.active>th,
+.module-calendar .table>tfoot>tr>td.active,
+.module-calendar .table>tfoot>tr>th.active,
+.module-calendar .table>thead>tr.active>td,
+.module-calendar .table>thead>tr.active>th,
+.module-calendar .table>thead>tr>td.active,
+.module-calendar .table>thead>tr>th.active { background-color: #795548; }
+
+.module-calendar table a:not(.btn),
+.module-calendar .table a:not(.btn) { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 17) SIDEBAR - MODULE MENU CATEGORIES
+ ----------------------------------------------------------------------------------------------*/
+.module-menu-categories .nav-pills>li.active>a,
+.module-menu-categories .nav-pills>li.active>a:focus,
+.module-menu-categories .nav-pills>li.active>a:hover { background-color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 18) SIDEBAR - MODULE RECENT POSTS
+ ----------------------------------------------------------------------------------------------*/
+.module-recent-posts a { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 19) SIDEBAR - MODULE ARCHIVES
+ ----------------------------------------------------------------------------------------------*/
+.module-archives .nav>li>a:hover[aria-expanded="true"],
+.module-archives .nav>li>a[aria-expanded="true"] { background-color: #795548; }
+
+.module-archives .nav ul a { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 20) SIDEBAR - MODULE RECENT COMMENTS
+ ----------------------------------------------------------------------------------------------*/
+.module-recent-comments a { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 21) SIDEBAR - MODULE TAG
+ ----------------------------------------------------------------------------------------------*/
+.module-tags .tag:hover {
+  border-color: #795548;
+  background-color: #795548;
+}
+
+
+/*----------------------------------------------------------------------------------------------
+ 22) CONTENT - MODULE CATEGORIES
+ ----------------------------------------------------------------------------------------------*/
+.module-categories .list-grid>li.active>a,
+.module-categories .list-grid>li.active>a:focus,
+.module-categories .list-grid>li.active>a:hover {
+  background-color: #795548;
+  border: 1px solid #795548;
+}
+
+.module-categories .thumb-overlay .published { background-color: #795548; }
+
+.module-categories .content .title a { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 23) CONTENT - BLOG META
+ ----------------------------------------------------------------------------------------------*/
+.blog-meta .blog-tags a { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 24) CONTENT - BLOG AUTHOR INFO
+ ----------------------------------------------------------------------------------------------*/
+.blog-author-info .media-heading { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 25) CONTENT - MODULE RELATED POSTS
+ ----------------------------------------------------------------------------------------------*/
+.module-related-posts .thumb-overlay .published { background-color: #795548; }
+
+.module-related-posts .content .title a { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 26) CONTENT - MODULE AUTHOR POSTS
+ ----------------------------------------------------------------------------------------------*/
+.module-author-posts .list-grid>li.active>a,
+.module-author-posts .list-grid>li.active>a:focus,
+.module-author-posts .list-grid>li.active>a:hover {
+  background-color: #795548;
+  border: 1px solid #795548;
+}
+
+.module-author-posts .thumb-overlay .published { background-color: #795548; }
+
+.module-author-posts .content .title a { color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 27) CONTENT - PAGINATION
+ ----------------------------------------------------------------------------------------------*/
+.wrapper-pagination .pagination>.active>a,
+.wrapper-pagination .pagination>.active>a:focus,
+.wrapper-pagination .pagination>.active>a:hover,
+.wrapper-pagination .pagination>.active>span,
+.wrapper-pagination .pagination>.active>span:focus,
+.wrapper-pagination .pagination>.active>span:hover { background-color: #795548; }
+
+
+/*----------------------------------------------------------------------------------------------
+ 28) CONTENT - MODULE COMMENTS
+ ----------------------------------------------------------------------------------------------*/
+.module-blog-comments form .submit-form-blog { background-color: #795548; }
+.module-blog-comments form .submit-form-blog:hover { background-color: #704c3f; }
+
+.module-blog-comments .btn-reply { color: #795548; }
