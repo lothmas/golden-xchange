@@ -1,13 +1,14 @@
 package com.golden_xchange.domain.utilities;
 
+import org.hibernate.criterion.Criterion;
+
 import java.io.Serializable;
 import java.util.List;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Criterion;
+
 
 /**
  *
- * @author kwk
+ * @author louis
  * @param <E>
  * @param <I>
  */
@@ -25,33 +26,12 @@ public interface AbstractDao<E, I extends Serializable> {
      * @param e
      */
     void saveOrUpdate(E e);
-//    boolean saveObject(E e);
-
     void delete(E e);
-
-    void saveOrUpdateForTransaction(E e);
-
-    void merge(E e);
 
     /**
      *
      * @param criterion
      * @return
      */
-    List<E> findByCriteria(Criterion criterion);
-
-    public void beginTransaction();
-
-    /**
-     *
-     */
-    public void transactionCommit();
-
-    /**
-     *
-     */
-    public void transactionRollBack();
-
-    public Transaction getTransaction();
-
+        List<E> findByCriteria(Criterion criterion);
 }
