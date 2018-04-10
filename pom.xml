@@ -61,10 +61,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -86,12 +83,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.webjars/kendo-ui-core -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>kendo-ui-core</artifactId>
-            <version>2014.2.716</version>
-        </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -227,12 +219,6 @@
             <version>1.57</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.jdom/jdom2 -->
-        <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom2</artifactId>
-            <version>2.0.6</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -246,12 +232,6 @@
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>1.4.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sourceforge.nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
-            <version>1.9.21</version>
         </dependency>
 
 
