@@ -60,6 +60,9 @@ public class Controller {
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
         model.addAttribute("bankDetails",new GetBankNameListResponse());
         String url = request.getRequestURI();
+        if(!session.getAttributeNames().hasMoreElements()){
+            return "redirect:/";
+        }
         int index = url.lastIndexOf("/");
         if (index != -1) {
             if (url.contains("profile")) {
