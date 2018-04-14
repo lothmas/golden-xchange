@@ -71,7 +71,10 @@
                         <button type="submit" name="action" value="login" class="btn btn-success btn-block btn-lg">Sign me in</button>
                     </div>
                     <div class="m-t-20">
-                        Not a member yet? Click <a href="register">here</a> to register.
+                      <h5> <font color="white"> Not a member yet? Click <a href="register"><font color="#deb887">HERE</font></a> to register.</font></h5>
+                    </div>
+                    <div class="m-t-20">
+                        <h5> <font color="white"> Go Back Home? Click <a href="index"><font color="#deb887">HERE</font></a> </font></h5>
                     </div>
                     <div class="alert alert-danger" th:if="${response.message!=null}">
                         <strong>Danger!</strong> <span th:text="${response.message}"></span>
