@@ -104,8 +104,8 @@ public class ApproveDonationWebserviceEndpoint {
                     notificationsService.save(notificationsEntity);
                     SendSms send = new SendSms();
 
-                    send.send("sendSms.sh", goldenRichesUsers1.getTelephoneNumber(), "Golden Riches: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
-                    LOG.info("MSG SENT: Golden Riches: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+                    send.send("sendSms.sh", goldenRichesUsers1.getTelephoneNumber(), "Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+                    LOG.info("MSG SENT: Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
                 } catch (Exception var12) {
                     //do nothing skip
                 }

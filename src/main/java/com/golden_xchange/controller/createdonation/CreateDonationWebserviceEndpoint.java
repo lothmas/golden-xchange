@@ -258,7 +258,7 @@ public class CreateDonationWebserviceEndpoint {
 
         try {
 //            SendSms send = new SendSms();
-//            send.send("sendSms.sh", gold.getTelephoneNumber(), "Golden Riches Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + request.getAmount() + ". Confirm Before Payment [expires in 5hrs]");
+//            send.send("sendSms.sh", gold.getTelephoneNumber(), "Golden-Xchange Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + request.getAmount() + ". Confirm Before Payment [expires in 5hrs]");
         } catch (Exception var11) {
             ;
         }

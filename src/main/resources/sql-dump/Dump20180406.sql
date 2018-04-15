@@ -38,7 +38,7 @@ CREATE TABLE `notifications` (
 
 LOCK TABLES `notifications` WRITE;
 /*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-INSERT INTO `notifications` VALUES (1,3,'MSG SENT: Golden Riches: Deposit Confirmed 03-03-2018 DepositReference: \" OOOEJkki2834 + \". AmountPayed: \"  R32433 \". Confirm in Your Account and Update The System',1,'2003-03-18');
+INSERT INTO `notifications` VALUES (1,3,'MSG SENT: Golden-Xchange: Deposit Confirmed 03-03-2018 DepositReference: \" OOOEJkki2834 + \". AmountPayed: \"  R32433 \". Confirm in Your Account and Update The System',1,'2003-03-18');
 /*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
