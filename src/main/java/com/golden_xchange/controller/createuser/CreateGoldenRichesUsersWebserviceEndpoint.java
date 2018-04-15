@@ -8,6 +8,7 @@ package com.golden_xchange.controller.createuser;
 import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
+import com.golden_xchange.domain.utilities.Enums;
 import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
 import com.golden_xchange.domain.utilities.GeneralDomainFunctions;
 import org.apache.commons.codec.binary.Base64;
@@ -38,9 +39,9 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
     }
 
     @RequestMapping(value = {"/register"})
-    public String handleCreateGoldenRichesRequest(Model model){
+    public String handleCreateGoldenRichesRequest(Model model) {
         CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
-        model.addAttribute("response",response);
+        model.addAttribute("response", response);
         return "register";
     }
 
@@ -51,9 +52,23 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
         CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
         GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
 
+        if (!request.getReferenceUser().equals("")) {
+            try {
+                this.goldenRichesUsersService.findUserByMemberId(request.getReferenceUser());
+                goldenRichesUsers.setReferenceUser(request.getReferenceUser());
+            } catch (Exception exp) {
+                response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
+                response.setMessage("Supplied Sponsor-Username is not Registered on the System. Please confirm with your Sponsor Or Leave Blank To Proceed");
+                return registerResponse(model, response);
+            }
+        } else {
+            goldenRichesUsers.setReferenceUser("admin");
+        }
+
+
         try {
             GoldenRichesUsers goldenUsers = this.goldenRichesUsersService.getUserByBankDetails(request.getAccountNumber());
-            if(null != goldenUsers) {
+            if (null != goldenUsers) {
                 response.setMessage("AccountNumber Already Registered");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                 return registerResponse(model, response);
@@ -63,7 +78,7 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
         }
 
         try {
-            if(null != request.getUserName() && !request.getUserName().equals("")) {
+            if (null != request.getUserName() && !request.getUserName().equals("")) {
                 this.goldenRichesUsersService.findUserByMemberId(request.getUserName());
                 response.setMessage("Username: " + request.getUserName() + " Already Exists");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
@@ -74,7 +89,7 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 return registerResponse(model, response);
             }
         } catch (GoldenRichesUsersNotFoundException var6) {
-            if(this.inputValidation(request, response)) {
+            if (this.inputValidation(request, response)) {
                 return registerResponse(model, response);
             } else {
 
@@ -86,29 +101,23 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 goldenRichesUsers.setFirstName(request.getFirstName());
                 goldenRichesUsers.setPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(request.getPassword()));
                 goldenRichesUsers.setSurname(request.getSurname());
-                goldenRichesUsers.setTelephoneNumber("+"+diallingCode+request.getTelephone());
+                goldenRichesUsers.setTelephoneNumber("+" + diallingCode + request.getTelephone());
                 goldenRichesUsers.setUserName(request.getUserName());
                 goldenRichesUsers.setEnabled((byte) 1);
                 goldenRichesUsers.setAccountHoldername(request.getAccountHolderName());
                 goldenRichesUsers.setGender(request.getGender());
                 goldenRichesUsers.setAccountType(request.getAccountType());
-                if(!profilePic.getOriginalFilename().equals("")) {
+                if (!profilePic.getOriginalFilename().equals("")) {
                     goldenRichesUsers.setProfilePic(StringUtils.newStringUtf8(Base64.encodeBase64(profilePic.getBytes(), false)));
-                }
-                else{
+                } else {
                     goldenRichesUsers.setProfilePic(defaultImage());
                 }
 
-                if(!request.getReferenceUser().equals("")){
-                    goldenRichesUsers.setReferenceUser(request.getReferenceUser());
-                }
-                else{
-                    goldenRichesUsers.setReferenceUser("admin");
-                }
+
                 this.goldenRichesUsersService.saveUser(goldenRichesUsers);
                 response.setMessage("User " + request.getUserName() + " Was Successfully Created");
                 response.setStatusCode(StatusCodeEnum.CREATED.getStatusCode());
-                model.addAttribute("profile",goldenRichesUsers);
+                model.addAttribute("profile", goldenRichesUsers);
                 session.setAttribute("profile", goldenRichesUsers);
                 return "profile";
             }
@@ -116,20 +125,20 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
     }
 
     private String registerResponse(Model model, CreateGoldenRichesUserResponse response) {
-        model.addAttribute("response",response);
+        model.addAttribute("response", response);
         return "register";
     }
 
     public boolean inputValidation(@RequestPayload CreateGoldenRichesUserRequest request, CreateGoldenRichesUserResponse response) throws GoldenRichesUsersNotFoundException {
-        if(null != request.getFirstName() && !request.getFirstName().equals("")) {
-            if(null != request.getSurname() && !request.getSurname().equals("")) {
-                if(null != request.getAccountHolderName() && !request.getAccountHolderName().equals("")) {
-                    if(null != request.getBankName() && !request.getBankName().equals("")) {
-                        if(null != request.getBranchNumber() && !request.getBranchNumber().equals("")) {
-                            if(null != request.getAccountNumber() && !request.getAccountNumber().equals("")) {
-                                if(null != request.getTelephone() && !request.getTelephone().equals("")) {
-                                    if(null != request.getPassword() && !request.getPassword().equals("")) {
-                                        if(!request.getPassword().equals(request.getPassword2())) {
+        if (null != request.getFirstName() && !request.getFirstName().equals("")) {
+            if (null != request.getSurname() && !request.getSurname().equals("")) {
+                if (null != request.getAccountHolderName() && !request.getAccountHolderName().equals("")) {
+                    if (null != request.getBankName() && !request.getBankName().equals("")) {
+                        if (null != request.getBranchNumber() && !request.getBranchNumber().equals("")) {
+                            if (null != request.getAccountNumber() && !request.getAccountNumber().equals("")) {
+                                if (null != request.getTelephone() && !request.getTelephone().equals("")) {
+                                    if (null != request.getPassword() && !request.getPassword().equals("")) {
+                                        if (!request.getPassword().equals(request.getPassword2())) {
                                             response.setStatusCode(StatusCodeEnum.INVALIDSYNTAX.getStatusCode());
                                             response.setMessage("Your passwords do not match!!");
                                             return true;
@@ -179,12 +188,12 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
     }
 
     public boolean emailAddressValidation(@RequestPayload CreateGoldenRichesUserRequest request, CreateGoldenRichesUserResponse response) throws GoldenRichesUsersNotFoundException, GoldenRichesUsersNotFoundException {
-        if(null != request.getEmailAddress() && !request.getEmailAddress().equals("")) {
-            if(!GeneralDomainFunctions.isEmailValid(request.getEmailAddress())) {
+        if (null != request.getEmailAddress() && !request.getEmailAddress().equals("")) {
+            if (!GeneralDomainFunctions.isEmailValid(request.getEmailAddress())) {
                 response.setMessage("Provided EmailAddress is Invalid");
                 response.setStatusCode(StatusCodeEnum.INVALIDSYNTAX.getStatusCode());
                 return true;
-            } else if(this.goldenRichesUsersService.suppliedEmailExists(request.getEmailAddress())) {
+            } else if (this.goldenRichesUsersService.suppliedEmailExists(request.getEmailAddress())) {
                 response.setMessage("EmailAddress: " + request.getEmailAddress() + " Already Exists");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                 return true;
@@ -198,7 +207,7 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
         }
     }
 
-    String defaultImage(){
+    String defaultImage() {
         return "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAd\n" +
                 "Hx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3\n" +
                 "Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAUwBuwMBIgACEQED\n" +
