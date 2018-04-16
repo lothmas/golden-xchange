@@ -60,52 +60,8 @@
     <!-- end #header -->
 
     <!-- begin #sidebar -->
-    <div id="sidebar" class="sidebar">
-        <!-- begin sidebar scrollbar -->
-        <div data-scrollbar="true" data-height="100%">
-            <!-- begin sidebar user -->
-            <ul class="nav">
-                <li class="nav-profile">
-                    <a href="#" data-toggle="nav-profile">
-                        <div class="cover with-shadow"></div>
-                        <div class="image">
-                            <img th:src="@{'data:image/jpeg;base64,'+${profile.profilePic}}"
-                                 alt="no profile pic set"/>
-                        </div>
-                        <div class="info">
-                            <b class="caret pull-right"></b>
-                            <span th:text="${profile.getUserName()}"></span>
-                            <small th:text="${profile.getFirstName() +'  '+profile.getSurname()}">Front end developer
-                            </small>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <ul class="nav nav-profile">
-                        <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-                        <li><a href="#"><i class="fa fa-pencil-alt"></i> Send Feedback</a></li>
-                        <li><a href="#"><i class="fa fa-question-circle"></i> Helps</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- end sidebar user -->
-            <!-- begin sidebar nav -->
-            <ul class="nav">
-                <li class="nav-header">Navigation</li>
-                <li><a href="profile"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>
-                <li><a href="new_donation"><i class="fa fa-image"></i> <span>CREATE DONATION</span></a></li>
-                <li><a href="current_donations"><i class="fa fa-clock"></i> <span>CURRENT DONATION</span></a></li>
-                <li><a href="donation_state"><i class="fa fa-table" aria-hidden="true"></i>
-                    <span>ALL DONATIONS</span></a></li>
-                <!-- begin sidebar minify button -->
-                <li><a href="#" class="sidebar-minify-btn" data-click="sidebar-minify"><i
-                        class="fa fa-angle-double-left"></i></a></li>
-                <!-- end sidebar minify button -->
-            </ul>
-            <!-- end sidebar nav -->
-        </div>
-        <!-- end sidebar scrollbar -->
-    </div>
+    <div class="container" th:include="fragments :: sideBar" />
+
     <div class="sidebar-bg"></div>
     <!-- end #sidebar -->
 
