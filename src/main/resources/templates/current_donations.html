@@ -20,6 +20,8 @@
 	<link href="../assets/css/default/style.min.css" rel="stylesheet" />
 	<link href="../assets/css/default/style-responsive.min.css" rel="stylesheet" />
 	<link href="../assets/css/default/theme/default.css" rel="stylesheet" id="theme" />
+	<link href="../assets/css/pricing.css" rel="stylesheet"/>
+
 	<!-- ================== END BASE CSS STYLE ================== -->
 
 	<!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
@@ -136,49 +138,195 @@
 							<div class="table-responsive">
 
 								<table class="table table-striped m-b-0" >
-									<thead>
-									<tr>
-										<th>Deposit Reference</th>
-										<th>Bank Name</th>
-										<th>Branch Number</th>
-										<th>Account Type</th>
-										<th>Account Number</th>
-										<th>Account Holder Name</th>
-										<th>Donation Amount</th>
-										<!--<th width="1%"></th>-->
-										<th>Donation Status</th>
-									</tr>
-									</thead>
-									<th:block th:each="result, rowStat : ${response.returnData}" th:name="action" th:attr="action=${rowStat.index}">
-									<tr >
-										<!--<td class="with-img">-->
-											<!--<img src="../assets/img/user/user-1.jpg" class="img-rounded height-30" />-->
-										<!--</td>-->
-										<td th:text="${result.depositReference}"/>
-										<td th:text="${result.bankName}"/>
-										<td th:text="${result.branchNumber}"/>
-										<td th:text="${result.accountType}"/>
-										<td th:text="${result.accountNumber}"/>
-										<td th:text="${result.accountHolderName}"/>
-										<td th:text="${result.amount}"/>
+									<div class="row">
+									<div class="col-sm-4"  th:each="result, rowStat : ${response.returnData}" th:name="action"
+										 th:attr="action=${rowStat.index}">
+										<form action="#" data-th-action="@{./approveDonation}" th:object="${register}" method="post"
+											  enctype="multipart/form-data" class="margin-bottom-0">
+											<input name="requester" th:value="donation_state" type="hidden"/>
 
 
-										<td class="with-btn" nowrap="nowrap" th:if="${result.status==0}" >
-                                            <button  style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left">Confirm Payment</button>
-                                            <input name="approver"  type="hidden" th:value="1"/>
-                                        </td>
-										<!--<td class="with-btn" nowrap="nowrap" th:if="${result.status==0 &amp;&amp; result.enabled==0}" >-->
-											<!--<button name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm">Book Donation</button>-->
-											<!--<input name="approver"  type="hidden" th:value="1"/>-->
-										<!--</td>-->
-										<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.status==1}" >
-                                            <button style="width: 98%" name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
-                                        </td>
-										<td class="with-btn" nowrap="nowrap" th:if="${result.status==2}" >
-                                            <button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-success btn-sm text-left">Donation Approved</button>
-                                        </td>
-									</tr>
-									</th:block>
+											<!-- begin panel -->
+											<div >
+
+												<!-- end panel-heading -->
+												<!-- begin panel-body -->
+												<div class="panel-body">
+													<!-- begin table-responsive -->
+
+
+													<div>
+														<div>
+															<div>
+																<div id="price">
+																	<div class="plan basic">
+																		<div class="plan-inner">
+																			<div class="hot" th:text="${'Username          : '+result.payerUsername}"></div>
+																			<div class="entry-title">
+
+																				<div align="left" width="1%" class="with-img" th:if="${result.donationType==1}"><img
+																						src="../assets/img/user/user-1.jpg" class="img-rounded height-30"/></div>
+																				<div align="left" width="1%" class="with-img" th:if="${result.donationType!=1}"><img
+																						src="../assets/img/user/user-2.jpg" class="img-rounded height-30"/></div>
+																				<h3 th:text="${'Deposit Ref: '+result.depositReference}"></h3>
+																				<div class="price" th:text="${'R'+result.amount}"><span  >/PER CAR</span>
+																				</div>
+																			</div>
+																			<div class="entry-content">
+																				<ul>
+																					<li><strong>Bank Name: </strong> <span th:text="${result.bankName}"/></li>
+																					<li><strong>Branch Number:</strong> <span th:text="${': '+result.branchNumber}"/></li>
+																					<li><strong>Account Type:</strong> <span th:text="${' '+result.accountType}"/></li>
+																					<li><strong>Account Number:</strong> <span th:text="${' '+result.accountNumber}"/></li>
+																					<li><strong>Account HolderName:</strong> <span th:text="${' '+result.accountHolderName}"/></li>
+																				</ul>
+																			</div>
+																			<div class="btn">
+																				<div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==0}">
+																					<button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-danger btn-sm text-left">Pending Maturity</button>
+																					<input name="approver"  type="hidden" th:value="1"/>
+																				</div>
+																				<div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType==0}">
+																					<div class="progress">
+																						<div class="progress-bar progress-bar-striped progress-bar-animated text-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"  th:style="'width: '+${result.getMaturityAmount()/result.getAmountToReceive()*100}+'%'"  ></div>
+																					</div>
+
+																					<h6><p th:text="${T(Math).floor(result.getMaturityAmount()/result.getAmountToReceive()*100)+'% '+'Maturity Level'}"/></h6>
+																					<p  class="text-danger " align="center"/>
+																					<h4><p  class="text-danger " align="center" th:text="${'R'+result.maturityAmount}"/></h4>
+																				</div>
+																				<div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==2} ">
+																					<button  style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}">Confirm Payment</button>
+																					<input name="approver"  type="hidden" th:value="1"/>
+																				</div>
+																				<div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==1}  ">
+																					<button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}">Confirm Payment</button>
+																				</div>
+																				<div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType!=0}">
+																					<button style="width: 98%" disabled="true" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>
+																				</div>
+																				<!--<td class="with-btn" name="depositReference" nowrap="nowrap" th:if="${result.username.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >-->
+																				<!--<button style="width: 98%" name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-warning btn-sm text-left">Pending Approval</button>-->
+																				<!--</td>-->
+																				<div class="with-btn" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0}" >
+																					<button name="depositReference" disabled="true" th:value="${result.depositReference}" type="submit" class="btn btn-light bg-dark btn-sm text-white">Waiting Confirmation</button>
+																					<!--<input name="approver"  type="hidden" th:value="1"/>-->
+																				</div>
+																				<div class="with-btn" name="depositReference" nowrap="nowrap" th:if="${!result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1}" >
+																					<button style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-danger btn-sm text-left">Approve Donation</button>
+																					<input name="approvers"  type="hidden" th:value="2"/>
+																				</div>
+																				<div class="with-btn" nowrap="nowrap" th:if="${result.status==2}" >
+																					<button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white">Completed</button>
+																				</div>
+																				<div class="with-btn" nowrap="nowrap" th:if="${result.status==3}" >
+																					<button style="width: 98%" disabled="true"  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-primary btn-sm text-left text-white" >Completed</button>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<!-- end of price tab-->
+
+																</div>
+
+															</div>
+
+
+
+
+
+														</div>
+
+
+
+														<div class="modal fade" id="confirmPayment1" tabindex="-1" role="dialog"
+															 aria-labelledby="confirmPaymentLabel">
+															<div class="modal-dialog" role="document">
+																<div class="modal-content">
+																	<div class="modal-header" align="center">
+																		<button type="button" class="close" data-dismiss="modal"
+																				aria-label="Close"><span aria-hidden="true">&times;</span>
+																		</button>
+																		<h4 class="modal-title" id="confirmPaymentLabel">Confirm Donation
+																			Payment</h4>
+																	</div>
+																	<div class="modal-body">
+																		<form>
+																			<div class="form-group">
+																				<label for="payerUsername" class="control-label">PayerUsername:<input
+																						disabled="true" type="text" class="form-control"
+																						id="payerUsername"/></label>
+
+																			</div>
+																			<div class="form-group">
+																				<label for="depositReference" class="control-label">DepositReference:<input
+																						disabled="true" type="text" class="form-control"
+																						id="depositReference"
+																				/></label>
+																				<input name="approver"  type="hidden" th:value="1"/>
+																				<!--<input  type="hidden" />-->
+																			</div>
+																			<div class="form-group">
+																				<label for="donationAmount" class="control-label">DonationAmount:<input
+																						disabled="true" type="text" class="form-control"
+																						id="donationAmount"/></label>
+
+																			</div>
+																			<div class="form-group">
+																				<label for="approver" class="control-label"><input
+																						disabled="true" type="hidden" class="form-control"
+																						id="approver"/></label>
+																				<!--<label for="depositReferenceCount"-->
+																				<!--class="control-label"><input disabled="true"-->
+																				<!--type="hidden"-->
+																				<!--class="form-control"-->
+																				<!--id="depositReferenceCount" name="depositReferenceCount" th:value="${result.depositReference}"/></label>-->
+
+
+																			</div>
+
+
+																			<!--<p>PAYER USERNAME:<span class="badge" th:text="${result.payerUsername}"></span></p>-->
+
+																			<!--<p>DEPOSIT REF:<span class="badge" th:text="${'      '+result.depositReference}"></span></p>-->
+																			<!--<p>AMOUNT : <span class="badge" th:text="${'R'+result.amount}"></span></p>-->
+
+																		</form>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-default" data-dismiss="modal">
+																			Close
+																			<button onclick='this.form.submit()' name="action" value="1" type="button" class="btn btn-primary">Confirm Pyment</button>
+
+																		</button>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+
+													<!-- Modal -->
+
+
+													<!-- end table-responsive -->
+
+												</div>
+												<!--<div th:if="sponsorResponse!=1" align="center">-->
+												<!--<div class="alert alert-info col-lg-12" >-->
+												<!--<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List and wait approval by sponsors</span>-->
+												<!--</div>	&lt;!&ndash; begin panel-heading &ndash;&gt;-->
+												<!--<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:20%; height:20%"/>-->
+												<!--</div>-->
+												<!-- end panel-body -->
+												<!-- begin hljs-wrapper -->
+
+												<!-- end hljs-wrapper -->
+											</div>
+											<!-- end panel --> </form>
+									</div>
+									</div>
 								</table>
 							</div>
 							<!-- end table-responsive -->
