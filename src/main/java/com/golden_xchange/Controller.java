@@ -19,10 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,10 +41,10 @@ import java.util.List;
 public class Controller {
 
 
-@Autowired
+    @Autowired
     GetBankNameListWebserviceEndpoint getBankNameListWebserviceEndpoint;
 
-@Autowired
+    @Autowired
     UploadService uploadService;
 
 
@@ -67,14 +64,14 @@ public class Controller {
     }
 
 
-    @RequestMapping({"/profile","/dashboard","/new_donation","/index"})
+    @RequestMapping({"/profile", "/dashboard", "/new_donation", "/index", "upload"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
-        model.addAttribute("bankDetails",new GetBankNameListResponse());
+        model.addAttribute("bankDetails", new GetBankNameListResponse());
         String url = request.getRequestURI();
 
-        if(!session.getAttributeNames().hasMoreElements()){
+        if (!session.getAttributeNames().hasMoreElements()) {
             return "redirect:/";
         }
         int index = url.lastIndexOf("/");
@@ -96,6 +93,15 @@ public class Controller {
                 }
                 return "new_donation";
             }
+            if (url.contains("upload")) {
+                try {
+                    setModels(model, session);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "upload";
+            }
             if (url.contains("index")) {
                 return "index";
             }
@@ -111,10 +117,10 @@ public class Controller {
     }
 
     private void setModels(Model model, HttpSession session) {
-        model.addAttribute("profile",session.getAttribute("profile"));
-        model.addAttribute("response",new CreateDonationResponse());
-        model.addAttribute("notifications",session.getAttribute("notifications")) ;
-        model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
+        model.addAttribute("profile", session.getAttribute("profile"));
+        model.addAttribute("response", new CreateDonationResponse());
+        model.addAttribute("notifications", session.getAttribute("notifications"));
+        model.addAttribute("notificationCount", session.getAttribute("notificationCount"));
     }
 
 
@@ -130,8 +136,10 @@ public class Controller {
     }
 
 
-    @RequestMapping(value = {"/upload"})
-    public String upload(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file , @RequestParam(value = "depositReference", required = false) String depositReference) {
+    @RequestMapping(value = {"/uploading"})
+    @ResponseBody
+
+    public String upload(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "depositReference", required = false) String depositReference) {
         java.util.Date utilDate = new java.util.Date();
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp sqlDate = new Timestamp(utilDate.getTime());
@@ -139,30 +147,32 @@ public class Controller {
         JsonObjectConversionUtility jsonObjectConversionUtility = new JsonObjectConversionUtility();
         JsonResponse jsonResponse = new JsonResponse();
         File file1 = new File();
+        file1.setName(file.getOriginalFilename());
+        file1.setSize((int) file.getSize());
         List<File> files = new ArrayList<>();
         setModels(model, session);
         int index = url.lastIndexOf("/");
         if (index != -1) {
             if (null != file) {
                 try {
-                    if(depositReference.equals("")){
-                        file1.setError("Please Supply Deposit Reference");
+                    if (depositReference.equals("")) {
+                        file1.setError("Provide Deposit Reference");
                         files.add(file1);
                         jsonResponse.setFiles(files);
                         return jsonObjectConversionUtility.objectToJson(jsonResponse);
                     }
                     String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-                    PaymentProofEntity paymentProofEntity=new PaymentProofEntity();
+                    PaymentProofEntity paymentProofEntity = new PaymentProofEntity();
                     paymentProofEntity.setDate(sqlDate);
                     paymentProofEntity.setStatus(1);
+                    paymentProofEntity.setDepositReference(depositReference);
                     paymentProofEntity.setExtension(extension);
-                    GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
+                    GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
                     paymentProofEntity.setUsername(goldenRichesUsers.getUserName());
 
-                    if(!extension.equals("pdf")){
-                    paymentProofEntity.setFile(StringUtils.newStringUtf8(Base64.encodeBase64(file.getBytes(), false)));
-                    }
-                    else{
+                    if (!extension.equals("pdf")) {
+                        paymentProofEntity.setFile(StringUtils.newStringUtf8(Base64.encodeBase64(file.getBytes(), false)));
+                    } else {
                         StringWriter writer = new StringWriter();
                         IOUtils.copy(file.getInputStream(), writer);
                         String filess = writer.toString();
@@ -188,7 +198,6 @@ public class Controller {
         }
         return "upload";
     }
-
 
 
 }

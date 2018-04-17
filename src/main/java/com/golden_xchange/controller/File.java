@@ -19,6 +19,9 @@ import java.util.Map;
 })
 public class File {
 
+
+
+
     @JsonProperty("url")
     private String url;
     @JsonProperty("thumbnailUrl")

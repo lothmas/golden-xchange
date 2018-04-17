@@ -69,7 +69,7 @@
 			<!-- begin form-file-upload -->
 				<!-- begin panel -->
 
-				<form id="fileupload" action="#" data-th-action="@{./upload}" th:object="${register}" method="POST"
+				<form id="fileupload" action="#" data-th-action="@{./uploading}" th:object="${register}" method="POST"
 					  enctype="multipart/form-data" class="margin-bottom-0">
 						<div class="panel panel-inverse">
 					<!-- begin panel-heading -->
@@ -255,7 +255,7 @@
 							<dd class="size">{%=o.formatFileSize(file.size)%}</dd>
 						</dl>
 						{% if (file.error) { %}
-							<div><span class="label label-danger">Error</span> {%=file.error%}</div>
+							<div><span class="label label-info">Response Message</span> {%=file.error%}</div>
 						{% } %}
 					</div>
                 </td>
