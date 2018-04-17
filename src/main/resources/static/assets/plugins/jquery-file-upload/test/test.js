@@ -1241,7 +1241,7 @@ $(function () {
         $('#fileupload')
             .fileupload({
                 autoUpload: true,
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf)$/i,
                 disableImageMetaDataLoad: true,
                 send: function () {
                     strictEqual(
@@ -1275,7 +1275,7 @@ $(function () {
 
     test('acceptFileTypes as HTML5 data attribute', function () {
         expect(2);
-        var regExp = /(\.|\/)(gif|jpe?g|png)$/i;
+        var regExp = /(\.|\/)(gif|jpe?g|png|pdf)$/i;
         $('#fileupload')
             .attr('data-accept-file-types', regExp.toString())
             .fileupload();

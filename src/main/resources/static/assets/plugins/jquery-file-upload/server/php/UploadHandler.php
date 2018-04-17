@@ -498,6 +498,9 @@ class UploadHandler
                 case IMAGETYPE_GIF:
                     $extensions = array('gif');
                     break;
+                    case IMAGETYPE_PDF:
+                                        $extensions = array('pdf');
+                                        break;
             }
             // Adjust incorrect image file extensions:
             if (!empty($extensions)) {

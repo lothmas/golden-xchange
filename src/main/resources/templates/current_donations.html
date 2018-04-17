@@ -61,7 +61,7 @@
 			<!--</ol>-->
 			<!-- end breadcrumb -->
 			<!-- begin page-header -->
-			<h1 class="page-header">Your Current Donation Assignment <small>GOLDEN-XCHANGE</small></h1>
+			<h1 class="page-header">Your Current Donation Assignment </h1>
 			<!-- end page-header -->
 
 			<!-- begin row -->
@@ -100,9 +100,7 @@
 									<div class="row">
 									<div class="col-sm-4"  th:each="result, rowStat : ${response.returnData}" th:name="action"
 										 th:attr="action=${rowStat.index}">
-										<form action="#" data-th-action="@{./approveDonation}" th:object="${register}" method="post"
-											  enctype="multipart/form-data" class="margin-bottom-0">
-											<input name="requester" th:value="donation_state" type="hidden"/>
+
 
 
 											<!-- begin panel -->
@@ -283,7 +281,7 @@
 
 												<!-- end hljs-wrapper -->
 											</div>
-											<!-- end panel --> </form>
+											<!-- end panel -->
 									</div>
 									</div>
 								</table>

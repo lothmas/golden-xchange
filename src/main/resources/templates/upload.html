@@ -54,10 +54,10 @@
 		<!-- begin #content -->
 		<div id="content" class="content">
 			<!-- begin breadcrumb -->
-			<ol class="breadcrumb pull-right">
-				<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-				<li class="breadcrumb-item active">Payment Pfoof</li>
-			</ol>
+			<!--<ol class="breadcrumb pull-right">-->
+				<!--<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>-->
+				<!--<li class="breadcrumb-item active">Payment Pfoof</li>-->
+			<!--</ol>-->
 			<!-- end breadcrumb -->
 			<!-- begin page-header -->
 			<h1 class="page-header">Upload Payment Proof Doc's<small></small></h1>
@@ -65,10 +65,13 @@
 			<div class="container-fluid hidden-xs hidden-sm" th:include="fragments :: desktopTabs"/>
 
 			<!-- end page-header -->
+
 			<!-- begin form-file-upload -->
-			<form id="fileupload" action="../assets/global/plugins/jquery-file-upload/server/php/" method="POST" enctype="multipart/form-data">
 				<!-- begin panel -->
-				<div class="panel panel-inverse">
+
+				<form id="fileupload" action="#" data-th-action="@{./upload}" th:object="${register}" method="POST"
+					  enctype="multipart/form-data" class="margin-bottom-0">
+						<div class="panel panel-inverse">
 					<!-- begin panel-heading -->
 					<div class="panel-heading">
 						<div class="panel-heading-btn">
@@ -81,7 +84,9 @@
 					</div>
 					<!-- end panel-heading -->
 					<!-- begin panel-body -->
-					<div class="panel-body">			
+					<div class="panel-body">
+						<input type="text"  class="form-control validate" id="depositReference" name="depositReference" placeholder="Enter DepositReference" required="true" oninput="multiplyBy()"/>
+
 						<div class="note note-yellow m-b-15">
 							<div class="note-icon f-s-20">
 								<i class="fa fa-lightbulb fa-2x"></i>
@@ -93,12 +98,13 @@
 								</ul>
 							</div>
 						</div>
+
 						<div class="row fileupload-buttonbar">
 							<div class="col-md-7">
 								<span class="btn btn-primary fileinput-button m-r-3">
 									<i class="fa fa-plus"></i>
 									<span>Add files...</span>
-									<input type="file" name="files[]" multiple="multiple"/>
+                            		<input type="file" name="file"  multiple="true" accept="pdf,png,jpeg,jpg" required="true" />
 								</span>
 								<!--<button type="submit" class="btn btn-primary start m-r-3">-->
 									<!--<i class="fa fa-upload"></i>-->

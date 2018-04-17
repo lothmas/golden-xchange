@@ -9475,7 +9475,7 @@ body.flat-black {
 
 /* 8.6 Flat Black - Nav Pills Setting */
 
-.flat-black .nav-pills > li.active > a, 
+.flat-black .nav-pills > li.active > a,
 .flat-black .nav-pills > li.active > a:focus,
 .flat-black .nav-pills > li.active > a:hover {
     background: #2A2A2A;
@@ -9484,11 +9484,11 @@ body.flat-black {
 
 /* 8.7 Flat Black - Badge Setting */
 
-.flat-black .badge.badge-inverse, 
+.flat-black .badge.badge-inverse,
 .flat-black .label.label-inverse {
     background: #3A3A3A;
 }
-.flat-black .badge.badge-default, 
+.flat-black .badge.badge-default,
 .flat-black .label.label-default {
     background: #C3C3C3;
 }
@@ -9517,11 +9517,11 @@ body.flat-black {
 
 /* 8.10 Flat Black - Table Setting */
 
-.flat-black .table > tbody > tr > td, 
-.flat-black .table > tbody > tr > th, 
-.flat-black .table > tfoot > tr > td, 
-.flat-black .table > tfoot > tr > th, 
-.flat-black .table > thead > tr > td, 
+.flat-black .table > tbody > tr > td,
+.flat-black .table > tbody > tr > th,
+.flat-black .table > tfoot > tr > td,
+.flat-black .table > tfoot > tr > th,
+.flat-black .table > thead > tr > td,
 .flat-black .table > thead > tr > th {
     border-color: #E0E0E0;
 }

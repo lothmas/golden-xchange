@@ -1,32 +1,42 @@
 package com.golden_xchange;
 
 
+import com.golden_xchange.controller.File;
+import com.golden_xchange.controller.JsonResponse;
 import com.golden_xchange.controller.createdonation.CreateDonationResponse;
 import com.golden_xchange.controller.getbanknames.GetBankNameListResponse;
 import com.golden_xchange.controller.getbanknames.GetBankNameListWebserviceEndpoint;
+import com.golden_xchange.domain.upload.PaymentProofEntity;
+import com.golden_xchange.domain.upload.service.UploadService;
+import com.golden_xchange.domain.users.model.GoldenRichesUsers;
+import com.golden_xchange.domain.utilities.JsonObjectConversionUtility;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
+import java.io.StringWriter;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @ControllerAdvice
@@ -36,6 +46,9 @@ public class Controller {
 
 @Autowired
     GetBankNameListWebserviceEndpoint getBankNameListWebserviceEndpoint;
+
+@Autowired
+    UploadService uploadService;
 
 
     public static String byteToString(byte[] _bytes) {
@@ -54,22 +67,20 @@ public class Controller {
     }
 
 
-    @RequestMapping({"/profile","/dashboard","/new_donation","/index","upload"})
+    @RequestMapping({"/profile","/dashboard","/new_donation","/index"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
         model.addAttribute("bankDetails",new GetBankNameListResponse());
         String url = request.getRequestURI();
+
         if(!session.getAttributeNames().hasMoreElements()){
             return "redirect:/";
         }
         int index = url.lastIndexOf("/");
         if (index != -1) {
             if (url.contains("profile")) {
-                model.addAttribute("profile",session.getAttribute("profile"));
-                model.addAttribute("response",new CreateDonationResponse());
-                model.addAttribute("notifications",session.getAttribute("notifications")) ;
-                model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
+                setModels(model, session);
 
                 return "profile";
             }
@@ -78,27 +89,12 @@ public class Controller {
             }
             if (url.contains("new_donation")) {
                 try {
-                    model.addAttribute("profile",session.getAttribute("profile"));
-                    model.addAttribute("response",new CreateDonationResponse());
-                    model.addAttribute("notifications",session.getAttribute("notifications")) ;
-                    model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
+                    setModels(model, session);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return "new_donation";
-            }
-            if (url.contains("upload")) {
-                try {
-                    model.addAttribute("profile",session.getAttribute("profile"));
-                    model.addAttribute("response",new CreateDonationResponse());
-                    model.addAttribute("notifications",session.getAttribute("notifications")) ;
-                    model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return "upload";
             }
             if (url.contains("index")) {
                 return "index";
@@ -114,6 +110,13 @@ public class Controller {
         return url;
     }
 
+    private void setModels(Model model, HttpSession session) {
+        model.addAttribute("profile",session.getAttribute("profile"));
+        model.addAttribute("response",new CreateDonationResponse());
+        model.addAttribute("notifications",session.getAttribute("notifications")) ;
+        model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
+    }
+
 
     @RequestMapping(value = {"/logout"}, method = RequestMethod.GET)
     public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -125,6 +128,67 @@ public class Controller {
         }
         return "redirect:/";
     }
+
+
+    @RequestMapping(value = {"/upload"})
+    public String upload(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file , @RequestParam(value = "depositReference", required = false) String depositReference) {
+        java.util.Date utilDate = new java.util.Date();
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Timestamp sqlDate = new Timestamp(utilDate.getTime());
+        String url = request.getRequestURI();
+        JsonObjectConversionUtility jsonObjectConversionUtility = new JsonObjectConversionUtility();
+        JsonResponse jsonResponse = new JsonResponse();
+        File file1 = new File();
+        List<File> files = new ArrayList<>();
+        setModels(model, session);
+        int index = url.lastIndexOf("/");
+        if (index != -1) {
+            if (null != file) {
+                try {
+                    if(depositReference.equals("")){
+                        file1.setError("Please Supply Deposit Reference");
+                        files.add(file1);
+                        jsonResponse.setFiles(files);
+                        return jsonObjectConversionUtility.objectToJson(jsonResponse);
+                    }
+                    String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+                    PaymentProofEntity paymentProofEntity=new PaymentProofEntity();
+                    paymentProofEntity.setDate(sqlDate);
+                    paymentProofEntity.setStatus(1);
+                    paymentProofEntity.setExtension(extension);
+                    GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
+                    paymentProofEntity.setUsername(goldenRichesUsers.getUserName());
+
+                    if(!extension.equals("pdf")){
+                    paymentProofEntity.setFile(StringUtils.newStringUtf8(Base64.encodeBase64(file.getBytes(), false)));
+                    }
+                    else{
+                        StringWriter writer = new StringWriter();
+                        IOUtils.copy(file.getInputStream(), writer);
+                        String filess = writer.toString();
+                        paymentProofEntity.setFile(filess);
+                    }
+                    uploadService.save(paymentProofEntity);
+
+                    file1.setError("File Successfully Uploaded");
+                    files.add(file1);
+                    jsonResponse.setFiles(files);
+                    return jsonObjectConversionUtility.objectToJson(jsonResponse);
+
+                } catch (IOException e) {
+                    file1.setError("File Failed To Successfully Upload");
+                    files.add(file1);
+                    jsonResponse.setFiles(files);
+                    return jsonObjectConversionUtility.objectToJson(jsonResponse);
+                }
+
+
+            }
+
+        }
+        return "upload";
+    }
+
 
 
 }
