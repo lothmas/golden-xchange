@@ -81,7 +81,9 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             String url = requests.getRequestURI();
 
             GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
-
+            if(null==goldenRichesUsers){
+                return "index";
+            }
             if (url.contains("donation_state")) {
                 model.addAttribute("profile", goldenRichesUsers);
                 try {
@@ -206,7 +208,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             amountToPay = createDonationProcess(response, amountToPay, username, sqlDate, true, mainList);
 
             if (amountToPay > 0) {
-                //keeper add keeper if not
+                //keeper add keeper if no mature donation has been selected
                 amountToPay = createDonationProcess(response, amountToPay, username, sqlDate, false, mainList);
             }
 
@@ -217,16 +219,23 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     }
 
     private double createDonationProcess(GetMainListResponse response, double amountToPay, String username, Timestamp sqlDate, boolean keeper, List<MainListEntity> mainList) throws GoldenRichesUsersNotFoundException {
+       int count;
         while (amountToPay > 0) {
+
             for (MainListEntity mainListEntity : mainList) {
 
                 if (checkDateLimit(mainListEntity.getUpdatedDate()) && keeper) {
+                    mainListEntity.setKeeper(0);
                     amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
                 }
                 if (!keeper) {
-                    amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
+//                    if(mainListEntity.getAdjustedAmount()/mainListEntity.getAmountToReceive()*100>0.75*mainListEntity.getAmountToReceive()) {
+                        mainListEntity.setKeeper(1);
+                        amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
+                  //  }
                 }
             }
+
             break;
         }
         return amountToPay;
@@ -241,6 +250,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         createDonationRequest.setAmount(amountToPay);
         createDonationRequest.setPayerUsername(username);
         createDonationRequest.setBankAccountNumber(mainListEntity.getBankAccountNumber());
+        createDonationRequest.setKeeper(mainListEntity.getKeeper());
 
         try {
             MainListEntity mainListEntity11 = createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, new MainListEntity(), null, sqlDate);

@@ -47,6 +47,7 @@ public class CreateDonationRequest {
     protected String bankAccountNumber;
     @XmlElement(required = true)
     protected String payerUsername;
+    protected int keeper;
 
     /**
      * Gets the value of the mainListReference property.
@@ -136,4 +137,12 @@ public class CreateDonationRequest {
         this.payerUsername = value;
     }
 
+
+    public int getKeeper() {
+        return keeper;
+    }
+
+    public void setKeeper(int keeper) {
+        this.keeper = keeper;
+    }
 }

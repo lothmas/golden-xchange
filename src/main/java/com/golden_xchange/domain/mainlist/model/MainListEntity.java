@@ -29,6 +29,7 @@ public class MainListEntity {
     private String depositReference;
     private Timestamp updatedDate;
     private int donationType;
+    private int keeper;
 
     public MainListEntity() {
     }
@@ -172,11 +173,15 @@ public class MainListEntity {
         this.donationType = donationType;
     }
 
+    @Basic
+    @Column(name = "keeper", length = 1)
+    public int getKeeper() {
+        return keeper;
+    }
 
-
-
-
-
+    public void setKeeper(int keeper) {
+        this.keeper = keeper;
+    }
 
     public boolean equals(Object o) {
         if(this == o) {

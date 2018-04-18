@@ -69,6 +69,9 @@ public class ApproveDonationWebserviceEndpoint {
         new MainListEntity();
         new GoldenRichesUsers();
         GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
+        if(null==goldenRichesUsers){
+            return "index";
+        }
         request.setUsername(goldenRichesUsers.getUserName());
         try {
             Date utilDate = new Date();
@@ -88,9 +91,14 @@ public class ApproveDonationWebserviceEndpoint {
                     mainListEntity.setStatus(1);
                     mainListEntity.setUpdatedDate(sqlDate);
                     this.mainListService.saveUser(mainListEntity);
-                    NotificationsEntity notificationsEntity=notificationsService.getNotificationByRefAndUser(mainListEntity.getPayerUsername(),mainListEntity.getMainListReference());
-                    notificationsEntity.setStatus(1);
-                    notificationsService.save(notificationsEntity);
+                    try {
+                        NotificationsEntity notificationsEntity = notificationsService.getNotificationByRefAndUser(mainListEntity.getPayerUsername(), mainListEntity.getMainListReference());
+                        notificationsEntity.setStatus(1);
+                        notificationsService.save(notificationsEntity);
+                    }
+                    catch (Exception ex){
+                        //do nothing
+                    }
                     createNotificationMessage(mainListEntity.getUserName(),mainListEntity);
                 }
 
@@ -130,10 +138,14 @@ public class ApproveDonationWebserviceEndpoint {
                 List<MainListEntity> donations = this.mainListService.findDonorsByDonationReference(mainListEntity.getDonationReference());
                 List<MainListEntity> paidDonations = this.mainListService.findPaidDonationsPayerName(mainListEntity.getPayerUsername());
 
-                NotificationsEntity notificationsEntity=notificationsService.getNotificationByRefAndUser(mainListEntity.getUserName(),mainListEntity.getMainListReference());
-                notificationsEntity.setStatus(1);
-                notificationsService.save(notificationsEntity);
-
+                try {
+                    NotificationsEntity notificationsEntity = notificationsService.getNotificationByRefAndUser(mainListEntity.getUserName(), mainListEntity.getMainListReference());
+                    notificationsEntity.setStatus(1);
+                    notificationsService.save(notificationsEntity);
+                }
+                catch (Exception exp){
+                    //do nothing
+                }
 
 
                 boolean paidAll = true;

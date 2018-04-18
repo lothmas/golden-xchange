@@ -64,7 +64,7 @@ public class Controller {
     }
 
 
-    @RequestMapping({"/profile", "/dashboard", "/new_donation", "/index", "upload"})
+    @RequestMapping({"/profile", "/dashboard", "/new_donation", "/index", "upload","keeper"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
@@ -101,6 +101,15 @@ public class Controller {
                     e.printStackTrace();
                 }
                 return "upload";
+            }
+            if (url.contains("keeper")) {
+                try {
+                    setModels(model, session);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "keeper";
             }
             if (url.contains("index")) {
                 return "index";

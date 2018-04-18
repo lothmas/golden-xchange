@@ -256,9 +256,6 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     @Override
     public List<MainListEntity> getMainList(String username) throws MainListNotFoundException {
         List<MainListEntity> returnMainList = null;
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -30);
         try {
             returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                     .add(Restrictions.ne("userName", username))
