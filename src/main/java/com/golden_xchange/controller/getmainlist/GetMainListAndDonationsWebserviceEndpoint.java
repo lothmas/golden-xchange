@@ -209,6 +209,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
 
             if (amountToPay > 0) {
                 //keeper add keeper if no mature donation has been selected
+
                 amountToPay = createDonationProcess(response, amountToPay, username, sqlDate, false, mainList);
             }
 
@@ -229,10 +230,22 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                     amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
                 }
                 if (!keeper) {
-//                    if(mainListEntity.getAdjustedAmount()/mainListEntity.getAmountToReceive()*100>0.75*mainListEntity.getAmountToReceive()) {
+                 boolean continueAsigningKeeper=true;
+                 double expenses=0;
+                    List<MainListEntity> mainlistss =donationService.findKeeperDonorsByDonationReference(mainListEntity.getMainListReference());
+                   if(mainlistss.size()!=0){
+                       for(MainListEntity mainListEntity1:mainlistss){
+                           expenses=expenses+mainListEntity1.getDonatedAmount();
+                       }
+                       if(expenses/mainListEntity.getAmountToReceive()*100>0.75){
+                           continueAsigningKeeper=false;
+                       }
+                   }
+
+                    if(continueAsigningKeeper) {
                         mainListEntity.setKeeper(1);
                         amountToPay = createDonation(response, amountToPay, username, sqlDate, mainListEntity);
-                  //  }
+                    }
                 }
             }
 

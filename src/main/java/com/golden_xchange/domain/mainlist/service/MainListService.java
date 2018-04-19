@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface MainListService {
     List<MainListEntity> findDonorsByDonationReference(String var1);
+    List<MainListEntity> findKeeperDonorsByDonationReference(String var1);
 
     List<MainListEntity> findMainListEntityByUsername(String var1) throws MainListNotFoundException, NoSuchAlgorithmException;
 

@@ -14,6 +14,7 @@ import java.util.List;
 
 public interface MainListDao extends AbstractDao<MainListEntity, Integer> {
     List<MainListEntity> findDonorsByDonationReference(String var1);
+    List<MainListEntity> findKeeperDonorsByDonationReference(String var1);
 
     MainListEntity findMainListsByDepositReference(String var1) throws MainListNotFoundException, NoSuchAlgorithmException;
 

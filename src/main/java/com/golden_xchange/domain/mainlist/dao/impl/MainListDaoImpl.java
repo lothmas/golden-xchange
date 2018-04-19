@@ -72,7 +72,16 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public List<MainListEntity> findDonorsByDonationReference(String donorRef) {
-        List<MainListEntity> result = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("donationReference", donorRef)).list();
+        List<MainListEntity> result = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("donationReference", donorRef)).list();
+        return result;
+    }
+
+    public List<MainListEntity> findKeeperDonorsByDonationReference(String donorRef) {
+        List<MainListEntity> result = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("donationReference", donorRef))
+                .add(Restrictions.eq("keeper", 1))
+                .list();
         return result;
     }
 

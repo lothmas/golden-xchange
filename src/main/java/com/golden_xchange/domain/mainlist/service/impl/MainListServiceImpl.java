@@ -30,6 +30,9 @@ public class MainListServiceImpl implements MainListService {
     public List<MainListEntity> findDonorsByDonationReference(String mainListRef) {
         return this.mainListDao.findDonorsByDonationReference(mainListRef);
     }
+    public List<MainListEntity> findKeeperDonorsByDonationReference(String mainListRef) {
+        return this.mainListDao.findKeeperDonorsByDonationReference(mainListRef);
+    }
 
     public List<MainListEntity> findMainListEntityByUsername(String username) throws MainListNotFoundException, NoSuchAlgorithmException {
         return null;
