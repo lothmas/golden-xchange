@@ -97,9 +97,9 @@
 							<div class="table-responsive">
 
 								<table class="table table-striped m-b-0" >
-									<div class="row">
-									<div class="col-sm-4"  th:each="result, rowStat : ${response.returnData}" th:name="action"
+									<div class="row" th:each="result, rowStat : ${response.returnData}" th:name="action"
 										 th:attr="action=${rowStat.index}">
+									<div class="col-sm-4"  th:if="${result.status==0}">
 
 
 
@@ -112,12 +112,12 @@
 													<!-- begin table-responsive -->
 
 
-													<div>
+													<div >
 														<div>
 															<div>
 																<div id="price">
 																	<div class="plan basic">
-																		<div class="plan-inner">
+																		<div class="plan-inner" >
 																			<div class="hot" th:text="${'Username          : '+result.payerUsername}"></div>
 																			<div class="entry-title">
 

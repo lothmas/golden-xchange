@@ -81,6 +81,8 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             String url = requests.getRequestURI();
 
             GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
+            model.addAttribute("profile", goldenRichesUsers);
+
             if(null==goldenRichesUsers){
                 return "index";
             }
@@ -91,6 +93,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                 } catch (Exception exp) {
                     response.setMessage("No Previous Donations Found. Create a New Donation");
                     response.setStatusCode(500);
+                    model.addAttribute("response", response);
                 }
 
                 return "donation_state";
@@ -100,7 +103,6 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                     List<MainListEntity> keeperDetails = mainListService.returnKeeperList(goldenRichesUsers.getUserName());
                     setLists(response, keeperDetails, model, session,goldenRichesUsers);
                 }catch (Exception exp){
-                    model.addAttribute("profile", goldenRichesUsers);
                     response.setMessage("No Keeper Donations Found");
                     response.setStatusCode(500);
                     model.addAttribute("response", response);

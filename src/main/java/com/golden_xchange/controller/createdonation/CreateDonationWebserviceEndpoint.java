@@ -277,7 +277,7 @@ public class CreateDonationWebserviceEndpoint {
     }
 
     private boolean commonValidator(CreateDonationRequest request, CreateDonationResponse response) {
-        if(request.getAmount() < 500.0D) {
+        if(request.getAmount() < 350.0D) {
             response.setMessage("Minimum Donation Amount is R500");
             response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
             return true;

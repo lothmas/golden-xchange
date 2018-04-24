@@ -89,7 +89,7 @@
             <div class="col-lg-12">
                 <form action="#" data-th-action="@{./approveDonation}" th:object="${register}" method="post"
                       enctype="multipart/form-data" class="margin-bottom-0">
-                    <input name="requester" th:value="donation_state" type="hidden"/>
+                    <input name="requester" th:value="keeper" type="hidden"/>
 
                     <!-- begin panel -->
                     <div class="panel panel-inverse" data-sortable-id="table-basic-7">
