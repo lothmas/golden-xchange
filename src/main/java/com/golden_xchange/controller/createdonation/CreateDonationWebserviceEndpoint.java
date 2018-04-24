@@ -197,9 +197,9 @@ public class CreateDonationWebserviceEndpoint {
 //                        }
 
                         if(0.0D != request.getAmount()) {
-                            if(request.getKeeper()==1){
-                                request.setAmount(0.75*request.getAmount());
-                            }
+//                            if(request.getKeeper()==1){
+//                                request.setAmount(0.75*request.getAmount());
+//                            }
                             createDonation.setKeeper(request.getKeeper());
 
                             createDonation.setDonatedAmount(request.getAmount());
