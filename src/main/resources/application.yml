@@ -1,7 +1,7 @@
 server:
   port: 8443
   ssl:
-    key-alias: goldenxchangeCA
+#    key-alias: goldenxchangeCA
     key-password: G0ld3nxchang3
     key-store-type: JKS
     key-store-provider: SUN
