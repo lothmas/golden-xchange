@@ -62,7 +62,7 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
                 return registerResponse(model, response);
             }
         } else {
-            goldenRichesUsers.setReferenceUser("admin");
+            goldenRichesUsers.setReferenceUser("sanele");
         }
 
 

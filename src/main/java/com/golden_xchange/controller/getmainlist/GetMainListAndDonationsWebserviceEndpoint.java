@@ -68,11 +68,13 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     BankAccountsEntity createBankAccount = new BankAccountsEntity();
     Logger mainListLogger = Logger.getLogger(this.getClass().getName());
     static double amountToSponsors = 0;
-
+    static boolean  addNew =true;
+    static String returnUrl=null;
 
     @RequestMapping({"/current_donations", "/donation_state", "/keeper"})
     public String handleCreateGoldenRichesRequest(HttpServletRequest requests, Model model, HttpSession session)
             throws Exception {
+        addNew=true;
         GetMainListResponse response = new GetMainListResponse();
         model.addAttribute("notifications",session.getAttribute("notifications")) ;
         model.addAttribute("notificationCount",session.getAttribute("notificationCount"));
@@ -87,27 +89,30 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                 return "index";
             }
             if (url.contains("donation_state")) {
+                addNew=false;
                 try {
                     List<MainListEntity> payerPendingList = this.mainListService.returnPendingPayerList(goldenRichesUsers.getUserName());
-                    setLists(response, payerPendingList,model,session,goldenRichesUsers);
+                    setLists(response, payerPendingList,model,session,goldenRichesUsers,addNew);
                 } catch (Exception exp) {
                     response.setMessage("No Previous Donations Found. Create a New Donation");
                     response.setStatusCode(500);
                     model.addAttribute("response", response);
                 }
 
-                return "donation_state";
+                returnUrl= "donation_state";
             }
             else  if (url.contains("keeper")) {
+                addNew=false;
+
                 try {
                     List<MainListEntity> keeperDetails = mainListService.returnKeeperList(goldenRichesUsers.getUserName());
-                    setLists(response, keeperDetails, model, session,goldenRichesUsers);
+                    setLists(response, keeperDetails, model, session,goldenRichesUsers,addNew);
                 }catch (Exception exp){
                     response.setMessage("No Keeper Donations Found");
                     response.setStatusCode(500);
                     model.addAttribute("response", response);
                 }
-                return "keeper";
+                returnUrl= "keeper";
 
             }
 
@@ -142,7 +147,9 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                 }
 
                 try {
-                    prepareMainListResponse(response, retunedList);
+                    if(addNew) {
+                        prepareMainListResponse(response, retunedList,addNew);
+                    }
                 } catch (Exception expt) {
                     break MainListLoop;
                 }
@@ -172,12 +179,14 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         return response(model, session, response);
     }
 
-    private void setLists(GetMainListResponse response, List<MainListEntity> payerPendingList,Model model,HttpSession session,GoldenRichesUsers goldenRichesUsers) throws GoldenRichesUsersNotFoundException {
+    private void setLists(GetMainListResponse response, List<MainListEntity> payerPendingList,Model model,HttpSession session,GoldenRichesUsers goldenRichesUsers,boolean addNew1) throws GoldenRichesUsersNotFoundException {
         model.addAttribute("profile", goldenRichesUsers);
 
         Collections.reverse(payerPendingList);
         for (MainListEntity mainListEntity : payerPendingList) {
-            prepareMainListResponse(response, mainListEntity);
+
+                prepareMainListResponse(response, mainListEntity,addNew1);
+
         }
         model.addAttribute("response", response);
         session.setAttribute("mainList", response);
@@ -185,35 +194,36 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         response.setStatusCode(200);
     }
 
-    private void prepareMainListResponse(GetMainListResponse response, MainListEntity retunedList) throws GoldenRichesUsersNotFoundException {
-        MainList mainLists = new MainList();
-        GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(retunedList.getBankAccountNumber().trim());
-        mainLists.setUsername(checkUser.getUserName());
-        mainLists.setEmailAddress(checkUser.getEmailAddress());
-        mainLists.setMobileNumber(checkUser.getTelephoneNumber());
-        mainLists.setBranchNumber(checkUser.getBranchNumber());
-        mainLists.setBankName(checkUser.getBankName());
-        mainLists.setAccountHolderName(checkUser.getAccountHoldername());
-        mainLists.setAccountNumber(checkUser.getAccountNumber());
-        mainLists.setAmount(retunedList.getAdjustedAmount());
-        mainLists.setMainListReference(retunedList.getMainListReference());
-        mainLists.setAccountType(checkUser.getAccountType());
-        mainLists.setDepositReference(retunedList.getDepositReference());
-        mainLists.setDonationType(retunedList.getDonationType());
-        mainLists.setStatus(retunedList.getStatus());
-        mainLists.setPayerUsername(retunedList.getPayerUsername());
-        mainLists.setAmountToReceive(retunedList.getAmountToReceive());
-        LocalDateTime endDate = LocalDateTime.now();
-        long numberOfDays = Duration.between(retunedList.getUpdatedDate().toLocalDateTime(), endDate).toDays();
-        double percentage=(double)numberOfDays/30*retunedList.getAmountToReceive();
-        if(numberOfDays<=30){
-            mainLists.setMaturityAmount(Math.round((percentage) * 100.0) / 100.0);
-        }
-        else{
-            mainLists.setMaturityAmount(retunedList.getAmountToReceive());
-        }
+    private void prepareMainListResponse(GetMainListResponse response, MainListEntity retunedList,boolean addNew) throws GoldenRichesUsersNotFoundException {
+       if((addNew && retunedList.getStatus()==0)|| !addNew) {
+           MainList mainLists = new MainList();
+           GoldenRichesUsers checkUser = goldenRichesUsersService.getUserByBankDetails(retunedList.getBankAccountNumber().trim());
+           mainLists.setUsername(checkUser.getUserName());
+           mainLists.setEmailAddress(checkUser.getEmailAddress());
+           mainLists.setMobileNumber(checkUser.getTelephoneNumber());
+           mainLists.setBranchNumber(checkUser.getBranchNumber());
+           mainLists.setBankName(checkUser.getBankName());
+           mainLists.setAccountHolderName(checkUser.getAccountHoldername());
+           mainLists.setAccountNumber(checkUser.getAccountNumber());
+           mainLists.setAmount(retunedList.getAdjustedAmount());
+           mainLists.setMainListReference(retunedList.getMainListReference());
+           mainLists.setAccountType(checkUser.getAccountType());
+           mainLists.setDepositReference(retunedList.getDepositReference());
+           mainLists.setDonationType(retunedList.getDonationType());
+           mainLists.setStatus(retunedList.getStatus());
+           mainLists.setPayerUsername(retunedList.getPayerUsername());
+           mainLists.setAmountToReceive(retunedList.getAmountToReceive());
+           LocalDateTime endDate = LocalDateTime.now();
+           long numberOfDays = Duration.between(retunedList.getUpdatedDate().toLocalDateTime(), endDate).toDays();
+           double percentage = (double) numberOfDays / 30 * retunedList.getAmountToReceive();
+           if (numberOfDays <= 30) {
+               mainLists.setMaturityAmount(Math.round((percentage) * 100.0) / 100.0);
+           } else {
+               mainLists.setMaturityAmount(retunedList.getAmountToReceive());
+           }
 
-        response.getReturnData().add(mainLists);
+           response.getReturnData().add(mainLists);
+       }
 
     }
 
@@ -289,7 +299,9 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             MainListEntity mainListEntity11 = createDonationWebserviceEndpoint.createDonationFromExisting(createDonationRequest, new MainListEntity(), null, sqlDate);
             if (null != mainListEntity11) {
                 amountToPay = amountToPay - mainListEntity.getAdjustedAmount();
-                prepareMainListResponse(response, mainListEntity11);
+                if(addNew) {
+                    prepareMainListResponse(response, mainListEntity11,addNew);
+                }
             }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -305,7 +317,12 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         model.addAttribute("response", response);
         session.setAttribute("mainList", response);
         model.addAttribute("profile", (GoldenRichesUsers) session.getAttribute("profile"));
+        if(null==returnUrl){
         return "current_donations";
+        }else{
+            return returnUrl;
+        }
+
     }
 
 
