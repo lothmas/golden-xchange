@@ -23,7 +23,6 @@ import java.util.List;
 
 @Controller
 public class GetPayerPendingDonationsListWebserviceEndpoint {
-    private static final String NAMESPACE_URI = "getPayerPendingDonationsList.webservice.golden_xchange.com";
     DateConversion dateConversion = new DateConversion();
     @Autowired
     MainListService mainListService;
@@ -33,11 +32,7 @@ public class GetPayerPendingDonationsListWebserviceEndpoint {
     public GetPayerPendingDonationsListWebserviceEndpoint() {
     }
 
-    @PayloadRoot(
-        namespace = "getPayerPendingDonationsList.webservice.golden_xchange.com",
-        localPart = "GetPayerPendingDonationsListRequest"
-    )
-    @ResponsePayload
+
     public GetPayerPendingDonationsListResponse handleDonationsListRequest(@RequestPayload GetPayerPendingDonationsListRequest request) throws Exception {
         GetPayerPendingDonationsListResponse response = new GetPayerPendingDonationsListResponse();
 

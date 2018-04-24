@@ -205,8 +205,8 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 
     public List<MainListEntity> returnPendingApprovalReceiverList(String username) throws MainListNotFoundException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
-                .add(Restrictions.eq("status", Integer.valueOf(1)))
-                .add(Restrictions.eq("enabled", Integer.valueOf(0)))
+                .add(Restrictions.eq("status", 1))
+                .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.eq("userName", username)).list();
         if (results.isEmpty()) {
             throw new MainListNotFoundException("No Donations found Pending Approval  found");
