@@ -6,7 +6,7 @@
 <!--<![endif]-->
 <head>
     <meta charset="utf-8"/>
-    <title>Golden-Xchange | Approval</title>
+    <title>Golden-Xchange | Keeper</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
@@ -74,7 +74,7 @@
         <!--</ol>-->
         <!-- end breadcrumb -->
         <!-- begin page-header -->
-        <h1 class="page-header">Donations That Are Waiting Your Approval
+        <h1 class="page-header">Keeper Donations That Have Been Assigned To You
         </h1>
         <!-- end page-header -->
 
@@ -93,9 +93,9 @@
 
                     <!-- begin panel -->
                     <div class="panel panel-inverse" data-sortable-id="table-basic-7">
-                        <!--<div th:if="${response.statusCode!=200}" class="alert alert-warning">-->
-                            <!--<strong>Warning!</strong> <span th:text="${response.message}"></span>-->
-                        <!--</div>    &lt;!&ndash; begin panel-heading &ndash;&gt;-->
+                        <div th:if="${response.statusCode!=200}" class="alert alert-warning">
+                            <strong>Warning!</strong> <span th:text="${response.message}"></span>
+                        </div>    <!-- begin panel-heading -->
                         <!--<div th:if="${response.statusCode==200}" class="alert alert-success">-->
                             <!--<strong>Warning!</strong> <span th:text="${response.message}"></span>-->
                         <!--</div>    &lt;!&ndash; begin panel-heading &ndash;&gt;-->
@@ -106,7 +106,7 @@
                                 <!--<a href="#" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>-->
                                 <!--<a href="#" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>-->
                             </div>
-                            <h4 class="panel-title">Pending Your Approval</h4>
+                            <h4 class="panel-title">Keeper Details</h4>
                         </div>
                         <!-- end panel-heading -->
                         <!-- begin panel-body -->
@@ -119,9 +119,6 @@
 
                                     <div class="col-sm-4"  th:each="result, rowStat : ${response.returnData}" th:name="action"
                                          th:attr="action=${rowStat.index}">
-
-
-
                                             <!-- begin panel -->
                                             <div >
 

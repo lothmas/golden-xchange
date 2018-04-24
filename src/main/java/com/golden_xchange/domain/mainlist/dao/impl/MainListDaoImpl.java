@@ -340,6 +340,22 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         }
     }
 
+    @Override
+    public List<MainListEntity> returnKeeperList(String username) throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", 1))
+                .add(Restrictions.gt("adjustedAmount", 0.0))
+                .add(Restrictions.eq("keeper", 1))
+                .add(Restrictions.eq("userName",username))
+                .list();
+        if (returnMainList.size() == 0 ) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        }
+        else {
+            return returnMainList;
+        }
+    }
+
 
 }
 

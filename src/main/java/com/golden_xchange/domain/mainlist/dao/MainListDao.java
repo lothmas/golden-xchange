@@ -60,6 +60,7 @@ public interface MainListDao extends AbstractDao<MainListEntity, Integer> {
 
     List<MainListEntity> outStandingPayment(String payerUsername) throws MainListNotFoundException;
 
+    List<MainListEntity> returnKeeperList(String var1) throws MainListNotFoundException;
 
 }
 

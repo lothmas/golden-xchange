@@ -33,6 +33,9 @@ public interface MainListService {
 
     List<MainListEntity> returnMainList(String var1) throws MainListNotFoundException;
 
+    List<MainListEntity> returnKeeperList(String var1) throws MainListNotFoundException;
+
+
     MainListEntity findBankAccByAccNumber(String var1) throws MainListNotFoundException;
 
     MainListEntity findMainRefByAccNumber(String var1) throws MainListNotFoundException;

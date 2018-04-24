@@ -70,7 +70,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
     static double amountToSponsors = 0;
 
 
-    @RequestMapping({"/current_donations", "/donation_state"})
+    @RequestMapping({"/current_donations", "/donation_state", "/keeper"})
     public String handleCreateGoldenRichesRequest(HttpServletRequest requests, Model model, HttpSession session)
             throws Exception {
         GetMainListResponse response = new GetMainListResponse();
@@ -85,23 +85,28 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                 return "index";
             }
             if (url.contains("donation_state")) {
-                model.addAttribute("profile", goldenRichesUsers);
                 try {
                     List<MainListEntity> payerPendingList = this.mainListService.returnPendingPayerList(goldenRichesUsers.getUserName());
-                    Collections.reverse(payerPendingList);
-                    for (MainListEntity mainListEntity : payerPendingList) {
-                        prepareMainListResponse(response, mainListEntity);
-                    }
-
-                    response.setMessage("sucessfull");
-                    response.setStatusCode(200);
+                    setLists(response, payerPendingList,model,session,goldenRichesUsers);
                 } catch (Exception exp) {
                     response.setMessage("No Previous Donations Found. Create a New Donation");
                     response.setStatusCode(500);
                 }
-                model.addAttribute("response", response);
-                session.setAttribute("mainList", response);
+
                 return "donation_state";
+            }
+            else  if (url.contains("keeper")) {
+                try {
+                    List<MainListEntity> keeperDetails = mainListService.returnKeeperList(goldenRichesUsers.getUserName());
+                    setLists(response, keeperDetails, model, session,goldenRichesUsers);
+                }catch (Exception exp){
+                    model.addAttribute("profile", goldenRichesUsers);
+                    response.setMessage("No Keeper Donations Found");
+                    response.setStatusCode(500);
+                    model.addAttribute("response", response);
+                }
+                return "keeper";
+
             }
 
 
@@ -163,6 +168,19 @@ public class GetMainListAndDonationsWebserviceEndpoint {
         }
         response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
         return response(model, session, response);
+    }
+
+    private void setLists(GetMainListResponse response, List<MainListEntity> payerPendingList,Model model,HttpSession session,GoldenRichesUsers goldenRichesUsers) throws GoldenRichesUsersNotFoundException {
+        model.addAttribute("profile", goldenRichesUsers);
+
+        Collections.reverse(payerPendingList);
+        for (MainListEntity mainListEntity : payerPendingList) {
+            prepareMainListResponse(response, mainListEntity);
+        }
+        model.addAttribute("response", response);
+        session.setAttribute("mainList", response);
+        response.setMessage("sucessfull");
+        response.setStatusCode(200);
     }
 
     private void prepareMainListResponse(GetMainListResponse response, MainListEntity retunedList) throws GoldenRichesUsersNotFoundException {

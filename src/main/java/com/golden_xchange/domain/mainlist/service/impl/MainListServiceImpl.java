@@ -76,6 +76,11 @@ public class MainListServiceImpl implements MainListService {
         return this.mainListDao.returnMainList(username);
     }
 
+    @Override
+    public List<MainListEntity> returnKeeperList(String var1) throws MainListNotFoundException {
+        return this.mainListDao.returnKeeperList(var1);
+    }
+
     public MainListEntity findBankAccByAccNumber(String accountNumber) throws MainListNotFoundException {
         return this.mainListDao.findBankAccByAccNumber(accountNumber);
     }

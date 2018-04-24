@@ -84,7 +84,7 @@ public class GetReceiverPendingApprovalListWebserviceEndpoint {
         model.addAttribute("response", response);
         session.setAttribute("mainList", response);
         model.addAttribute("profile", (GoldenRichesUsers) session.getAttribute("profile"));
-        return "current_donations";
+        return "approvals";
     }
 
     private void prepareMainListResponse(GetMainListResponse response, MainListEntity retunedList) throws GoldenRichesUsersNotFoundException {
