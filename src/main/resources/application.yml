@@ -1,11 +1,23 @@
 server:
   port: 8443
   ssl:
-#    key-alias: goldenxchangeCA
+#    key-alias: goldenxchange
     key-password: G0ld3nxchang3
-    key-store-type: JKS
+    key-store: classpath:goldenXchange.jks
     key-store-provider: SUN
-    key-store: classpath:goldenXchangeTrustStore
+    key-store-type: JKS
+
+#server:
+#  port: 8443
+#  ssl:
+#    key-alias: goldenxchangeca
+#    key-password: G0ld3nxchang3
+#    key-store-type: JKS
+#    key-store-provider: SUN
+#    key-store: classpath:goldenXchangeTrustStore
+
+
+
 #  context-path: /iqa
 
 #db:
