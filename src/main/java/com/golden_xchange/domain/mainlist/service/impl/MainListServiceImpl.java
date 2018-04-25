@@ -141,6 +141,11 @@ public class MainListServiceImpl implements MainListService {
         return this.mainListDao.outStandingPayment(payerUsername);
     }
 
+    @Override
+    public List<MainListEntity> donationsToReverse() throws MainListNotFoundException {
+        return this.mainListDao.donationsToReverse();
+    }
+
 
 }
 

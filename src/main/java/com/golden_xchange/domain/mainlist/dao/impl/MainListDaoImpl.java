@@ -231,7 +231,9 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     public List<MainListEntity> UpdateNewMainList() throws MainListNotFoundException {
-        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class).add(Restrictions.eq("enabled", Integer.valueOf(0))).add(Restrictions.eq("status", Integer.valueOf(2))).list();
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", Integer.valueOf(0)))
+                .add(Restrictions.eq("status", Integer.valueOf(2))).list();
         return returnMainList;
     }
 
@@ -347,6 +349,21 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.gt("adjustedAmount", 0.0))
                 .add(Restrictions.eq("keeper", 1))
                 .add(Restrictions.eq("userName",username))
+                .list();
+        if (returnMainList.size() == 0 ) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        }
+        else {
+            return returnMainList;
+        }
+    }
+
+    @Override
+    public List<MainListEntity> donationsToReverse() throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", 1))
+                .add(Restrictions.gt("adjustedAmount", 0.0))
+                .add(Restrictions.eq("status", 0))
                 .list();
         if (returnMainList.size() == 0 ) {
             throw new MainListNotFoundException("No MainListFound found:");

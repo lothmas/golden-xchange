@@ -271,7 +271,7 @@ public class CreateDonationWebserviceEndpoint {
             GoldenRichesUsers goldenRichesUsers=goldenRichesUsersService.findUserByMemberId(createDonation.getUserName());
             send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "Golden-Xchange Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
         } catch (Exception var11) {
-            ;
+            //do nothing
         }
     }
 

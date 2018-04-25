@@ -49,7 +49,7 @@ public class ScheduledListUpdate {
             List returnMainList;
             MainListEntity reverseDonation;
             if(this.mainListService.checkIfMainListAvailable()) {
-                returnMainList = this.mainListService.UpdateNewMainList();
+                returnMainList = this.mainListService.donationsToReverse();
                 if(null != returnMainList) {
                     Iterator var2 = returnMainList.iterator();
 
@@ -61,34 +61,34 @@ public class ScheduledListUpdate {
                     }
                 }
 
-                String fileName = "/home/GRusers.txt";
-
-                try {
-                    Stream<String> stream = Files.lines(Paths.get(fileName, new String[0]));
-                    Throwable var4 = null;
-
-                    try {
-                        stream.forEach(this::updateAdmin);
-                    } catch (Throwable var19) {
-                        var4 = var19;
-                        throw var19;
-                    } finally {
-                        if(stream != null) {
-                            if(var4 != null) {
-                                try {
-                                    stream.close();
-                                } catch (Throwable var18) {
-                                    var4.addSuppressed(var18);
-                                }
-                            } else {
-                                stream.close();
-                            }
-                        }
-
-                    }
-                } catch (IOException var21) {
-                    this.schedulerLog.info(var21.getMessage());
-                }
+//                String fileName = "/home/GRusers.txt";
+//
+//                try {
+//                    Stream<String> stream = Files.lines(Paths.get(fileName, new String[0]));
+//                    Throwable var4 = null;
+//
+//                    try {
+//                        stream.forEach(this::updateAdmin);
+//                    } catch (Throwable var19) {
+//                        var4 = var19;
+//                        throw var19;
+//                    } finally {
+//                        if(stream != null) {
+//                            if(var4 != null) {
+//                                try {
+//                                    stream.close();
+//                                } catch (Throwable var18) {
+//                                    var4.addSuppressed(var18);
+//                                }
+//                            } else {
+//                                stream.close();
+//                            }
+//                        }
+//
+//                    }
+//                } catch (IOException var21) {
+//                    this.schedulerLog.info(var21.getMessage());
+//                }
             }
 
             this.schedulerLog.info("started checking reserved donations");
@@ -104,15 +104,17 @@ public class ScheduledListUpdate {
                     MainListEntity upDate = (MainListEntity)var7.next();
                     long numberOfHours = Duration.between(upDate.getUpdatedDate().toLocalDateTime(), endDate).toHours();
                     this.schedulerLog.info("mainRef: " + upDate.getMainListReference() + " lapsed by: " + numberOfHours + " hours");
-                    if(numberOfHours >= 1L) {
+                    if(numberOfHours >= 12L) {
                         new MainListEntity();
                         upDate.setStatus(4);
                         upDate.setUpdatedDate(sqlDate);
                         this.mainListService.saveUser(upDate);
-                        reverseDonation = this.mainListService.findDonationByMainListReference(upDate.getDonationReference());
-                        reverseDonation.setAdjustedAmount(reverseDonation.getAdjustedAmount() + upDate.getDonatedAmount());
-                        reverseDonation.setUpdatedDate(sqlDate);
-                        this.mainListService.saveUser(reverseDonation);
+                        if(upDate.getDonationType()==0) {
+                            reverseDonation = this.mainListService.findDonationByMainListReference(upDate.getDonationReference());
+                            reverseDonation.setAdjustedAmount(reverseDonation.getAdjustedAmount() + upDate.getDonatedAmount());
+                            reverseDonation.setUpdatedDate(sqlDate);
+                            this.mainListService.saveUser(reverseDonation);
+                        }
                         this.schedulerLog.info("Rolled Back Donation MainRef: " + upDate.getMainListReference() + " DonationRef: " + upDate.getDonationReference() + " amount rolled back: " + upDate.getDonatedAmount());
                     }
                 }

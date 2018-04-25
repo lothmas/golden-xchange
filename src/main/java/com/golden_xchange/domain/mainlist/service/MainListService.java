@@ -63,6 +63,7 @@ public interface MainListService {
     public MainListEntity findDonationToStartMaturityProcess(String userName,double donatedAmount) throws MainListNotFoundException;
 
     List<MainListEntity> outStandingPayment(String payerUsername) throws MainListNotFoundException;
+    List<MainListEntity> donationsToReverse() throws MainListNotFoundException;
 
 }
 
