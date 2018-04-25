@@ -101,22 +101,24 @@ public class ApproveDonationWebserviceEndpoint {
                     }
                     createNotificationMessage(mainListEntity.getUserName(),mainListEntity);
                 }
-
+                GoldenRichesUsers goldenRichesUsers1 = null;
                 try {
-                    GoldenRichesUsers goldenRichesUsers1 = this.goldenRichesUsersService.findUserByMemberId(mainListEntity.getUserName());
+                    goldenRichesUsers1 = this.goldenRichesUsersService.findUserByMemberId(mainListEntity.getUserName());
                     NotificationsEntity notificationsEntity=new NotificationsEntity();
                     notificationsEntity.setCreationDate(new Date());
                     notificationsEntity.setMessage("DepositReference: "+mainListEntity.getDepositReference()+", AmountPaid: "+mainListEntity.getDonatedAmount()+", Status: Pending Your Approval");
                     notificationsEntity.setStatus(0);
                     notificationsEntity.setUserName(goldenRichesUsers1.getUserName());
                     notificationsService.save(notificationsEntity);
-                    SendSms send = new SendSms();
-
-                    send.send("sendSms.sh", goldenRichesUsers1.getTelephoneNumber(), "Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
-                    LOG.info("MSG SENT: Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
-                } catch (Exception var12) {
+                                   } catch (Exception var12) {
                     //do nothing skip
                 }
+
+                if(null!=goldenRichesUsers1) {
+                    SendSms send = new SendSms();
+                    send.send("sendSms.sh", goldenRichesUsers1.getTelephoneNumber(), "Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+                }
+                LOG.info("MSG SENT: Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
 
 
                 response.setMessage("Payer Has Approved Payment For Deposit Reference: " + request.getDepositReference());
