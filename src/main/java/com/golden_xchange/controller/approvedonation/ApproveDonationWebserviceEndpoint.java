@@ -86,8 +86,8 @@ public class ApproveDonationWebserviceEndpoint {
 //                return errorResponse(model,response,session);
 //            }
 
-            if (request.getApprover() == 1) {
-                if (mainListEntity.getPayerUsername().equals(request.getUsername())) {
+            if (request.getApprover() == 1 ) {
+                if (mainListEntity.getPayerUsername().equals(request.getUsername())&& mainListEntity.getStatus()==0) {
                     mainListEntity.setStatus(1);
                     mainListEntity.setUpdatedDate(sqlDate);
                     this.mainListService.saveUser(mainListEntity);
@@ -100,6 +100,9 @@ public class ApproveDonationWebserviceEndpoint {
                         //do nothing
                     }
                     createNotificationMessage(mainListEntity.getUserName(),mainListEntity);
+                }
+                else{
+                    return "redirect:/"+requester;
                 }
                 GoldenRichesUsers goldenRichesUsers1 = null;
                 try {
