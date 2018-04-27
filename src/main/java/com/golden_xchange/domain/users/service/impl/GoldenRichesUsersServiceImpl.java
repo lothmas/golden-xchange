@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service("GoldenRichesUsersService")
 @Transactional(
@@ -55,6 +56,11 @@ public class GoldenRichesUsersServiceImpl implements GoldenRichesUsersService {
 
     public GoldenRichesUsers findUserByMemberId(String memberId) throws GoldenRichesUsersNotFoundException {
         return this.GoldenRichesUsersDao.findUserByMemberId(memberId);
+    }
+
+    @Override
+    public List<GoldenRichesUsers> getAllUsers() throws GoldenRichesUsersNotFoundException {
+        return this.GoldenRichesUsersDao.getAllUsers();
     }
 
     public GoldenRichesUsers findGoldenRichesUsersByEmailAndPassword(String email, String password) throws GoldenRichesUsersNotFoundException, NoSuchAlgorithmException {

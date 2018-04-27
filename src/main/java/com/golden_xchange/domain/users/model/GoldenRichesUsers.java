@@ -29,6 +29,7 @@ public class GoldenRichesUsers {
     private String gender;
     private String accountType;
     private String referenceUser;
+    private Integer userType;
 
     public GoldenRichesUsers() {
     }
@@ -191,6 +192,16 @@ public class GoldenRichesUsers {
 
     public void setAccountHoldername(String accountHoldername) {
         this.accountHoldername = accountHoldername;
+    }
+
+    @Basic
+    @Column(name = "user_type")
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 
     public boolean equals(Object o) {

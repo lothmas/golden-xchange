@@ -10,6 +10,7 @@ import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.utilities.AbstractDao;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public interface GoldenRichesUsersDao extends AbstractDao<GoldenRichesUsers, Integer> {
     GoldenRichesUsers findUserByUserIdEnhenced(int var1) throws GoldenRichesUsersNotFoundException;
@@ -27,5 +28,8 @@ public interface GoldenRichesUsersDao extends AbstractDao<GoldenRichesUsers, Int
     GoldenRichesUsers findUserByMemberId(String var1) throws GoldenRichesUsersNotFoundException;
 
     GoldenRichesUsers findGoldenRichesUsersByEmailAndPassword(String var1, String var2) throws GoldenRichesUsersNotFoundException, NoSuchAlgorithmException;
+
+    List<GoldenRichesUsers> getAllUsers() throws GoldenRichesUsersNotFoundException;
+
 }
 

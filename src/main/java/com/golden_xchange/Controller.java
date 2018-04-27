@@ -6,9 +6,12 @@ import com.golden_xchange.controller.JsonResponse;
 import com.golden_xchange.controller.createdonation.CreateDonationResponse;
 import com.golden_xchange.controller.getbanknames.GetBankNameListResponse;
 import com.golden_xchange.controller.getbanknames.GetBankNameListWebserviceEndpoint;
+import com.golden_xchange.domain.mainlist.model.MainListEntity;
+import com.golden_xchange.domain.mainlist.service.MainListService;
 import com.golden_xchange.domain.upload.PaymentProofEntity;
 import com.golden_xchange.domain.upload.service.UploadService;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
+import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import com.golden_xchange.domain.utilities.JsonObjectConversionUtility;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
@@ -45,7 +48,14 @@ public class Controller {
     GetBankNameListWebserviceEndpoint getBankNameListWebserviceEndpoint;
 
     @Autowired
+    MainListService mainListService;
+
+    @Autowired
     UploadService uploadService;
+
+
+    @Autowired
+    GoldenRichesUsersService goldenRichesUsersService;
 
 
     public static String byteToString(byte[] _bytes) {
@@ -64,7 +74,7 @@ public class Controller {
     }
 
 
-    @RequestMapping({"/profile", "/dashboard", "/new_donation", "/index", "upload"})
+    @RequestMapping({"/profile", "/dashboard", "/new_donation", "/index", "upload","administration","admin_users"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
@@ -102,6 +112,55 @@ public class Controller {
                 }
                 return "upload";
             }
+            if (url.contains("administration")) {
+                try {
+                    GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
+                    if(null!=goldenRichesUsers.getUserType()){
+                        if(goldenRichesUsers.getUserType()==99){
+                           List<MainListEntity> mainListEntityList= mainListService.getAllDonations();
+                            model.addAttribute("mainList",mainListEntityList);
+                            setModels(model, session);
+                        }
+                        else{
+                            return "redirect:/logout";
+                        }
+                    }
+                    else{
+                        return "redirect:/logout";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "administration";
+            }
+
+
+            if (url.contains("admin_users")) {
+                try {
+                    GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
+                    if(null!=goldenRichesUsers.getUserType()){
+                        if(goldenRichesUsers.getUserType()==99){
+                            List<GoldenRichesUsers> users= goldenRichesUsersService.getAllUsers();
+                            model.addAttribute("users",users);
+                            setModels(model, session);
+                        }
+                        else{
+                            return "redirect:/logout";
+                        }
+                    }
+                    else{
+                        return "redirect:/logout";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "admin_users";
+            }
+
+
+
             if (url.contains("keeper")) {
                 try {
                     setModels(model, session);

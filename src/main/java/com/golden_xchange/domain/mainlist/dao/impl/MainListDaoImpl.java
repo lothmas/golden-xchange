@@ -373,6 +373,18 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         }
     }
 
+    @Override
+    public List<MainListEntity> getAllDonations() throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .list();
+        if (returnMainList.size() == 0 ) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        }
+        else {
+            return returnMainList;
+        }
+    }
+
 
 }
 

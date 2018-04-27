@@ -9,6 +9,7 @@ import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundExcept
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public interface GoldenRichesUsersService {
     GoldenRichesUsers findUserByUserId(int var1) throws GoldenRichesUsersNotFoundException;
@@ -26,5 +27,8 @@ public interface GoldenRichesUsersService {
     GoldenRichesUsers findUserByEmail(String var1) throws GoldenRichesUsersNotFoundException;
 
     GoldenRichesUsers findUserByMemberId(String var1) throws GoldenRichesUsersNotFoundException;
+
+    List<GoldenRichesUsers> getAllUsers() throws GoldenRichesUsersNotFoundException;
+
 }
 

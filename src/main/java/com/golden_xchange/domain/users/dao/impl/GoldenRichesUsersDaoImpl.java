@@ -185,5 +185,16 @@ public class GoldenRichesUsersDaoImpl extends AbstractDaoImpl<GoldenRichesUsers,
             }
         }
     }
+
+    @Override
+    public List<GoldenRichesUsers> getAllUsers() throws GoldenRichesUsersNotFoundException {
+        List<GoldenRichesUsers> result = this.getCurrentSession().createCriteria(GoldenRichesUsers.class)
+               .list();
+        if(result.isEmpty()) {
+            throw new GoldenRichesUsersNotFoundException("No Users found");
+        }
+        return result;
+
+    }
 }
 
