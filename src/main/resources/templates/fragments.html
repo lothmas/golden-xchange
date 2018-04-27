@@ -295,6 +295,8 @@
 					<li><a href="approvals"><i class="fa fa-table"></i> <span>APPROVE DONATIONS</span></a></li>
 					<li><a href="donation_state"><i class="fa fa-table"></i> <span>ALL DONATIONS</span></a></li>
 					<li><a href="upload"><i class="fa fa-upload"></i> <span>UPLOAD PAYMENT PROOF</span></a></li>
+					<li th:if="${profile.userType==99}"><a href="upload"><i class="fa fa-address-book"></i> <span>ADMINISTRATION</span></a></li>
+
 					<!-- begin sidebar minify button -->
 					<li><a href="#" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
 					<!-- end sidebar minify button -->
