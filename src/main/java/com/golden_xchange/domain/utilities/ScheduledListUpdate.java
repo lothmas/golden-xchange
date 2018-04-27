@@ -13,11 +13,9 @@ import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -26,8 +24,9 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 
+@Configuration
+@EnableScheduling
 public class ScheduledListUpdate {
     Logger schedulerLog = Logger.getLogger(this.getClass().getName());
     @Autowired
@@ -40,84 +39,48 @@ public class ScheduledListUpdate {
     }
 
     @Scheduled(
-        fixedDelay = 600000L
+            fixedDelay = 600000L
     )
     public void updateMainList() {
         this.schedulerLog.info("started SchedulerListUpdate");
 
         try {
-            List returnMainList;
-            MainListEntity reverseDonation;
-            if(this.mainListService.checkIfMainListAvailable()) {
-                returnMainList = this.mainListService.UpdateNewMainList();
-                if(null != returnMainList) {
-                    Iterator var2 = returnMainList.iterator();
 
-                    while(var2.hasNext()) {
-                        reverseDonation = (MainListEntity)var2.next();
-                        reverseDonation.setEnabled(1);
-                        this.mainListService.saveUser(reverseDonation);
-                        this.schedulerLog.info("Upadated MainRef: " + reverseDonation.getMainListReference() + " to MAINLIST");
-                    }
-                }
-
-                String fileName = "/home/GRusers.txt";
-
+            this.schedulerLog.info("started checking reserved donations");
+            List<MainListEntity> returnMainList = this.mainListService.donationsToReverse();
+            for (MainListEntity upDate : returnMainList) {
                 try {
-                    Stream<String> stream = Files.lines(Paths.get(fileName, new String[0]));
-                    Throwable var4 = null;
+                    MainListEntity mainDonation=  mainListService.findDonationByMainListReference(upDate.getDonationReference());
 
-                    try {
-                        stream.forEach(this::updateAdmin);
-                    } catch (Throwable var19) {
-                        var4 = var19;
-                        throw var19;
-                    } finally {
-                        if(stream != null) {
-                            if(var4 != null) {
-                                try {
-                                    stream.close();
-                                } catch (Throwable var18) {
-                                    var4.addSuppressed(var18);
-                                }
-                            } else {
-                                stream.close();
+                    if (returnMainList.size() != 0 && null!=mainDonation) {
+                        LocalDateTime endDate = LocalDateTime.now();
+                        Date toDate = new Date();
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Timestamp sqlDate = new Timestamp(toDate.getTime());
+                        Iterator var7 = returnMainList.iterator();
+
+                        long numberOfHours = Duration.between(upDate.getUpdatedDate().toLocalDateTime(), endDate).toHours();
+                        this.schedulerLog.info("mainRef: " + upDate.getMainListReference() + " lapsed by: " + numberOfHours + " hours");
+                        if (numberOfHours >= 12L) {
+                            new MainListEntity();
+                            upDate.setStatus(4);
+                            upDate.setUpdatedDate(sqlDate);
+                            this.mainListService.saveUser(upDate);
+                            if (upDate.getDonationType() == 0) {
+                                MainListEntity reverseDonation = this.mainListService.findDonationByMainListReference(upDate.getDonationReference());
+                                reverseDonation.setAdjustedAmount(reverseDonation.getAdjustedAmount() + upDate.getDonatedAmount());
+                                reverseDonation.setUpdatedDate(sqlDate);
+                                this.mainListService.saveUser(reverseDonation);
                             }
+                            this.schedulerLog.info("Rolled Back Donation MainRef: " + upDate.getMainListReference() + " DonationRef: " + upDate.getDonationReference() + " amount rolled back: " + upDate.getDonatedAmount());
                         }
 
                     }
-                } catch (IOException var21) {
-                    this.schedulerLog.info(var21.getMessage());
+                }catch(Exception exp){
+                // do nothing
                 }
             }
-
-            this.schedulerLog.info("started checking reserved donations");
-            returnMainList = this.mainListService.updateUsingTimeLapsed();
-            if(returnMainList.size() != 0) {
-                LocalDateTime endDate = LocalDateTime.now();
-                Date toDate = new Date();
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Timestamp sqlDate = new Timestamp(toDate.getTime());
-                Iterator var7 = returnMainList.iterator();
-
-                while(var7.hasNext()) {
-                    MainListEntity upDate = (MainListEntity)var7.next();
-                    long numberOfHours = Duration.between(upDate.getUpdatedDate().toLocalDateTime(), endDate).toHours();
-                    this.schedulerLog.info("mainRef: " + upDate.getMainListReference() + " lapsed by: " + numberOfHours + " hours");
-                    if(numberOfHours >= 1L) {
-                        new MainListEntity();
-                        upDate.setStatus(4);
-                        upDate.setUpdatedDate(sqlDate);
-                        this.mainListService.saveUser(upDate);
-                        reverseDonation = this.mainListService.findDonationByMainListReference(upDate.getDonationReference());
-                        reverseDonation.setAdjustedAmount(reverseDonation.getAdjustedAmount() + upDate.getDonatedAmount());
-                        reverseDonation.setUpdatedDate(sqlDate);
-                        this.mainListService.saveUser(reverseDonation);
-                        this.schedulerLog.info("Rolled Back Donation MainRef: " + upDate.getMainListReference() + " DonationRef: " + upDate.getDonationReference() + " amount rolled back: " + upDate.getDonatedAmount());
-                    }
-                }
-            }
-        } catch (NoSuchAlgorithmException | MainListNotFoundException var22) {
+        } catch ( MainListNotFoundException var22) {
             this.schedulerLog.info("Error running Scheduler: " + var22.getMessage());
         }
 
@@ -133,8 +96,7 @@ public class ScheduledListUpdate {
 
         try {
             goldenRichesUsersService.findUserByMemberId(adminUsers[2].trim());
-            if(adminUsers[2].trim().equals(goldenRichesUsersService.getUserByBankDetails(adminUsers[0].trim()).getUserName()))
-            {
+            if (adminUsers[2].trim().equals(goldenRichesUsersService.getUserByBankDetails(adminUsers[0].trim()).getUserName())) {
                 MainListEntity newAdminTransaction = new MainListEntity();
                 newAdminTransaction.setBankAccountNumber(adminUsers[0].trim());
                 newAdminTransaction.setEnabled(1);
@@ -153,18 +115,14 @@ public class ScheduledListUpdate {
                 newAdminTransaction.setPayerUsername(adminUsers[2].trim());
                 mainListService.saveUser(newAdminTransaction);
                 schedulerLog.info("admin user rolledin accountNumber: " + adminUsers[0].trim() + "amount: " + adminUsers[1].trim() + " mainRef: " + mainRef);
-            }
-            else{
+            } else {
                 schedulerLog.error("Admin user: with accNo." + adminUsers[0].trim() + " username: " + adminUsers[2].trim() + " not Added because of a mismatch");
 
             }
-        }
-        catch (GoldenRichesUsersNotFoundException ntfnd){
-            schedulerLog.warn("No Admin User Added: "+ ntfnd.getMessage());
+        } catch (GoldenRichesUsersNotFoundException ntfnd) {
+            schedulerLog.warn("No Admin User Added: " + ntfnd.getMessage());
 
-        }
-        catch (Exception exp)
-        {
+        } catch (Exception exp) {
             schedulerLog.error(exp.getMessage());
 
         }

@@ -261,13 +261,18 @@ public class CreateDonationWebserviceEndpoint {
             donationService.saveUser(mainListReference);
         }
 
-        try {
-//            SendSms send = new SendSms();
-//            send.send("sendSms.sh", gold.getTelephoneNumber(), "Golden-Xchange Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + request.getAmount() + ". Confirm Before Payment [expires in 5hrs]");
-        } catch (Exception var11) {
-            ;
-        }
+        sendMessage(request, createDonation);
         return createDonation;
+    }
+
+    private void sendMessage(CreateDonationRequest request, MainListEntity createDonation) {
+        try {
+            SendSms send = new SendSms();
+            GoldenRichesUsers goldenRichesUsers=goldenRichesUsersService.findUserByMemberId(createDonation.getUserName());
+            send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "Golden-Xchange Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
+        } catch (Exception var11) {
+            //do nothing
+        }
     }
 
     private String errorResponse(Model model, CreateDonationResponse response,HttpSession session ) {
@@ -329,7 +334,11 @@ public class CreateDonationWebserviceEndpoint {
         mainListEntity.setDonationType(1);
         donationService.saveUser(mainListEntity);
         createNotificationMessage(request, mainListEntity);
+        sendMessage(request, mainListEntity);
 
     }
+
+
+
 }
 

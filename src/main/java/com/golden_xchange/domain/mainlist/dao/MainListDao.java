@@ -62,5 +62,8 @@ public interface MainListDao extends AbstractDao<MainListEntity, Integer> {
 
     List<MainListEntity> returnKeeperList(String var1) throws MainListNotFoundException;
 
+    List<MainListEntity> donationsToReverse() throws MainListNotFoundException;
+
+
 }
 

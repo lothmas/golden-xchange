@@ -162,6 +162,9 @@
                                                                                     <button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-danger btn-sm text-left">Pending Maturity</button>
                                                                                     <input name="approver"  type="hidden" th:value="1"/>
                                                                                 </div>
+                                                                                <div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==4}">
+                                                                                    <button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-default btn-sm text-left">Cancelled / Reversed</button>
+                                                                                </div>
                                                                                 <div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==1 &amp;&amp; result.donationType==0}">
                                                                                     <div class="progress">
                                                                                         <div class="progress-bar progress-bar-striped progress-bar-animated text-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"  th:style="'width: '+${result.getMaturityAmount()/result.getAmountToReceive()*100}+'%'"  ></div>
