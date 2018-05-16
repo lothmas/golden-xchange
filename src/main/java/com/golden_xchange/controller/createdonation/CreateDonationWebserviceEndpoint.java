@@ -101,11 +101,11 @@ public class CreateDonationWebserviceEndpoint {
             MainListEntity mainListEntity=new MainListEntity();
             mainListEntity.setStatus(0);
             mainListEntity.setUpdatedDate(sqlDate);
-            mainListEntity.setAdjustedAmount(request.getAmount() + 0.7D * request.getAmount());
+            mainListEntity.setAdjustedAmount(request.getAmount() + 0.8D * request.getAmount());
             mainListEntity.setDonatedAmount(request.getAmount());
             mainListEntity.setEnabled(1);
             mainListEntity.setBankAccountNumber(goldenRichesUsers.getAccountNumber());
-            mainListEntity.setAmountToReceive(request.getAmount() + 0.7D * request.getAmount());
+            mainListEntity.setAmountToReceive(request.getAmount() + 0.8D * request.getAmount());
             mainListEntity.setDate(sqlDate);
             String mainRef=RandomStringUtils.randomAlphanumeric(10).toUpperCase();
             mainListEntity.setMainListReference(mainRef);
