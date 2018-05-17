@@ -138,6 +138,9 @@ public class ApproveDonationWebserviceEndpoint {
                 mainListEntity.setStatus(2);
                 mainListEntity.setUpdatedDate(sqlDate);
                 this.mainListService.saveUser(mainListEntity);
+                GoldenRichesUsers   goldenRichesUsersPayer = this.goldenRichesUsersService.findUserByMemberId(mainListEntity.getPayerUsername());
+                goldenRichesUsersPayer.setReferenceUser("");
+                goldenRichesUsersService.saveUser(goldenRichesUsersPayer);
                 response.setMessage("Donation Receiver has Approved Deposit Reference: " + request.getDepositReference());
                 response.setStatusCode(StatusCodeEnum.OK.getStatusCode());
                 List<MainListEntity> donations = this.mainListService.findDonorsByDonationReference(mainListEntity.getDonationReference());

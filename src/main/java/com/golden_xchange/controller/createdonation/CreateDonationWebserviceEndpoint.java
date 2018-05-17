@@ -305,9 +305,9 @@ public class CreateDonationWebserviceEndpoint {
         double sponsorPercentage=0.2D;
         try {
             GoldenRichesUsers sponsorProfile=goldenRichesUsersService.findUserByMemberId(goldenRichesUsers.getReferenceUser());
-            addSponsors(request, ref, sqlDate, 0.2D, sponsorProfile);
-            GoldenRichesUsers sponsorProfile1=goldenRichesUsersService.findUserByMemberId(sponsorProfile.getReferenceUser());
-            addSponsors(request, ref, sqlDate, 0.1D, sponsorProfile1);
+            addSponsors(request, ref, sqlDate, 0.1D, sponsorProfile);
+//            GoldenRichesUsers sponsorProfile1=goldenRichesUsersService.findUserByMemberId(sponsorProfile.getReferenceUser());
+//            addSponsors(request, ref, sqlDate, 0.1D, sponsorProfile1);
 
         } catch (GoldenRichesUsersNotFoundException e) {
             e.printStackTrace();

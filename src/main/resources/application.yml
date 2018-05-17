@@ -2,8 +2,8 @@ server:
   port: 8443
   ssl:
 #    key-alias: goldenxchange
-    key-password: G0ld3nxchang3
-    key-store: classpath:goldenXchange.jks
+    key-password: lothmas
+    key-store: classpath:mindset24-7.jks
     key-store-provider: SUN
     key-store-type: JKS
 
