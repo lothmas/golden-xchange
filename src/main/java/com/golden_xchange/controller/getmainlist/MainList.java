@@ -82,6 +82,8 @@ public class MainList {
 
     protected double amountToReceive;
 
+    protected  int daysRemaining;
+
     /**
      * Gets the value of the username property.
      * 
@@ -352,5 +354,13 @@ public class MainList {
 
     public void setAmountToReceive(double amountToReceive) {
         this.amountToReceive = amountToReceive;
+    }
+
+    public int getDaysRemaining() {
+        return daysRemaining;
+    }
+
+    public void setDaysRemaining(int daysRemaining) {
+        this.daysRemaining = daysRemaining;
     }
 }

@@ -20,7 +20,8 @@
 		<div id="header" class="header navbar-default">
 			<!-- begin navbar-header -->
 			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>MindSet</b> 24-7</a>
+				<a href="index.html" class="navbar-brand"><span class="navbar-logo"><img src="assets/img/logo-original.png" alt="Home" /></span>
+				</a>
 				<button type="button" class="navbar-toggle" data-click="sidebar-toggled">
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -95,18 +96,18 @@
 			<!-- end col-3 -->
 
 			<!-- begin col-3 -->
-			<div class="col-lg-2 col-md-6">
-				<div class="widget widget-stats bg-yellow-darker">
-					<div class="stats-icon"><i class="fa fa-user"></i></div>
-					<div class="stats-info">
-						<h3>KEEPER</h3>
-						<!--<p>Keeper Donations</p>-->
-					</div>
-					<div class="stats-link">
-						<a href="keeper">View Keeper <i class="fa fa-arrow-alt-circle-right"></i></a>
-					</div>
-				</div>
-			</div>
+			<!--<div class="col-lg-2 col-md-6">-->
+				<!--<div class="widget widget-stats bg-yellow-darker">-->
+					<!--<div class="stats-icon"><i class="fa fa-user"></i></div>-->
+					<!--<div class="stats-info">-->
+						<!--<h3>KEEPER</h3>-->
+						<!--&lt;!&ndash;<p>Keeper Donations</p>&ndash;&gt;-->
+					<!--</div>-->
+					<!--<div class="stats-link">-->
+						<!--<a href="keeper">View Keeper <i class="fa fa-arrow-alt-circle-right"></i></a>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
 			<!-- end col-3 -->
 
 
@@ -239,12 +240,7 @@
 		</div>
 	</div>
 
-	<div th:fragment="footer">
-		<hr/>
-		<footer>
-			<p>Powered by the FNB Integration Layer.</p>
-		</footer>
-	</div>
+
 
 	<div th:fragment="downloadButton (downloadId)">		
 		<th:block th:if="${downloadId}!=null">			
@@ -290,7 +286,7 @@
 					<li class="nav-header">Navigation</li>
 					<li><a href="profile"><i class="fa fa-user"></i> <span>PROFILE</span></a></li>
 					<li><a href="new_donation"><i class="fa fa-image"></i> <span>CREATE DONATION</span></a></li>
-					<li><a href="keeper"><i class="fa fa-image"></i> <span>KEEPER</span></a></li>
+					<!--<li><a href="keeper"><i class="fa fa-image"></i> <span>KEEPER</span></a></li>-->
 					<li><a href="current_donations"><i class="fa fa-clock"></i> <span>CONFIRM DONATION</span></a></li>
 					<li><a href="approvals"><i class="fa fa-table"></i> <span>APPROVE DONATIONS</span></a></li>
 					<li><a href="donation_state"><i class="fa fa-table"></i> <span>ALL DONATIONS</span></a></li>

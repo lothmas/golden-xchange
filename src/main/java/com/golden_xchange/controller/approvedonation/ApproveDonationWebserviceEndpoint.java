@@ -130,11 +130,7 @@ public class ApproveDonationWebserviceEndpoint {
 
                 return "redirect:/"+requester;
 
-            } else if (request.getApprover() != 2) {
-                response.setMessage("Please set Approver: [1 = PayerApprover] [2= Receiver Approver]");
-                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
-                return errorResponse(model, response, session,url);
-            } else {
+            }  else if (request.getApprover() == 2) {
                 mainListEntity.setStatus(2);
                 mainListEntity.setUpdatedDate(sqlDate);
                 this.mainListService.saveUser(mainListEntity);
@@ -206,6 +202,15 @@ public class ApproveDonationWebserviceEndpoint {
                         return "redirect:/"+requester;
                     }
                 }
+            }
+            else if (request.getApprover() == 3) {
+                mainListEntity.setEnabled(0);
+                mainListService.saveUser(mainListEntity);
+            }
+            else  {
+                response.setMessage("Please set Approver: [1 = PayerApprover] [2= Receiver Approver]");
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return errorResponse(model, response, session,url);
             }
         } catch (MainListNotFoundException var13) {
             response.setMessage(var13.getMessage());

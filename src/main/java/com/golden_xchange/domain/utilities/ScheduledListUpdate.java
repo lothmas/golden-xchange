@@ -5,28 +5,45 @@
 
 package com.golden_xchange.domain.utilities;
 
+import com.golden_xchange.controller.createdonation.CreateDonationRequest;
+import com.golden_xchange.controller.createdonation.CreateDonationWebserviceEndpoint;
+import com.golden_xchange.controller.getmainlist.GetMainListAndDonationsWebserviceEndpoint;
 import com.golden_xchange.domain.mainlist.exception.MainListNotFoundException;
 import com.golden_xchange.domain.mainlist.model.MainListEntity;
 import com.golden_xchange.domain.mainlist.service.MainListService;
+import com.golden_xchange.domain.notifications.model.NotificationsEntity;
+import com.golden_xchange.domain.notifications.service.NotificationsService;
 import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
+import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.mock.MockHttpServletRequest;
+import org.apache.struts.mock.MockHttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 @Configuration
+@EnableAsync
 @EnableScheduling
+
 public class ScheduledListUpdate {
     Logger schedulerLog = Logger.getLogger(this.getClass().getName());
     @Autowired
@@ -35,12 +52,18 @@ public class ScheduledListUpdate {
     @Autowired
     GoldenRichesUsersService goldenRichesUsersService;
 
+    @Autowired
+    NotificationsService notificationsService;
+
+    @Autowired
+    GetMainListAndDonationsWebserviceEndpoint getMainListAndDonationsWebserviceEndpoint;
+
     public ScheduledListUpdate() {
     }
 
-    @Scheduled(
-            fixedDelay = 600000L
-    )
+//    @Scheduled(
+//            fixedDelay = 60000L
+//    )
     public void updateMainList() {
         this.schedulerLog.info("started SchedulerListUpdate");
 
@@ -50,9 +73,9 @@ public class ScheduledListUpdate {
             List<MainListEntity> returnMainList = this.mainListService.donationsToReverse();
             for (MainListEntity upDate : returnMainList) {
                 try {
-                    MainListEntity mainDonation=  mainListService.findDonationByMainListReference(upDate.getDonationReference());
+                    MainListEntity mainDonation = mainListService.findDonationByMainListReference(upDate.getDonationReference());
 
-                    if (returnMainList.size() != 0 && null!=mainDonation) {
+                    if (returnMainList.size() != 0 && null != mainDonation) {
                         LocalDateTime endDate = LocalDateTime.now();
                         Date toDate = new Date();
                         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -76,11 +99,11 @@ public class ScheduledListUpdate {
                         }
 
                     }
-                }catch(Exception exp){
-                // do nothing
+                } catch (Exception exp) {
+                    // do nothing
                 }
             }
-        } catch ( MainListNotFoundException var22) {
+        } catch (MainListNotFoundException var22) {
             this.schedulerLog.info("Error running Scheduler: " + var22.getMessage());
         }
 
@@ -129,5 +152,177 @@ public class ScheduledListUpdate {
 
 
     }
+
+
+    //    @Scheduled(cron = "0 0 0,12 ? * SUN,MON,TUE,WED,THU,FRI,SAT *")
+    @Scheduled(
+            fixedDelay = 600000L
+    )
+    public void assignDonations() {
+
+        try {
+            List<MainListEntity> returnMainList = this.mainListService.donationsToReverse();
+
+            for (MainListEntity pending : returnMainList) {
+                LocalDateTime endDate = LocalDateTime.now();
+                long numberOfDays = Duration.between(pending.getUpdatedDate().toLocalDateTime(), endDate).toDays();
+                List<MainListEntity> donationsToDonateTo;
+                try {
+                    donationsToDonateTo = mainListService.getMainList(pending.getUserName());
+                } catch (Exception exp) {
+                    continue;
+                }
+                double amountPaidToSponsor = 0;
+
+                if (numberOfDays >= 28) {
+
+                    Date utilDate = new Date();
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Timestamp sqlDate = new Timestamp(utilDate.getTime());
+                    GoldenRichesUsers sponsorProfile = goldenRichesUsersService.findUserByMemberId(pending.getUserName());
+                    if (null != sponsorProfile.getReferenceUser() && !sponsorProfile.getReferenceUser().equals("")) {
+                        List<MainListEntity> returnedSponsor = mainListService.findDonorsByDonationReference(pending.getMainListReference());
+
+                        if (returnedSponsor.size() == 0 || returnedSponsor.get(0).getDonatedAmount() != (0.1D * pending.getDonatedAmount())) {
+                            GoldenRichesUsers receiverProfile = goldenRichesUsersService.findUserByMemberId(sponsorProfile.getReferenceUser());
+                            createInvester(pending, sqlDate, 0.1D, receiverProfile);
+                            amountPaidToSponsor = 0.1D * pending.getDonatedAmount();
+                        } else {
+                            amountPaidToSponsor = 0.1D * pending.getDonatedAmount();
+                        }
+                    }
+
+                    for (MainListEntity donateTo : donationsToDonateTo) {
+                        double alreadyReservedAmount = 0;
+
+                        if (checkDateLimit(donateTo.getUpdatedDate())) {
+                            List<MainListEntity> returnedSponsor = mainListService.findDonorsByDonationReference(donateTo.getMainListReference());
+                            for (MainListEntity alreadyReserved : returnedSponsor) {
+                                if (alreadyReserved.getDonationType() == 2) {
+                                    alreadyReservedAmount = alreadyReservedAmount + alreadyReserved.getDonatedAmount();
+                                }
+                            }
+                            if (pending.getAdjustedAmount() > 0 && !((alreadyReservedAmount + amountPaidToSponsor) >= pending.getDonatedAmount())) {
+                                double amoutToDonate = pending.getDonatedAmount() - amountPaidToSponsor;
+                                if (pending.getDonatedAmount() < donateTo.getAdjustedAmount()) {
+                                    createMainInvester(pending, sqlDate, amoutToDonate, sponsorProfile, donateTo);
+                                } else {
+                                    createMainInvester(pending, sqlDate, donateTo.getAdjustedAmount(), sponsorProfile, donateTo);
+                                }
+                            }
+                        }
+                    }
+
+
+                    //    getMainListAndDonationsWebserviceEndpoint.handleCreateGoldenRichesRequest(null,null,session,"autoRun");
+                }
+            }
+
+
+        } catch (MainListNotFoundException e) {
+            e.printStackTrace();
+        } catch (GoldenRichesUsersNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+//    public void createForSponsor(GoldenRichesUsers goldenRichesUsers, CreateDonationRequest request, String ref){
+//        Date utilDate = new Date();
+//        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Timestamp sqlDate = new Timestamp(utilDate.getTime());
+//        try {
+//            GoldenRichesUsers sponsorProfile=goldenRichesUsersService.findUserByMemberId(goldenRichesUsers.getReferenceUser());
+//            addSponsors(request,  sqlDate, 0.1D, sponsorProfile);
+//        } catch (GoldenRichesUsersNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//    }
+
+    private void createInvester(MainListEntity request, Timestamp sqlDate, double sponsorPercentage, GoldenRichesUsers sponsorProfile) {
+        MainListEntity mainListEntity = new MainListEntity();
+        mainListEntity.setStatus(0);
+        mainListEntity.setUpdatedDate(sqlDate);
+        mainListEntity.setAdjustedAmount(sponsorPercentage * request.getDonatedAmount());
+        mainListEntity.setDonatedAmount(sponsorPercentage * request.getDonatedAmount());
+        mainListEntity.setEnabled(1);
+        mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
+        mainListEntity.setAmountToReceive(sponsorPercentage * request.getDonatedAmount());
+        mainListEntity.setDate(sqlDate);
+        mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+        mainListEntity.setDonationReference(request.getMainListReference());
+        mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+        mainListEntity.setUserName(sponsorProfile.getUserName());
+        mainListEntity.setPayerUsername(request.getUserName());
+        mainListEntity.setDonationType(1);
+        mainListService.saveUser(mainListEntity);
+        createNotificationMessage(request.getPayerUsername(), mainListEntity);
+        sendMessage(mainListEntity);
+    }
+
+
+    private void createMainInvester(MainListEntity donateFrom, Timestamp sqlDate, double amountToDonate, GoldenRichesUsers sponsorProfile, MainListEntity donateTo) {
+        MainListEntity mainListEntity = new MainListEntity();
+        mainListEntity.setStatus(0);
+        mainListEntity.setUpdatedDate(sqlDate);
+        mainListEntity.setAdjustedAmount(amountToDonate);
+        mainListEntity.setDonatedAmount(amountToDonate);
+        mainListEntity.setEnabled(1);
+        mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
+        mainListEntity.setAmountToReceive(amountToDonate);
+        mainListEntity.setDate(sqlDate);
+        mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+        mainListEntity.setDonationReference(donateTo.getMainListReference());
+        mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+        mainListEntity.setUserName(sponsorProfile.getUserName());
+        mainListEntity.setPayerUsername(donateFrom.getUserName());
+        mainListEntity.setDonationType(2);
+        mainListService.saveUser(mainListEntity);
+
+        double reduceDonatedAmount = donateTo.getAdjustedAmount() - amountToDonate;
+        donateTo.setAdjustedAmount(reduceDonatedAmount);
+        mainListService.saveUser(donateTo);
+
+        createNotificationMessage(donateFrom.getPayerUsername(), mainListEntity);
+        sendMessage(mainListEntity);
+    }
+
+    private void createNotificationMessage(String payerUsername, MainListEntity mainListEntity) {
+        NotificationsEntity notificationsEntity = new NotificationsEntity();
+        notificationsEntity.setMessage("DepositReference: " + mainListEntity.getDepositReference() + ", AmountPaid: " + mainListEntity.getDonatedAmount() + ", Status: Pending Payment Confirmation");
+        notificationsEntity.setUserName(payerUsername);
+        notificationsEntity.setCreationDate(new Date());
+        notificationsEntity.setStatus(0);
+        notificationsEntity.setMainListRef(mainListEntity.getMainListReference());
+        notificationsService.save(notificationsEntity);
+
+    }
+
+    private void sendMessage(MainListEntity createDonation) {
+        try {
+            SendSms send = new SendSms();
+            GoldenRichesUsers goldenRichesUsers = goldenRichesUsersService.findUserByMemberId(createDonation.getUserName());
+            send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "Golden-Xchange Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
+        } catch (Exception var11) {
+            //do nothing
+        }
+    }
+
+
+    public boolean checkDateLimit(Date date) {
+        // convert Date into Java 8 LocalDate
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate today = LocalDate.now();
+        // count number of days between the given date and today
+        long days = ChronoUnit.DAYS.between(localDate, today);
+        return days > 30;
+    }
+
+
 }
 

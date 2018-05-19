@@ -73,23 +73,24 @@ public class CreateDonationWebserviceEndpoint {
             if (commonValidator(request, response))return errorResponse(model, response,session);
             try{
                 List<MainListEntity> paidDonations = this.donationService.outStandingPayment(request.getPayerUsername());
-                response.setMessage("You still have un-completed donations and can't make new ones DEPOSIT REF: "+ paidDonations.get(0).getDepositReference());
+                response.setMessage("You still have un-paid donations and can't make new ones until they are completed");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                 return errorResponse(model, response,session);
-
-
-
-
-//            for(MainListEntity mainListEntity:mainListEntities){
-//                if((mainListEntity.getStatus()!=3 && mainListEntity.getStatus()!=2) && request.getPayerUsername().equals(mainListEntity.getPayerUsername()) && mainListEntity.getDonationType()==1){
-//                   
-//                }
-//            }
-//            
-            
             }
             catch(Exception ex){
                //do nothing
+            }
+
+            if(request.getAmount()%10!=0){
+                response.setMessage("Please Make Your Donation Divisible By 10 e.g 300 , 8560, 12000");
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return errorResponse(model, response,session);
+            }
+
+            if((request.getAmount() + 0.8D * request.getAmount())%10!=0){
+                response.setMessage("Please Make Your Donation-Interest to be Divisible By 10 e.g 300 , 8560, 12000");
+                response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
+                return errorResponse(model, response,session);
             }
 
             if(null==request.getPayerUsername()) {
@@ -97,6 +98,8 @@ public class CreateDonationWebserviceEndpoint {
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                 return errorResponse(model, response,session);
             }
+
+
             GoldenRichesUsers goldenRichesUsers=goldenRichesUsersService.findUserByMemberId(request.getPayerUsername());
             MainListEntity mainListEntity=new MainListEntity();
             mainListEntity.setStatus(0);
@@ -115,15 +118,10 @@ public class CreateDonationWebserviceEndpoint {
             mainListEntity.setPayerUsername(request.getPayerUsername());
             mainListEntity.setDonationType(0);
             donationService.saveUser(mainListEntity);
-            createForSponsor(goldenRichesUsers,request,mainRef);
+           // createForSponsor(goldenRichesUsers,request,mainRef);
 
         }
-        else{
 
-//            if (createDonationFromExisting(request, createDonation, response, sqlDate)) {
-//                return errorResponse(model, response, session);
-//            }
-        }
 
         try {
             List<NotificationsEntity> notificationsEntityList = notificationsService.getUserNotifications(request.getPayerUsername());
@@ -145,7 +143,7 @@ public class CreateDonationWebserviceEndpoint {
         }
 
 
-        return "redirect:/current_donations";
+        return "redirect:/donation_state";
     }
 
     private void createNotificationMessage(CreateDonationRequest request, MainListEntity mainListEntity) {
