@@ -285,7 +285,7 @@ public class CreateDonationWebserviceEndpoint {
             response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
             return true;
         }
-        if(request.getAmount() > 100000.0D) {
+        if(request.getAmount() > 50000.0D) {
             response.setMessage("Maximum Donation Amount is R100000");
             response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
             return true;
