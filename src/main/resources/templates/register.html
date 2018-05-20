@@ -65,8 +65,8 @@
                     <label class="control-label">Profile Details <span class="text-danger">*</span></label>
                     <div class="row row-space-10">
                         <div class="col-md-12 m-b-15">
-                            <input type="text" name="referenceUser" class="form-control"
-                                   placeholder="Reference / Sponsore [Username]"/>
+                            <input type="text" name="referenceUser" class="form-control" th:value="${sponsor}" th:disabled="${disabled}"
+                                   placeholder="Reference / Sponsor [Username]"/>
                         </div>
                     </div>
                     <div class="row row-space-10">

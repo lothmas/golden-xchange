@@ -39,7 +39,17 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
     }
 
     @RequestMapping(value = {"/register"})
-    public String handleCreateGoldenRichesRequest(Model model) {
+    public String handleCreateGoldenRichesRequest(@RequestParam(value="sponsor",required=false) String sponsor,Model model,HttpSession session) {
+        if(null!=sponsor){
+            model.addAttribute("sponsor",sponsor);
+            model.addAttribute("disabled",true);
+            session.setAttribute("sponsor",sponsor);
+        }
+        else {
+            model.addAttribute("sponsor",null);
+            model.addAttribute("disabled",false);
+
+        }
         CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
         model.addAttribute("response", response);
         return "register";
@@ -51,7 +61,10 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
             , @RequestParam(value = "pic", required = false) MultipartFile profilePic) throws Exception {
         CreateGoldenRichesUserResponse response = new CreateGoldenRichesUserResponse();
         GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
-
+        String referenceFromSession= (String) session.getAttribute("sponsor");
+        if(null!=referenceFromSession && !referenceFromSession.equals("")){
+            request.setReferenceUser(referenceFromSession);
+        }
         if (!request.getReferenceUser().equals("")) {
             try {
                 this.goldenRichesUsersService.findUserByMemberId(request.getReferenceUser());
@@ -64,6 +77,13 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
         } else {
             goldenRichesUsers.setReferenceUser("sanele");
         }
+
+
+           if(this.goldenRichesUsersService.suppliedEmailExists(request.getEmailAddress())){
+               response.setStatusCode(StatusCodeEnum.NOTFOUND.getStatusCode());
+               response.setMessage("Supplied EmailAddress Already Exist on the System");
+               return registerResponse(model, response);
+           }
 
 
         try {
