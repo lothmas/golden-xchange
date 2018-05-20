@@ -84,6 +84,8 @@ public class MainList {
 
     protected  int daysRemaining;
 
+    protected int enabled;
+
     /**
      * Gets the value of the username property.
      * 
@@ -362,5 +364,13 @@ public class MainList {
 
     public void setDaysRemaining(int daysRemaining) {
         this.daysRemaining = daysRemaining;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 }

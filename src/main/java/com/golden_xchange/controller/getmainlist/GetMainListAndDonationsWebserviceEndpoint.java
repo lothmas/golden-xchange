@@ -225,6 +225,7 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             mainLists.setStatus(retunedList.getStatus());
             mainLists.setPayerUsername(retunedList.getPayerUsername());
             mainLists.setAmountToReceive(retunedList.getAmountToReceive());
+            mainLists.setEnabled(retunedList.getEnabled());
             LocalDateTime endDate = LocalDateTime.now();
             long numberOfDays = Duration.between(retunedList.getUpdatedDate().toLocalDateTime(), endDate).toDays();
             mainLists.setDaysRemaining(30 - (int) numberOfDays - 2);

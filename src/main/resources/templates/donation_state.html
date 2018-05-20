@@ -132,7 +132,7 @@
 
 
                                                     <div>
-                                                        <div>
+                                                        <div th:if="${result.enabled==1}">
                                                             <div>
                                                                 <div id="price">
                                                                     <div class="plan basic">
@@ -176,7 +176,7 @@
                                                                                     <p  class="text-danger " align="center"/>
                                                                                     <h4><p  class="text-danger " align="center" th:text="${'R'+result.maturityAmount}"/></h4>
 
-                                                                                    <button   name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}">Cancel Donation</button>
+                                                                                    <button   name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}">Cancel </button>
                                                                                     <input name="approver"  type="hidden" th:value="3"/>
                                                                                 </div>
                                                                                 <!--<div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status==0 &amp;&amp; result.donationType==2} ">-->
