@@ -73,9 +73,11 @@ public class CreateDonationWebserviceEndpoint {
             if (commonValidator(request, response))return errorResponse(model, response,session);
             try{
                 List<MainListEntity> paidDonations = this.donationService.outStandingPayment(request.getPayerUsername());
-                response.setMessage("You still have un-paid donations and can't make new ones until they are completed");
+                if(paidDonations.size()>2){
+                response.setMessage("You Can Only Have a Maximum of 3 Investments at a time. Either Cancel Some, Or Make Payments");
                 response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
                 return errorResponse(model, response,session);
+                }
             }
             catch(Exception ex){
                //do nothing
@@ -281,7 +283,7 @@ public class CreateDonationWebserviceEndpoint {
 
     private boolean commonValidator(CreateDonationRequest request, CreateDonationResponse response) {
         if(request.getAmount() < 350.0D) {
-            response.setMessage("Minimum Donation Amount is R500");
+            response.setMessage("Minimum Donation Amount is R350");
             response.setStatusCode(StatusCodeEnum.FORBIDDEN.getStatusCode());
             return true;
         }
