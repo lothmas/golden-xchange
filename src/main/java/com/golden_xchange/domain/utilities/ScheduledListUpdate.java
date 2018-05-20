@@ -155,9 +155,9 @@ public class ScheduledListUpdate {
 
 
     //    @Scheduled(cron = "0 0 0,12 ? * SUN,MON,TUE,WED,THU,FRI,SAT *")
-    @Scheduled(
-            fixedDelay = 600000L
-    )
+//    @Scheduled(
+//            fixedDelay = 600000L
+//    )
     public void assignDonations() {
 
         try {
