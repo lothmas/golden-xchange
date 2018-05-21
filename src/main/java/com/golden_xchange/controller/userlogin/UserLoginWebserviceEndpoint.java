@@ -90,6 +90,11 @@ public class UserLoginWebserviceEndpoint {
             try {
 
                 goldenRichesUsers = goldenRichesUsersService.findGoldenRichesUsersByUsernameAndPassword(username, password);
+                if(goldenRichesUsers.getEnabled()==0){
+                    response.setMessage("Your Account Has Been De-Activated, Suspicious Activities Identified.");
+                    response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
+                    return errorResponse(model, response);
+                }
                 response.setMessage("User: " + goldenRichesUsers.getUserName() + " Successfully LoggedIn");
                 response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
                 model.addAttribute("profile", goldenRichesUsers);
