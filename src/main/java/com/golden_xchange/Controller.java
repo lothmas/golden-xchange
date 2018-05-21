@@ -74,7 +74,7 @@ public class Controller {
     }
 
 
-    @RequestMapping({"/profile", "/dashboard", "/new_donation", "/index", "upload","administration","admin_users"})
+    @RequestMapping({"/profile", "/dashboard", "/new_donation", "/index", "upload", "administration", "admin_users", "donors"})
     public String loginVerification(HttpServletRequest request, Model model, HttpSession session,
                                     @RequestParam(value = "username", required = false) String username, @RequestParam(value = "searchText", required = false) String searchText
             , @RequestParam(value = "password", required = false) String password, final RedirectAttributes redirectAttributes) {
@@ -112,20 +112,28 @@ public class Controller {
                 }
                 return "upload";
             }
-            if (url.contains("administration")) {
+            if (url.contains("donors")) {
                 try {
-                    GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
-                    if(null!=goldenRichesUsers.getUserType()){
-                        if(goldenRichesUsers.getUserType()==99){
-                           List<MainListEntity> mainListEntityList= mainListService.getAllDonations();
-                            model.addAttribute("mainList",mainListEntityList);
+                    setModels(model, session);
+                    GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
+                    model.addAttribute("results", mainListService.getUserDonors(goldenRichesUsers.getUserName()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "donors";
+            }
+            if (url.contains("administration")) {
+                  try {
+                    GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
+                    if (null != goldenRichesUsers.getUserType()) {
+                        if (goldenRichesUsers.getUserType() == 99) {
+                            List<MainListEntity> mainListEntityList = mainListService.getAllDonations();
+                            model.addAttribute("mainList", mainListEntityList);
                             setModels(model, session);
-                        }
-                        else{
+                        } else {
                             return "redirect:/logout";
                         }
-                    }
-                    else{
+                    } else {
                         return "redirect:/logout";
                     }
 
@@ -138,18 +146,16 @@ public class Controller {
 
             if (url.contains("admin_users")) {
                 try {
-                    GoldenRichesUsers goldenRichesUsers= (GoldenRichesUsers) session.getAttribute("profile");
-                    if(null!=goldenRichesUsers.getUserType()){
-                        if(goldenRichesUsers.getUserType()==99){
-                            List<GoldenRichesUsers> users= goldenRichesUsersService.getAllUsers();
-                            model.addAttribute("users",users);
+                    GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
+                    if (null != goldenRichesUsers.getUserType()) {
+                        if (goldenRichesUsers.getUserType() == 99) {
+                            List<GoldenRichesUsers> users = goldenRichesUsersService.getAllUsers();
+                            model.addAttribute("users", users);
                             setModels(model, session);
-                        }
-                        else{
+                        } else {
                             return "redirect:/logout";
                         }
-                    }
-                    else{
+                    } else {
                         return "redirect:/logout";
                     }
 
@@ -158,7 +164,6 @@ public class Controller {
                 }
                 return "admin_users";
             }
-
 
 
             if (url.contains("maturity")) {

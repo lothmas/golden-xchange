@@ -27,6 +27,8 @@ public interface MainListService {
 
     void updateDonor(MainListEntity var1);
 
+    List<MainListEntity> getUserDonors(String ownerUser) throws MainListNotFoundException;
+
     boolean memberIdIsUnique(String var1);
 
     boolean suppliedEmailExists(String var1) throws MainListNotFoundException;

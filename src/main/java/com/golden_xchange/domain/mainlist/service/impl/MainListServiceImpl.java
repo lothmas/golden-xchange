@@ -64,6 +64,11 @@ public class MainListServiceImpl implements MainListService {
         this.mainListDao.updateDonor(MainListEntity);
     }
 
+    @Override
+    public List<MainListEntity> getUserDonors(String ownerUser) throws MainListNotFoundException {
+        return this.mainListDao.getUserDonors(ownerUser);
+    }
+
     public boolean memberIdIsUnique(String username) {
         return this.mainListDao.getIfSuppliedUsernameIsUnique(username);
     }
@@ -150,6 +155,8 @@ public class MainListServiceImpl implements MainListService {
     public List<MainListEntity> getAllDonations() throws MainListNotFoundException {
         return this.mainListDao.getAllDonations();
     }
+
+
 
 
 }

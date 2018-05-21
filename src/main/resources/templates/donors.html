@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	<title>MindSet 24-7 | Status</title>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="" name="description"/>
+	<meta content="" name="author" />
+
+	<!-- ================== BEGIN BASE CSS STYLE ================== -->
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+	<link href="../assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/font-awesome/5.0/css/fontawesome-all.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/animate/animate.min.css" rel="stylesheet" />
+	<link href="../assets/css/default/style.min.css" rel="stylesheet" />
+	<link href="../assets/css/default/style-responsive.min.css" rel="stylesheet" />
+	<link href="../assets/css/default/theme/default.css" rel="stylesheet" id="theme" />
+	<link href="../assets/css/pricing.css" rel="stylesheet"/>
+
+	<!-- ================== END BASE CSS STYLE ================== -->
+
+	<!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
+	<link href="../assets/plugins/jquery-jvectormap/jquery-jvectormap.css" rel="stylesheet" />
+	<link href="../assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="../assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" />
+	<!-- ================== END PAGE LEVEL STYLE ================== -->
+
+	<!-- ================== BEGIN BASE JS ================== -->
+	<script src="../assets/plugins/pace/pace.min.js"></script>
+	<!-- ================== END BASE JS ================== -->
+</head>
+<body>
+	<!-- begin #page-loader -->
+	<div id="page-loader" class="fade show"><span class="spinner"></span></div>
+	<!-- end #page-loader -->
+
+	<!-- begin #page-container -->
+	<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+		<!-- begin #header -->
+		<div class="container" th:include="fragments :: notifications" />
+
+		<!-- end #header -->
+
+		<!-- begin #sidebar -->
+		<div class="container" th:include="fragments :: sideBar" />
+
+		<div class="sidebar-bg"></div>
+		<!-- end #sidebar -->
+
+		<!-- begin #content -->
+		<div id="content" class="content">
+			<!-- begin breadcrumb -->
+			<!--<ol class="breadcrumb pull-right">-->
+				<!--<li class="breadcrumb-item"><a href="#">Home</a></li>-->
+				<!--<li class="breadcrumb-item active">Dashboard</li>-->
+			<!--</ol>-->
+			<!-- end breadcrumb -->
+			<!-- begin page-header -->
+			<h1 class="page-header">Your Current Donation Assignment </h1>
+			<!-- end page-header -->
+
+			<!-- begin row -->
+			<div  class="container-fluid hidden-xs hidden-sm" th:include="fragments :: desktopTabs" />
+
+			<!-- end row -->
+			<!-- begin row -->
+			<div class="row">
+				<!-- begin col-8 -->
+
+				<div class="col-lg-12">
+					<form action="#" data-th-action="@{./approveDonation}" th:object="${register}" method="post"
+						  enctype="multipart/form-data" class="margin-bottom-0">
+						<input name="requester" th:value="donation_state" type="hidden"/>
+
+						<!-- begin panel -->
+						<div class="panel panel-inverse" data-sortable-id="table-basic-7">
+							<!--<div th:if="${response.statusCode!=200}" class="alert alert-warning">-->
+							<!--<strong>Warning!</strong> <span th:text="${response.message}"></span>-->
+							<!--</div>    &lt;!&ndash; begin panel-heading &ndash;&gt;-->
+							<!--<div th:if="${response.statusCode==200}" class="alert alert-success">-->
+							<!--<strong>Warning!</strong> <span th:text="${response.message}"></span>-->
+							<!--</div>    &lt;!&ndash; begin panel-heading &ndash;&gt;-->
+							<div class="panel-heading">
+								<div class="panel-heading-btn">
+									<!--<a href="#" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>-->
+									<!--<a href="#" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>-->
+									<!--<a href="#" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>-->
+									<!--<a href="#" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>-->
+								</div>
+								<h4 class="panel-title">YOUR RECRUITS &amp; Expected Returns</h4>
+							</div>
+							<!-- end panel-heading -->
+							<!-- begin panel-body -->
+							<div class="panel-body">
+								<!-- begin table-responsive -->
+
+								<table id="data-table-select" class="table table-striped table-bordered">
+									<thead>
+									<tr>
+										<!--<th></th>-->
+										<!--<th width="1%" data-orderable="false">Donation Type</th>-->
+										<th>Recruit Name</th>
+										<th>Expected Donation</th>
+										<th>Amount You Will Receive 10% </th>
+										<th>Date Donation Created</th>
+										<th>Expected Maturity Date</th>
+
+										<!--<th width="1%"></th>-->
+									</tr>
+									</thead>
+									<th:block th:each="result, rowStat : ${results}" th:name="action"
+											  th:attr="action=${rowStat.index}">
+										<tr>
+											<td th:text="${result.userName}"/>
+											<td th:text="${result.donatedAmount}"/>
+											<td th:text="${result.donatedAmount * 0.10 }"/>
+											<td th:text="${result.updatedDate}"/>
+											<td th:text="${result.date}"/>
+										</tr>
+									</th:block>
+								</table>
+
+								<!-- Modal -->
+
+
+								<!-- end table-responsive -->
+
+							</div>
+							<!--<div th:if="sponsorResponse!=1" align="center">-->
+							<!--<div class="alert alert-info col-lg-12" >-->
+							<!--<strong>Info!</strong> <span>Make Payments to your Sponsors 1st to unlock the Donation List and wait approval by sponsors</span>-->
+							<!--</div>	&lt;!&ndash; begin panel-heading &ndash;&gt;-->
+							<!--<img src="../assets/img/intro-image-security.png" class="media-object" alt="" style="width:20%; height:20%"/>-->
+							<!--</div>-->
+							<!-- end panel-body -->
+							<!-- begin hljs-wrapper -->
+
+							<!-- end hljs-wrapper -->
+						</div>
+						<!-- end panel --> </form>
+				</div>
+
+
+				<!-- begin col-4 -->
+
+				<!-- end col-4 -->
+			</div>
+			<!-- end row -->
+		</div>
+		<!-- end #content -->
+
+        <!-- begin theme-panel -->
+
+        <!-- end theme-panel -->
+
+		<!-- begin scroll to top btn -->
+		<a href="#" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+		<!-- end scroll to top btn -->
+	</div>
+	<!-- end page container -->
+
+	<!-- ================== BEGIN BASE JS ================== -->
+	<script src="../assets/plugins/jquery/jquery-3.2.1.min.js"></script>
+	<script src="../assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+	<script src="../assets/plugins/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+	<!--[if lt IE 9]>
+		<script src="../assets/crossbrowserjs/html5shiv.js"></script>
+		<script src="../assets/crossbrowserjs/respond.min.js"></script>
+		<script src="../assets/crossbrowserjs/excanvas.min.js"></script>
+	<![endif]-->
+	<script src="../assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="../assets/plugins/js-cookie/js.cookie.js"></script>
+	<script src="../assets/js/theme/default.min.js"></script>
+	<script src="../assets/js/apps.min.js"></script>
+	<!-- ================== END BASE JS ================== -->
+
+	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+	<script src="../assets/plugins/gritter/js/jquery.gritter.js"></script>
+	<script src="../assets/plugins/flot/jquery.flot.min.js"></script>
+	<script src="../assets/plugins/flot/jquery.flot.time.min.js"></script>
+	<script src="../assets/plugins/flot/jquery.flot.resize.min.js"></script>
+	<script src="../assets/plugins/flot/jquery.flot.pie.min.js"></script>
+	<script src="../assets/plugins/sparkline/jquery.sparkline.js"></script>
+	<script src="../assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js"></script>
+	<script src="../assets/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="../assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script src="../assets/js/demo/dashboard.min.js"></script>
+	<!-- ================== END PAGE LEVEL JS ================== -->
+
+	<script src="../assets/plugins/DataTables/media/js/jquery.dataTables.js"></script>
+	<script src="../assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+	<script src="../assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js"></script>
+	<script src="../assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+	<script src="../assets/js/demo/table-manage-select.demo.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			App.init();
+            TableManageTableSelect.init();
+		});
+	</script>
+    <script> window.intergramId = "437066089"
+    window.intergramCustomizations = {
+        titleClosed: 'Closed chat title',
+        titleOpen: 'Opened chat title',
+        introMessage: 'Welcome to MindSet 24-7 How Can We Help You',
+        // autoResponse: 'Please Wait!! As The Next Free System Administrator Will Assist You Shortly',
+        autoNoResponse: 'We Are Experiencing High Volumes, Will Assist You Shortly',
+        // mainColor: "#e3e926", // Can be any css supported color 'red', 'rgb(255,87,34)', etc
+        alwaysUseFloatingButton: false // Use the mobile floating button also on large screens
+    };
+    </script>
+	<script id="intergram" type="text/javascript" src="https://www.intergram.xyz/js/widget.js"></script>
+</body>
+</html>

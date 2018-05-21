@@ -24,10 +24,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> implements MainListDao {
@@ -129,7 +126,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.eq("payerUsername", username))
-                .add(Restrictions.or(Restrictions.eq("donationType", 1), Restrictions.or(Restrictions.eq("donationType",2))))
+                .add(Restrictions.or(Restrictions.eq("donationType", 1), Restrictions.or(Restrictions.eq("donationType", 2))))
                 .add(Restrictions.ne("status", 3))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
                 .list();
@@ -194,7 +191,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     public List<MainListEntity> returnPendingPayerList(String payerUsername) throws MainListNotFoundException {
         List<MainListEntity> results = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.or(Restrictions.eq("payerUsername", payerUsername), Restrictions
-                .or(Restrictions.eq("userName",payerUsername))))
+                        .or(Restrictions.eq("userName", payerUsername))))
                 .list();
         if (results.isEmpty()) {
             throw new MainListNotFoundException("No PendigList found for username:" + payerUsername);
@@ -292,10 +289,10 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     public List<MainListEntity> findPaidDonationsPayerName(String payerUsername) throws MainListNotFoundException {
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("enabled", 1))
-                .add(Restrictions.ne("donationType",0))
-                .add(Restrictions.ne("status",0))
+                .add(Restrictions.ne("donationType", 0))
+                .add(Restrictions.ne("status", 0))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
-                .add(Restrictions.eq("payerUsername",payerUsername))
+                .add(Restrictions.eq("payerUsername", payerUsername))
                 .list();
         if (returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
@@ -306,21 +303,20 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     }
 
     @Override
-    public MainListEntity findDonationToStartMaturityProcess(String userName,double donatedAmount) throws MainListNotFoundException {
+    public MainListEntity findDonationToStartMaturityProcess(String userName, double donatedAmount) throws MainListNotFoundException {
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("enabled", 1))
-                .add(Restrictions.eq("donationType",0))
-                .add(Restrictions.eq("status",0))
+                .add(Restrictions.eq("donationType", 0))
+                .add(Restrictions.eq("status", 0))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
-                .add(Restrictions.eq("userName",userName))
-                .add(Restrictions.eq("donatedAmount",donatedAmount))
+                .add(Restrictions.eq("userName", userName))
+                .add(Restrictions.eq("donatedAmount", donatedAmount))
                 .list();
-        if (returnMainList.size() == 0 ) {
+        if (returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
-        }
-        else  if (returnMainList.size() >1 ) {
-            throw new MainListNotFoundException("More Than 1 transaction to update to start maturity for user: " +userName);
-        }else {
+        } else if (returnMainList.size() > 1) {
+            throw new MainListNotFoundException("More Than 1 transaction to update to start maturity for user: " + userName);
+        } else {
             return returnMainList.get(0);
         }
     }
@@ -330,14 +326,13 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.or(Restrictions.eq("status", 0), Restrictions
-                        .or(Restrictions.eq("status",1))))
+                        .or(Restrictions.eq("status", 1))))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
-                .add(Restrictions.eq("payerUsername",payerUsername))
+                .add(Restrictions.eq("payerUsername", payerUsername))
                 .list();
-        if (returnMainList.size() == 0 ) {
+        if (returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
-        }
-       else {
+        } else {
             return returnMainList;
         }
     }
@@ -348,12 +343,11 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
                 .add(Restrictions.eq("keeper", 1))
-                .add(Restrictions.eq("userName",username))
+                .add(Restrictions.eq("userName", username))
                 .list();
-        if (returnMainList.size() == 0 ) {
+        if (returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
-        }
-        else {
+        } else {
             return returnMainList;
         }
     }
@@ -365,10 +359,9 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.gt("adjustedAmount", 0.0))
                 .add(Restrictions.eq("status", 0))
                 .list();
-        if (returnMainList.size() == 0 ) {
+        if (returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
-        }
-        else {
+        } else {
             return returnMainList;
         }
     }
@@ -377,12 +370,41 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
     public List<MainListEntity> getAllDonations() throws MainListNotFoundException {
         List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
                 .list();
-        if (returnMainList.size() == 0 ) {
+        if (returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");
-        }
-        else {
+        } else {
             return returnMainList;
         }
+    }
+
+    @Override
+    public List<MainListEntity> getUserDonors(String ownerUser) throws MainListNotFoundException {
+        List<MainListEntity> returnMainList1 = new ArrayList<>();
+        List<GoldenRichesUsers> result = this.getCurrentSession().createCriteria(GoldenRichesUsers.class)
+                .add(Restrictions.eq("referenceUser", ownerUser))
+                .add(Restrictions.eq("enabled", 1))
+                .list();
+
+        Inner:
+        for (GoldenRichesUsers goldenRichesUsers : result) {
+            List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                    .add(Restrictions.eq("enabled", 1))
+                    .add(Restrictions.eq("userName", goldenRichesUsers.getUserName()))
+                    .addOrder(Order.asc("id"))
+                    .list();
+            if (returnMainList.size() != 0) {
+                Calendar c = Calendar.getInstance();
+                c.setTime(returnMainList.get(0).getUpdatedDate());
+                c.add(Calendar.MONTH, 1);
+                // convert calendar to date
+                Date currentDatePlusOne = c.getTime();
+                Timestamp sqlDate = new Timestamp(currentDatePlusOne.getTime());
+                returnMainList.get(0).setDate(sqlDate);
+                returnMainList1.add(returnMainList.get(0));
+            }
+        }
+        return returnMainList1;
+
     }
 
 
