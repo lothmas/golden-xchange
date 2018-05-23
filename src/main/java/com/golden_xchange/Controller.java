@@ -284,9 +284,12 @@ public class Controller {
 
     @RequestMapping(value = {"/reset"})
     public String resetLander(@RequestParam(value = "password", required = false) String password, Model model, HttpSession session) {
+        UserLoginResponse response = new UserLoginResponse();
+
         if (null != password) {
             session.setAttribute("resetPassword", password);
         }
+        model.addAttribute("response",response);
         return "reset";
     }
 
