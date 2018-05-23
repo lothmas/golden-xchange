@@ -30,6 +30,7 @@ public class GoldenRichesUsers {
     private String accountType;
     private String referenceUser;
     private Integer userType;
+    private String resetPassword;
 
     public GoldenRichesUsers() {
     }
@@ -198,6 +199,16 @@ public class GoldenRichesUsers {
     @Column(name = "user_type")
     public Integer getUserType() {
         return userType;
+    }
+
+    @Basic
+    @Column(name = "reset_password",  length = 500)
+    public String getResetPassword() {
+        return resetPassword;
+    }
+
+    public void setResetPassword(String resetPassword) {
+        this.resetPassword = resetPassword;
     }
 
     public void setUserType(Integer userType) {

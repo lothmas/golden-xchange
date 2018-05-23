@@ -68,7 +68,6 @@ public class UserLoginWebserviceEndpoint {
 
         model.addAttribute("login", new LoginRequest());
         String passwords = RandomStringUtils.randomAlphanumeric(10).toUpperCase();
-        String dbRestPassword = GeneralDomainFunctions.getCryptedPasswordAndSalt(passwords);
         if (action.equals("reset")) {
             try {
                 if (null == username || username.equals("")) {
@@ -96,7 +95,7 @@ public class UserLoginWebserviceEndpoint {
                         response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
                         return errorResponse(model, response);
                     }
-                    goldenRichesUsers.setPassword(dbRestPassword);
+                    goldenRichesUsers.setResetPassword(passwords);
                     goldenRichesUsersService.saveUser(goldenRichesUsers);
                     SendEmailMessages sendEmailMessages = new SendEmailMessages();
                     sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
@@ -112,7 +111,7 @@ public class UserLoginWebserviceEndpoint {
 
 
             }
-            goldenRichesUsers.setPassword(dbRestPassword);
+            goldenRichesUsers.setResetPassword(passwords);
             goldenRichesUsersService.saveUser(goldenRichesUsers);
             SendEmailMessages sendEmailMessages = new SendEmailMessages();
             sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
@@ -128,9 +127,25 @@ public class UserLoginWebserviceEndpoint {
                 response.setStatusCode(Enums.StatusCodeEnum.NOTAUTHORISED.getStatusCode());
                 model.addAttribute("response", response);
                 return "reset";
-            } else {
-                password = (String) session.getAttribute("resetPassword");
             }
+            String savedPassword = (String) session.getAttribute("resetPassword");
+            try{
+            goldenRichesUsers = goldenRichesUsersService.findUserByMemberId(username);}
+            catch (Exception ext){
+                goldenRichesUsers = goldenRichesUsersService.findUserByEmail(username);
+            }
+            if(savedPassword.equals(goldenRichesUsers.getResetPassword())){
+                 String dbRestPassword = GeneralDomainFunctions.getCryptedPasswordAndSalt(password);
+                 goldenRichesUsers.setPassword(dbRestPassword);
+                 goldenRichesUsersService.saveUser(goldenRichesUsers);
+            }
+            else {
+                response.setMessage("Invalid Password Reset");
+                response.setStatusCode(Enums.StatusCodeEnum.NOTAUTHORISED.getStatusCode());
+                model.addAttribute("response", response);
+                return "reset";
+            }
+
         }
 
         try {
@@ -171,7 +186,7 @@ public class UserLoginWebserviceEndpoint {
                 getNotifications(model, goldenRichesUsers, session);
 
                 if (action.equals("reset1")) {
-                    goldenRichesUsers.setPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(passwordConfirm));
+                    goldenRichesUsers.setResetPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(passwordConfirm));
                     goldenRichesUsersService.saveUser(goldenRichesUsers);
                 }
                 return "profile";
@@ -185,7 +200,7 @@ public class UserLoginWebserviceEndpoint {
         }
 
         if (action.equals("reset1")) {
-            goldenRichesUsers.setPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(passwordConfirm));
+            goldenRichesUsers.setResetPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(passwordConfirm));
             goldenRichesUsersService.saveUser(goldenRichesUsers);
         }
 

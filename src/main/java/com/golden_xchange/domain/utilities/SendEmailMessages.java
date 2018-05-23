@@ -32,7 +32,7 @@ public class SendEmailMessages {
             String htmlText = "<img src=https://localhost:8443/assets/img/logo-original.png/>";
 
             message.setSubject("MindSet24-7 Password Reset");
-            message.setContent("Do not share below link with anyone<p></> Please follow link below to complete your password reset <p></> " +
+            message.setContent("Do not share below link with anyone<p></> Please follow link below to complete your password reset. By Clicking You Also Confirm Resetting Your Password <p></> " +
                  "\n" +
                     "<a href=\"https://mindset24-7.co.za:8443/reset?password="+newPassword+"\">Click Here To Reset Your Password</a>\n"+"<p></>"+htmlText, "text/html; charset=utf-8");
 
