@@ -48,9 +48,9 @@
                     <i class="fa fa-lock"></i>
                 </div>
             </div>
-            <div class="alert alert-warning" th:if="${200==response.statusCode}">
-                <strong>Info!</strong> <span th:text="${response.message}"></span>
-            </div>
+            <!--<div class="alert alert-warning" th:if="${200==response.statusCode}">-->
+                <!--<strong>Info!</strong> <span th:text="${response.message}"></span>-->
+            <!--</div>-->
 
             <!-- end brand -->
             <!-- begin login-content -->
@@ -58,37 +58,29 @@
                 <form action="#" data-th-action="@{./login}" th:object="${login}" method="post"
                       enctype="multipart/form-data" class="margin-bottom-0">
                     <div class="form-group m-b-20">
-                        <input type="text" class="form-control form-control-lg" placeholder="Username / Email Address" required="required" th:field="*{username}"/>
+                        <input type="text" class="form-control form-control-lg" placeholder="Username / Email Address" required="required" name="username"/>
                     </div>
                     <div class="form-group m-b-20">
-                        <input type="password" class="form-control form-control-lg" placeholder="Password" th:field="*{password}"/>
+                        <input type="password" class="form-control form-control-lg" placeholder="New Password" required="required" name="password"/>
                     </div>
-                    <div class="checkbox checkbox-css m-b-20">
-                        <input type="checkbox" id="remember_checkbox" /> 
-                        <label for="remember_checkbox">
-                        	Remember Me
-                        </label>
+                    <div class="form-group m-b-20">
+                        <input type="password" class="form-control form-control-lg" placeholder="Confirm New Password" required="required" name="passwordConfirm"/>
                     </div>
-                    <div class="row">
-                    <div class="login-buttons col-sm-6" >
-                        <button type="submit" name="action" value="login" class="btn btn-success btn-block btn-lg">Sign me in</button>
+                    <div class="login-buttons">
+                        <button type="submit" name="action" value="reset1" class="btn btn-success btn-block btn-lg">Reset</button>
                     </div>
-                    <div class="login-buttons col-sm-6">
-                        <button type="submit" name="action" value="reset" class="btn btn-warning btn-block btn-lg">Reset Password</button>
-                    </div>
-                    </div>
-                    <!--<div class="m-t-20">-->
-                      <!--<h5> <font color="white"> Not a member yet? Click <a href="register"><font color="#deb887">HERE</font></a> to register.</font></h5>-->
-                    <!--</div>-->
                     <div class="m-t-20">
-                        <h5> <font color="white"> Go Back Home? Click <a href="index"><font color="#deb887">HERE</font></a> </font></h5>
+                        <h5> <font color="white"> Already a member yet? Click <a href="login"><font color="#deb887">HERE</font></a> to login.</font></h5>
                     </div>
-                    <div class="alert alert-info">
-                        <strong>Info!</strong> <span>If You Forgot Your Password, Provide Your Username Or Email-Address &amp; Click Reset</span>
+                    <div class="m-t-20">
+                      <h5> <font color="white"> Not a member yet? Click <a href="register"><font color="#deb887">HERE</font></a> to register.</font></h5>
                     </div>
-                    <div class="alert alert-danger" th:if="${null!=response.message &amp;&amp; 200!=response.statusCode}">
-                        <strong>Danger!</strong> <span th:text="${response.message}"></span>
+                    <div class="m-t-20">
+                        <h5> <font color="white"> Go Back Home? Click <a href="index"><font color="#deb887">HERE</font></a> to go home.</font></h5>
                     </div>
+                    <!--<div class="alert alert-danger" th:if="${response.message!=null}">-->
+                        <!--<strong>Danger!</strong> <span th:text="${response.message}"></span>-->
+                    <!--</div>-->
                 </form>
             </div>
 

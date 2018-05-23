@@ -4,19 +4,26 @@ package com.golden_xchange;
 import com.golden_xchange.controller.File;
 import com.golden_xchange.controller.JsonResponse;
 import com.golden_xchange.controller.createdonation.CreateDonationResponse;
+import com.golden_xchange.controller.createuser.CreateGoldenRichesUserResponse;
 import com.golden_xchange.controller.getbanknames.GetBankNameListResponse;
 import com.golden_xchange.controller.getbanknames.GetBankNameListWebserviceEndpoint;
+import com.golden_xchange.controller.userlogin.LoginRequest;
+import com.golden_xchange.controller.userlogin.UserLoginResponse;
 import com.golden_xchange.domain.mainlist.model.MainListEntity;
 import com.golden_xchange.domain.mainlist.service.MainListService;
 import com.golden_xchange.domain.upload.PaymentProofEntity;
 import com.golden_xchange.domain.upload.service.UploadService;
+import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundException;
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
+import com.golden_xchange.domain.utilities.Enums;
 import com.golden_xchange.domain.utilities.JsonObjectConversionUtility;
+import com.golden_xchange.domain.utilities.SendEmailMessages;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,9 +36,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -123,7 +132,7 @@ public class Controller {
                 return "donors";
             }
             if (url.contains("administration")) {
-                  try {
+                try {
                     GoldenRichesUsers goldenRichesUsers = (GoldenRichesUsers) session.getAttribute("profile");
                     if (null != goldenRichesUsers.getUserType()) {
                         if (goldenRichesUsers.getUserType() == 99) {
@@ -270,6 +279,83 @@ public class Controller {
 
         }
         return "upload";
+    }
+
+
+    @RequestMapping(value = {"/reset"})
+    public String resetLander(@RequestParam(value = "password", required = false) String password, Model model, HttpSession session) {
+        if (null != password) {
+            session.setAttribute("resetPassword", password);
+        }
+        return "reset";
+    }
+
+//    @RequestMapping(value = {"/reset"}, method = RequestMethod.POST)
+//    public String generateReport(@Valid LoginRequest loginRequest, Model model, HttpSession session,
+//                                 @RequestParam(value = "action", required = true) String action, @RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String password
+//            , @RequestParam(value = "passwordConfirm", required = false) String passwordConfirm) throws Exception {
+//
+//        UserLoginResponse response = new UserLoginResponse();
+//        GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
+//
+//
+//        model.addAttribute("login", new LoginRequest());
+//        String passwords = RandomStringUtils.randomAlphanumeric(10).toUpperCase();
+//        try {
+//            if (null == username || username.equals("")) {
+//                response.setMessage("Username / EmailAddress Can't be Left Empty");
+//                response.setStatusCode(Enums.StatusCodeEnum.EMPTYVALUE.getStatusCode());
+//                return errorResponse(model, response);
+//            }
+//
+//            goldenRichesUsers = goldenRichesUsersService.findUserByMemberId(username);
+//            if (goldenRichesUsers.getEnabled() == 0) {
+//                response.setMessage("Your Account Has Been De-Activated, Suspicious Activities Identified.");
+//                response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
+//                return errorResponse(model, response);
+//            }
+//            model.addAttribute("profile", goldenRichesUsers);
+//            session.setAttribute("profile", goldenRichesUsers);
+//
+//        } catch (GoldenRichesUsersNotFoundException exts) {
+//
+//            try {
+//
+//                goldenRichesUsers = goldenRichesUsersService.findUserByEmail(username);
+//                if (goldenRichesUsers.getEnabled() == 0) {
+//                    response.setMessage("You Can't Reset Your Password. Your Account Has Been De-Activated, Suspicious Activities Identified.");
+//                    response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
+//                    return errorResponse(model, response);
+//                }
+//                goldenRichesUsers.setPassword(passwords);
+//                goldenRichesUsersService.saveUser(goldenRichesUsers);
+//                SendEmailMessages sendEmailMessages = new SendEmailMessages();
+//                sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), goldenRichesUsers.getPassword());
+//                response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
+//                response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
+//                return "reset";
+//            } catch (GoldenRichesUsersNotFoundException unf) {
+//                response.setMessage("Provided Username / Email Does'nt Exist on the System");
+//                response.setStatusCode(Enums.StatusCodeEnum.NOTAUTHORISED.getStatusCode());
+//                return errorResponse(model, response);
+//            }
+//
+//
+//        }
+//        goldenRichesUsers.setPassword(passwords);
+//        goldenRichesUsersService.saveUser(goldenRichesUsers);
+//        SendEmailMessages sendEmailMessages = new SendEmailMessages();
+//        sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), goldenRichesUsers.getPassword());
+//        response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
+//        response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
+//
+//        //getNotifications(model, goldenRichesUsers, session);
+//        return "reset";
+//    }
+
+    private String errorResponse(Model model, UserLoginResponse response) {
+        model.addAttribute("response", response);
+        return "reset";
     }
 
 

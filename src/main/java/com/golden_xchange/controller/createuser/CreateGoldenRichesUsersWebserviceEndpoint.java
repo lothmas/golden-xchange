@@ -55,6 +55,8 @@ public class CreateGoldenRichesUsersWebserviceEndpoint {
         return "register";
     }
 
+
+
     @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
     @Transactional
     public String handleCreateGoldenRichesRequest(@Valid CreateGoldenRichesUserRequest request, Model model, HttpSession session, @RequestParam(value = "diallingCode", required = false) String diallingCode

@@ -12,6 +12,9 @@ import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundExcept
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import com.golden_xchange.domain.utilities.Enums;
+import com.golden_xchange.domain.utilities.GeneralDomainFunctions;
+import com.golden_xchange.domain.utilities.SendEmailMessages;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,13 +59,79 @@ public class UserLoginWebserviceEndpoint {
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.POST)
     public String generateReport(@Valid LoginRequest loginRequest, Model model, HttpSession session,
-                                 @RequestParam(value = "action", required = true) String action, @RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String password) throws Exception {
+                                 @RequestParam(value = "action", required = true) String action, @RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String password,
+                                 @RequestParam(value = "passwordConfirm", required = false) String passwordConfirm) throws Exception {
 
         UserLoginResponse response = new UserLoginResponse();
         GoldenRichesUsers goldenRichesUsers = new GoldenRichesUsers();
 
 
         model.addAttribute("login", new LoginRequest());
+        String passwords = RandomStringUtils.randomAlphanumeric(10).toUpperCase();
+        String dbRestPassword = GeneralDomainFunctions.getCryptedPasswordAndSalt(passwords);
+        if (action.equals("reset")) {
+            try {
+                if (null == username || username.equals("")) {
+                    response.setMessage("Username / EmailAddress Can't be Left Empty");
+                    response.setStatusCode(Enums.StatusCodeEnum.EMPTYVALUE.getStatusCode());
+                    return errorResponse(model, response);
+                }
+
+                goldenRichesUsers = goldenRichesUsersService.findUserByMemberId(username);
+                if (goldenRichesUsers.getEnabled() == 0) {
+                    response.setMessage("Your Account Has Been De-Activated, Suspicious Activities Identified.");
+                    response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
+                    return errorResponse(model, response);
+                }
+                model.addAttribute("profile", goldenRichesUsers);
+                session.setAttribute("profile", goldenRichesUsers);
+
+            } catch (GoldenRichesUsersNotFoundException exts) {
+
+                try {
+
+                    goldenRichesUsers = goldenRichesUsersService.findUserByEmail(username);
+                    if (goldenRichesUsers.getEnabled() == 0) {
+                        response.setMessage("You Can't Reset Your Password. Your Account Has Been De-Activated, Suspicious Activities Identified.");
+                        response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
+                        return errorResponse(model, response);
+                    }
+                    goldenRichesUsers.setPassword(dbRestPassword);
+                    goldenRichesUsersService.saveUser(goldenRichesUsers);
+                    SendEmailMessages sendEmailMessages = new SendEmailMessages();
+                    sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
+                    response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
+                    response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
+                    model.addAttribute("response", response);
+                    return "login";
+                } catch (GoldenRichesUsersNotFoundException unf) {
+                    response.setMessage("Provided Username / Email Does'nt Exist on the System");
+                    response.setStatusCode(Enums.StatusCodeEnum.NOTAUTHORISED.getStatusCode());
+                    return errorResponse(model, response);
+                }
+
+
+            }
+            goldenRichesUsers.setPassword(dbRestPassword);
+            goldenRichesUsersService.saveUser(goldenRichesUsers);
+            SendEmailMessages sendEmailMessages = new SendEmailMessages();
+            sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
+            response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
+            response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
+
+            //getNotifications(model, goldenRichesUsers, session);
+            model.addAttribute("response", response);
+            return "login";
+        } else if (action.equals("reset1")) {
+            if (!password.equals(passwordConfirm)) {
+                response.setMessage("Provided Username / Email Does'nt Exist on the System");
+                response.setStatusCode(Enums.StatusCodeEnum.NOTAUTHORISED.getStatusCode());
+                model.addAttribute("response", response);
+                return "reset";
+            } else {
+                password = (String) session.getAttribute("resetPassword");
+            }
+        }
 
         try {
             if (null == password || password.equals("")) {
@@ -77,7 +146,7 @@ public class UserLoginWebserviceEndpoint {
             }
 
             goldenRichesUsers = goldenRichesUsersService.findGoldenRichesUsersByEmailAndPassword(username, password);
-            if(goldenRichesUsers.getEnabled()==0){
+            if (goldenRichesUsers.getEnabled() == 0) {
                 response.setMessage("Your Account Has Been De-Activated, Suspicious Activities Identified.");
                 response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
                 return errorResponse(model, response);
@@ -90,7 +159,7 @@ public class UserLoginWebserviceEndpoint {
             try {
 
                 goldenRichesUsers = goldenRichesUsersService.findGoldenRichesUsersByUsernameAndPassword(username, password);
-                if(goldenRichesUsers.getEnabled()==0){
+                if (goldenRichesUsers.getEnabled() == 0) {
                     response.setMessage("Your Account Has Been De-Activated, Suspicious Activities Identified.");
                     response.setStatusCode(Enums.StatusCodeEnum.FORBIDDEN.getStatusCode());
                     return errorResponse(model, response);
@@ -101,6 +170,10 @@ public class UserLoginWebserviceEndpoint {
                 session.setAttribute("profile", goldenRichesUsers);
                 getNotifications(model, goldenRichesUsers, session);
 
+                if (action.equals("reset1")) {
+                    goldenRichesUsers.setPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(passwordConfirm));
+                    goldenRichesUsersService.saveUser(goldenRichesUsers);
+                }
                 return "profile";
             } catch (GoldenRichesUsersNotFoundException | NoSuchAlgorithmException unf) {
                 response.setMessage(unf.getMessage());
@@ -110,6 +183,12 @@ public class UserLoginWebserviceEndpoint {
 
 
         }
+
+        if (action.equals("reset1")) {
+            goldenRichesUsers.setPassword(GeneralDomainFunctions.getCryptedPasswordAndSalt(passwordConfirm));
+            goldenRichesUsersService.saveUser(goldenRichesUsers);
+        }
+
         response.setMessage("User: " + goldenRichesUsers.getUserName() + " Successfully LoggedIn");
         response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
 
@@ -145,6 +224,7 @@ public class UserLoginWebserviceEndpoint {
 
 
 }
+
 
 //Hibernate: create table bank_account (id integer not null, account_holder_name varchar(45) not null, account_number varchar(45) not null, bank_name varchar(45) not null, branch_number varchar(45) not null, email_address varchar(45) not null, enabled integer not null, first_name varchar(45) not null, gender varchar(45) not null, password varchar(45) not null, surname varchar(45) not null, telephone varchar(45) not null, username varchar(45) not null, primary key (id)) ENGINE=InnoDB
 //        Hibernate: create table bank_account_aud (id integer not null, rev integer not null, revtype tinyint, account_holder_name varchar(45), account_number varchar(45), bank_name varchar(45), branch_number varchar(45), email_address varchar(45), enabled integer, first_name varchar(45), gender varchar(45), password varchar(45), surname varchar(45), telephone varchar(45), username varchar(45), primary key (id, rev)) ENGINE=InnoDB
