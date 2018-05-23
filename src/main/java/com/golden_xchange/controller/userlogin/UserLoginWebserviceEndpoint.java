@@ -123,7 +123,7 @@ public class UserLoginWebserviceEndpoint {
             return "login";
         } else if (action.equals("reset1")) {
             if (!password.equals(passwordConfirm)) {
-                response.setMessage("Mismatched Passwords, Due To Security Restrictions You Will Have to Try Resetting Your Password Again Click Login & Restart Process");
+                response.setMessage("Mismatched Passwords, Try Again, with Matching Passwords");
                 response.setStatusCode(Enums.StatusCodeEnum.NOTAUTHORISED.getStatusCode());
                 model.addAttribute("response", response);
                 return "reset";
