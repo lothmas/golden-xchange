@@ -29,7 +29,7 @@ public class SendEmailMessages {
             message.setFrom(new InternetAddress("mindset24-7"));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse("lothmas@live.com"));
-            String htmlText = "<img src=https://localhost:8443/assets/img/logo-original.png/>";
+            String htmlText = "<img src=https://mindset24-7.co.za:8443/assets/img/logo-original.png/>";
 
             message.setSubject("MindSet24-7 Password Reset");
             message.setContent("Do not share below link with anyone<p></> Please follow link below to complete your password reset. By Clicking You Also Confirm Resetting Your Password <p></> " +
