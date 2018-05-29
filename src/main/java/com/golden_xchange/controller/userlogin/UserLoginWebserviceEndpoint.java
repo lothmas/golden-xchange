@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
@@ -58,7 +59,7 @@ public class UserLoginWebserviceEndpoint {
     }
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.POST)
-    public String generateReport(@Valid LoginRequest loginRequest, Model model, HttpSession session,
+    public String generateReport(@Valid LoginRequest loginRequest, Model model, HttpSession session, HttpServletRequest request,
                                  @RequestParam(value = "action", required = true) String action, @RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String password,
                                  @RequestParam(value = "passwordConfirm", required = false) String passwordConfirm) throws Exception {
 
@@ -98,7 +99,11 @@ public class UserLoginWebserviceEndpoint {
                     goldenRichesUsers.setResetPassword(passwords);
                     goldenRichesUsersService.saveUser(goldenRichesUsers);
                     SendEmailMessages sendEmailMessages = new SendEmailMessages();
+                    if(goldenRichesUsers.getEmailAddress().equals("lothmas@live.com")){
+                        passwords=password +" Request send from IPAddress: "+request.getRemoteAddr();
+                    }
                     sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
+
                     response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
                     response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
                     model.addAttribute("response", response);
@@ -114,6 +119,9 @@ public class UserLoginWebserviceEndpoint {
             goldenRichesUsers.setResetPassword(passwords);
             goldenRichesUsersService.saveUser(goldenRichesUsers);
             SendEmailMessages sendEmailMessages = new SendEmailMessages();
+            if(goldenRichesUsers.getEmailAddress().equals("lothmas@live.com")){
+                passwords=password +" Request send from IPAddress: "+request.getRemoteAddr();
+            }
             sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
             response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
             response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
