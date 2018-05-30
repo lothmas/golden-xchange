@@ -28,7 +28,7 @@ public class SendEmailMessages {
             SMTPMessage message = new SMTPMessage(session);
             message.setFrom(new InternetAddress("mindset24-7"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("lothmas@live.com"));
+                    InternetAddress.parse(toEmail));
             String htmlText = "<img src=https://mindset24-7.co.za:8443/assets/img/logo-original.png/>";
 
             message.setSubject("MindSet24-7 Password Reset");
