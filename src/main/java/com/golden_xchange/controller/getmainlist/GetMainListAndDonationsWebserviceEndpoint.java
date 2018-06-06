@@ -228,7 +228,15 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             mainLists.setEnabled(retunedList.getEnabled());
             LocalDateTime endDate = LocalDateTime.now();
             long numberOfDays = Duration.between(retunedList.getUpdatedDate().toLocalDateTime(), endDate).toDays();
-            mainLists.setDaysRemaining(30 - (int) numberOfDays - 2);
+
+            if((30 - (int) numberOfDays - 2)<0){
+                mainLists.setDaysRemaining(0);
+            }
+            else{
+                mainLists.setDaysRemaining(30 - (int) numberOfDays - 2);
+            }
+
+
 
             double percentage = (double) numberOfDays / 30 * retunedList.getAmountToReceive();
             if (numberOfDays <= 30) {
