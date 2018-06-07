@@ -221,11 +221,13 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             mainLists.setMainListReference(retunedList.getMainListReference());
             mainLists.setAccountType(checkUser.getAccountType());
             mainLists.setDepositReference(retunedList.getDepositReference());
+            mainLists.setDonationReference(retunedList.getDonationReference());
             mainLists.setDonationType(retunedList.getDonationType());
             mainLists.setStatus(retunedList.getStatus());
             mainLists.setPayerUsername(retunedList.getPayerUsername());
-            mainLists.setAmountToReceive(retunedList.getAmountToReceive());
+            mainLists.setAmountToReceive(retunedList.getDonatedAmount());
             mainLists.setEnabled(retunedList.getEnabled());
+            mainLists.setCreatedDate(retunedList.getDate());
             LocalDateTime endDate = LocalDateTime.now();
             long numberOfDays = Duration.between(retunedList.getUpdatedDate().toLocalDateTime(), endDate).toDays();
 

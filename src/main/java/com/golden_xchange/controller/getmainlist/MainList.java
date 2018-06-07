@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Date;
 
 
 /**
@@ -71,6 +72,8 @@ public class MainList {
     protected String accountType;
     @XmlElement(required = true)
     protected String depositReference;
+
+    protected Date createdDate;
 
     protected int donationType;
 
@@ -372,5 +375,14 @@ public class MainList {
 
     public void setEnabled(int enabled) {
         this.enabled = enabled;
+    }
+
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }

@@ -137,7 +137,8 @@
                                                                 <div id="price">
                                                                     <div class="plan basic">
                                                                         <div class="plan-inner">
-                                                                            <div class="hot" th:text="${'Payer          : '+result.payerUsername}"></div>
+                                                                            <div class="hot" th:if="${result.donationType==1}" th:text="${'Payer          : '+result.payerUsername}"></div>
+                                                                            <div class="hot" th:if="${result.donationType==0}">Donation to Receive with 80% Interest</div>
                                                                             <div class="entry-title">
                                                                                 <div align="left" width="1%" class="with-img" th:if="${result.donationType==1}"><img
                                                                                         src="../assets/img/user/user-1.jpg" class="img-rounded height-30"/></div>
@@ -146,6 +147,16 @@
                                                                                 <h3 th:text="${'Deposit Ref: '+result.depositReference}"></h3>
                                                                                 <div class="price" th:text="${'R'+result.amount}"><span  >/PER CAR</span>
                                                                                 </div>
+                                                                                <!--<div class="hot" th:if="${result.donationType==0}" th:text="${'R'+result.amountToReceive}" >Donation to Receive with 80% Interest</div>-->
+
+                                                                            </div>
+                                                                            <div class="entry-content" th:if="${result.donationType==0}">
+                                                                                <ul>
+                                                                                    <li><strong>Donated Amount: </strong> <span th:text="${'R'+result.amountToReceive}"/></li>
+                                                                                    <li><strong>Main Reference: </strong> <span th:text="${result.mainListReference}"/></li>
+                                                                                    <!--<li><strong>Donation Reference: </strong> <span th:text="${result.donationReference}"/></li>-->
+                                                                                    <li><strong>Date Created:</strong> <span th:text="${': '+result.createdDate}"/></li>
+                                                                                </ul>
                                                                             </div>
                                                                             <div class="entry-content" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp; result.status!=0}">
                                                                                 <ul>
