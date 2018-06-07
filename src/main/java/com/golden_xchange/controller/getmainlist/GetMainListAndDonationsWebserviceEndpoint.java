@@ -225,7 +225,8 @@ public class GetMainListAndDonationsWebserviceEndpoint {
             mainLists.setDonationType(retunedList.getDonationType());
             mainLists.setStatus(retunedList.getStatus());
             mainLists.setPayerUsername(retunedList.getPayerUsername());
-            mainLists.setAmountToReceive(retunedList.getDonatedAmount());
+            mainLists.setAmountToReceive(retunedList.getAmountToReceive());
+            mainLists.setDonatedAmount(retunedList.getDonatedAmount());
             mainLists.setEnabled(retunedList.getEnabled());
             mainLists.setCreatedDate(retunedList.getDate());
             LocalDateTime endDate = LocalDateTime.now();

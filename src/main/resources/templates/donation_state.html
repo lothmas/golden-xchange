@@ -152,7 +152,7 @@
                                                                             </div>
                                                                             <div class="entry-content" th:if="${result.donationType==0}">
                                                                                 <ul>
-                                                                                    <li><strong>Donated Amount: </strong> <span th:text="${'R'+result.amountToReceive}"/></li>
+                                                                                    <li><strong>Donated Amount: </strong> <span th:text="${'R'+result.donatedAmount}"/></li>
                                                                                     <li><strong>Main Reference: </strong> <span th:text="${result.mainListReference}"/></li>
                                                                                     <!--<li><strong>Donation Reference: </strong> <span th:text="${result.donationReference}"/></li>-->
                                                                                     <li><strong>Date Created:</strong> <span th:text="${': '+result.createdDate}"/></li>

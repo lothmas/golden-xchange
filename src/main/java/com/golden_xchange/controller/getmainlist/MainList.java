@@ -73,6 +73,8 @@ public class MainList {
     @XmlElement(required = true)
     protected String depositReference;
 
+    protected Double donatedAmount;
+
     protected Date createdDate;
 
     protected int donationType;
@@ -384,5 +386,13 @@ public class MainList {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Double getDonatedAmount() {
+        return donatedAmount;
+    }
+
+    public void setDonatedAmount(Double donatedAmount) {
+        this.donatedAmount = donatedAmount;
     }
 }
