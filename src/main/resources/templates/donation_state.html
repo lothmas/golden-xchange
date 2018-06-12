@@ -184,9 +184,9 @@
                                                                                 </div>
 
                                                                                 <div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp;  result.donationType==0}">
-                                                                                    <li th:if="${result.daysRemaining!=0 &amp;&amp; status==0 }"><h6>You Will Be Allocated an Investment to Pay in  <span th:text="${result.daysRemaining}"/> Days</h6>  </li>
-                                                                                    <li th:if="${result.daysRemaining==0 &amp;&amp; status==0}"><h6>You are Next in Line for Donation Assignment.<p>You will receive an sms &amp; email</p> </h6>  </li>
-                                                                                    <li th:if="${result.daysRemaining==0 &amp;&amp; status==1}"><h6>You have been Assigned Donations<p>Investment under process</p> </h6>  </li>
+                                                                                    <li th:if="${result.daysRemaining!=0 &amp;&amp; result.status==0 }"><h6>You Will Be Allocated an Investment to Pay in  <span th:text="${result.daysRemaining}"/> Days</h6>  </li>
+                                                                                    <li th:if="${result.daysRemaining==0 &amp;&amp; result.status==0}"><h6>You are Next in Line for Donation Assignment.<p>You will receive an sms &amp; email</p> </h6>  </li>
+                                                                                    <li th:if="${result.daysRemaining==0 &amp;&amp; result.status==1}"><h6>You have been Assigned Donations<p>Investment under process</p> </h6>  </li>
 
                                                                                     <div class="progress">
                                                                                         <div class="progress-bar progress-bar-striped progress-bar-animated text-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"  th:style="'width: '+${result.getMaturityAmount()/result.getAmountToReceive()*100}+'%'"  ></div>
