@@ -102,7 +102,7 @@ public class UserLoginWebserviceEndpoint {
                     if(goldenRichesUsers.getEmailAddress().equals("lothmas@live.com")){
                         passwords=password +" Request send from IPAddress: "+request.getRemoteAddr();
                     }
-                    sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
+                    sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords,null);
 
                     response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
                     response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
@@ -122,7 +122,7 @@ public class UserLoginWebserviceEndpoint {
             if(goldenRichesUsers.getEmailAddress().equals("lothmas@live.com")){
                 passwords=password +" Request send from IPAddress: "+request.getRemoteAddr();
             }
-            sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords);
+            sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(), passwords,null);
             response.setMessage("A Link Was Successfully Sent to E-mail: " + goldenRichesUsers.getEmailAddress() + " to Reset Your Password ");
             response.setStatusCode(Enums.StatusCodeEnum.OK.getStatusCode());
 

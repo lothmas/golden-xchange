@@ -272,7 +272,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 //                    .add(Restrictions.gt("updatedDate", cal.getTime()))
                     .add(Restrictions.eq("donationType", 0))
                     .add(Restrictions.eq("enabled", 1))
-//                    .addOrder(Order.desc("updatedDate"))
+                    .addOrder(Order.asc("id"))
                     .list();
         } catch (Exception exp) {
             throw new MainListNotFoundException("No MainListFound found:");
@@ -308,7 +308,7 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.eq("donationType", 0))
                 .add(Restrictions.eq("status", 0))
-                .add(Restrictions.gt("adjustedAmount", 0.0))
+//                .add(Restrictions.gt("adjustedAmount", 0.0))
                 .add(Restrictions.eq("userName", userName))
                 .add(Restrictions.eq("donatedAmount", donatedAmount))
                 .list();
@@ -358,6 +358,22 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
                 .add(Restrictions.eq("enabled", 1))
                 .add(Restrictions.gt("adjustedAmount", 0.0))
                 .add(Restrictions.eq("status", 0))
+                .list();
+        if (returnMainList.size() == 0) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        } else {
+            return returnMainList;
+        }
+    }
+
+    @Override
+    public List<MainListEntity> pendingPayment() throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", 1))
+                .add(Restrictions.eq("status", 0))
+                .add(Restrictions.gt("adjustedAmount", 0.0))
+                .add(Restrictions.eq("donationType", 0))
+                .addOrder(Order.asc("id"))
                 .list();
         if (returnMainList.size() == 0) {
             throw new MainListNotFoundException("No MainListFound found:");

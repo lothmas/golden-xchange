@@ -61,9 +61,11 @@ public class ScheduledListUpdate {
     public ScheduledListUpdate() {
     }
 
-//    @Scheduled(
-//            fixedDelay = 60000L
-//    )
+
+    //1 hour
+    @Scheduled(
+            fixedDelay = 3600000L
+    )
     public void updateMainList() {
         this.schedulerLog.info("started SchedulerListUpdate");
 
@@ -86,16 +88,24 @@ public class ScheduledListUpdate {
                         this.schedulerLog.info("mainRef: " + upDate.getMainListReference() + " lapsed by: " + numberOfHours + " hours");
                         if (numberOfHours >= 12L) {
                             new MainListEntity();
+                            upDate.setEnabled(0);
                             upDate.setStatus(4);
                             upDate.setUpdatedDate(sqlDate);
                             this.mainListService.saveUser(upDate);
-                            if (upDate.getDonationType() == 0) {
+
+
+
+                            if (upDate.getDonationType() == 1 || upDate.getDonationType() == 2) {
                                 MainListEntity reverseDonation = this.mainListService.findDonationByMainListReference(upDate.getDonationReference());
                                 reverseDonation.setAdjustedAmount(reverseDonation.getAdjustedAmount() + upDate.getDonatedAmount());
-                                reverseDonation.setUpdatedDate(sqlDate);
+                                //reverseDonation.setUpdatedDate(sqlDate);
                                 this.mainListService.saveUser(reverseDonation);
                             }
                             this.schedulerLog.info("Rolled Back Donation MainRef: " + upDate.getMainListReference() + " DonationRef: " + upDate.getDonationReference() + " amount rolled back: " + upDate.getDonatedAmount());
+
+                            GoldenRichesUsers goldenRichesUsers =goldenRichesUsersService.findUserByMemberId(upDate.getPayerUsername());
+                            goldenRichesUsers.setEnabled(0);
+                            goldenRichesUsersService.saveUser(goldenRichesUsers);
                         }
 
                     }
@@ -154,14 +164,14 @@ public class ScheduledListUpdate {
     }
 
 
-    //    @Scheduled(cron = "0 0 0,12 ? * SUN,MON,TUE,WED,THU,FRI,SAT *")
-//    @Scheduled(
-//            fixedDelay = 600000L
-//    )
+    //20 minutes
+    @Scheduled(
+            fixedDelay = 1200000L
+    )
     public void assignDonations() {
 
         try {
-            List<MainListEntity> returnMainList = this.mainListService.donationsToReverse();
+            List<MainListEntity> returnMainList = this.mainListService.pendingPayment();
 
             for (MainListEntity pending : returnMainList) {
                 LocalDateTime endDate = LocalDateTime.now();
@@ -186,9 +196,7 @@ public class ScheduledListUpdate {
                         if (returnedSponsor.size() == 0 || returnedSponsor.get(0).getDonatedAmount() != (0.1D * pending.getDonatedAmount())) {
                             GoldenRichesUsers receiverProfile = goldenRichesUsersService.findUserByMemberId(sponsorProfile.getReferenceUser());
                             createInvester(pending, sqlDate, 0.1D, receiverProfile);
-                            amountPaidToSponsor = 0.1D * pending.getDonatedAmount();
-                        } else {
-                            amountPaidToSponsor = 0.1D * pending.getDonatedAmount();
+                           // amountPaidToSponsor = 0.1D * pending.getDonatedAmount();
                         }
                     }
 
@@ -196,19 +204,14 @@ public class ScheduledListUpdate {
                         double alreadyReservedAmount = 0;
 
                         if (checkDateLimit(donateTo.getUpdatedDate())) {
-                            List<MainListEntity> returnedSponsor = mainListService.findDonorsByDonationReference(donateTo.getMainListReference());
-                            for (MainListEntity alreadyReserved : returnedSponsor) {
-                                if (alreadyReserved.getDonationType() == 2) {
-                                    alreadyReservedAmount = alreadyReservedAmount + alreadyReserved.getDonatedAmount();
-                                }
-                            }
-                            if (pending.getAdjustedAmount() > 0 && !((alreadyReservedAmount + amountPaidToSponsor) >= pending.getDonatedAmount())) {
-                                double amoutToDonate = pending.getDonatedAmount() - amountPaidToSponsor;
-                                if (pending.getDonatedAmount() < donateTo.getAdjustedAmount()) {
-                                    createMainInvester(pending, sqlDate, amoutToDonate, sponsorProfile, donateTo);
-                                } else {
-                                    createMainInvester(pending, sqlDate, donateTo.getAdjustedAmount(), sponsorProfile, donateTo);
-                                }
+                         //   List<MainListEntity> returnedSponsor = mainListService.findDonorsByDonationReference(donateTo.getMainListReference());
+//                            for (MainListEntity alreadyReserved : returnedSponsor) {
+//                                if (alreadyReserved.getDonationType() == 2) {
+//                                    alreadyReservedAmount = alreadyReservedAmount + alreadyReserved.getDonatedAmount();
+//                                }
+//                            }
+                            if (pending.getAdjustedAmount() > 0 ) {
+                                createMainInvester(pending, sqlDate, donateTo.getAdjustedAmount(), sponsorProfile, donateTo);
                             }
                         }
                     }
@@ -261,35 +264,70 @@ public class ScheduledListUpdate {
         mainListEntity.setPayerUsername(request.getUserName());
         mainListEntity.setDonationType(1);
         mainListService.saveUser(mainListEntity);
+
+
+
+        double reduceDonatedAmount = request.getAdjustedAmount() - (sponsorPercentage * request.getDonatedAmount());
+        request.setAdjustedAmount(reduceDonatedAmount);
+        mainListService.saveUser(request);
+
+
         createNotificationMessage(request.getPayerUsername(), mainListEntity);
         sendMessage(mainListEntity);
     }
 
 
     private void createMainInvester(MainListEntity donateFrom, Timestamp sqlDate, double amountToDonate, GoldenRichesUsers sponsorProfile, MainListEntity donateTo) {
-        MainListEntity mainListEntity = new MainListEntity();
-        mainListEntity.setStatus(0);
-        mainListEntity.setUpdatedDate(sqlDate);
-        mainListEntity.setAdjustedAmount(amountToDonate);
-        mainListEntity.setDonatedAmount(amountToDonate);
-        mainListEntity.setEnabled(1);
-        mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
-        mainListEntity.setAmountToReceive(amountToDonate);
-        mainListEntity.setDate(sqlDate);
-        mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-        mainListEntity.setDonationReference(donateTo.getMainListReference());
-        mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-        mainListEntity.setUserName(sponsorProfile.getUserName());
-        mainListEntity.setPayerUsername(donateFrom.getUserName());
-        mainListEntity.setDonationType(2);
-        mainListService.saveUser(mainListEntity);
+        double adjustAmount=donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount();
+       if(((donateTo.getAdjustedAmount()-donateFrom.getAdjustedAmount())>=350 ||
+               (donateTo.getAdjustedAmount()-donateFrom.getAdjustedAmount()==0) ||(donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>350)) ) {
 
-        double reduceDonatedAmount = donateTo.getAdjustedAmount() - amountToDonate;
-        donateTo.setAdjustedAmount(reduceDonatedAmount);
-        mainListService.saveUser(donateTo);
 
-        createNotificationMessage(donateFrom.getPayerUsername(), mainListEntity);
-        sendMessage(mainListEntity);
+           if((donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>350)){
+               donateFrom.setAdjustedAmount(donateTo.getAdjustedAmount());
+           }
+
+
+           MainListEntity mainListEntity = new MainListEntity();
+           mainListEntity.setStatus(0);
+           mainListEntity.setUpdatedDate(sqlDate);
+           mainListEntity.setAdjustedAmount(donateFrom.getAdjustedAmount());
+           mainListEntity.setDonatedAmount(donateFrom.getAdjustedAmount());
+           mainListEntity.setEnabled(1);
+           mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
+           mainListEntity.setAmountToReceive(donateFrom.getAdjustedAmount());
+           mainListEntity.setDate(sqlDate);
+           mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+           mainListEntity.setDonationReference(donateTo.getMainListReference());
+           mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+           mainListEntity.setUserName(donateTo.getUserName());
+           mainListEntity.setPayerUsername(donateFrom.getUserName());
+           mainListEntity.setDonationType(2);
+           mainListService.saveUser(mainListEntity);
+
+           double reduceDonatedAmount = donateTo.getAdjustedAmount() - donateFrom.getAdjustedAmount();
+           donateTo.setAdjustedAmount(reduceDonatedAmount);
+           mainListService.saveUser(donateTo);
+
+           if((donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>350)){
+               if(adjustAmount<-1){
+                   donateFrom.setAdjustedAmount(0);
+               }else{
+                   donateFrom.setAdjustedAmount(adjustAmount);
+               }
+           }
+           else{
+               double reduceDonatedAmount1 = donateFrom.getAdjustedAmount() - donateFrom.getAdjustedAmount();
+               donateFrom.setAdjustedAmount(reduceDonatedAmount1);
+           }
+
+           mainListService.saveUser(donateFrom);
+
+           createNotificationMessage(donateFrom.getPayerUsername(), mainListEntity);
+           sendMessage(mainListEntity);
+       }
+
+
     }
 
     private void createNotificationMessage(String payerUsername, MainListEntity mainListEntity) {
@@ -300,14 +338,15 @@ public class ScheduledListUpdate {
         notificationsEntity.setStatus(0);
         notificationsEntity.setMainListRef(mainListEntity.getMainListReference());
         notificationsService.save(notificationsEntity);
-
     }
 
     private void sendMessage(MainListEntity createDonation) {
         try {
             SendSms send = new SendSms();
+            SendEmailMessages sendEmailMessages=new SendEmailMessages();
             GoldenRichesUsers goldenRichesUsers = goldenRichesUsersService.findUserByMemberId(createDonation.getUserName());
-            send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "Golden-Xchange Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
+            send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "MindSet24-7: Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
+            sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(),"","MindSet24-7: Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
         } catch (Exception var11) {
             //do nothing
         }

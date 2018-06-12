@@ -17,6 +17,7 @@ import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import com.golden_xchange.domain.utilities.Enums;
 import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
+import com.golden_xchange.domain.utilities.SendEmailMessages;
 import com.golden_xchange.domain.utilities.SendSms;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +109,7 @@ public class CreateDonationWebserviceEndpoint {
             MainListEntity mainListEntity = new MainListEntity();
             mainListEntity.setStatus(0);
             mainListEntity.setUpdatedDate(sqlDate);
-            mainListEntity.setAdjustedAmount(request.getAmount() + 0.8D * request.getAmount());
+            mainListEntity.setAdjustedAmount(request.getAmount());
             mainListEntity.setDonatedAmount(request.getAmount());
             mainListEntity.setEnabled(1);
             mainListEntity.setBankAccountNumber(goldenRichesUsers.getAccountNumber());
@@ -279,8 +280,10 @@ public class CreateDonationWebserviceEndpoint {
     private void sendMessage(CreateDonationRequest request, MainListEntity createDonation) {
         try {
             SendSms send = new SendSms();
+            SendEmailMessages sendEmailMessages=new SendEmailMessages();
             GoldenRichesUsers goldenRichesUsers = goldenRichesUsersService.findUserByMemberId(createDonation.getUserName());
-            send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "Golden-Xchange Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
+            send.send("sendSms.sh", goldenRichesUsers.getTelephoneNumber(), "MindSet24-7: Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
+            sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(),"","MindSet24-7: Donation Created [" + createDonation.getUpdatedDate() + "]." + " DepositReference: " + createDonation.getDepositReference() + " AmountToPay: R" + createDonation.getDonatedAmount() + ". Confirm Before Payment [expires in 12hrs]");
         } catch (Exception var11) {
             //do nothing
         }

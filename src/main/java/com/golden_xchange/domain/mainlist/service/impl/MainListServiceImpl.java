@@ -152,6 +152,12 @@ public class MainListServiceImpl implements MainListService {
     }
 
     @Override
+    public List<MainListEntity> pendingPayment() throws MainListNotFoundException {
+        return this.mainListDao.pendingPayment();
+    }
+
+
+    @Override
     public List<MainListEntity> getAllDonations() throws MainListNotFoundException {
         return this.mainListDao.getAllDonations();
     }

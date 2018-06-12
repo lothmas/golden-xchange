@@ -15,6 +15,7 @@ import com.golden_xchange.domain.users.exception.GoldenRichesUsersNotFoundExcept
 import com.golden_xchange.domain.users.model.GoldenRichesUsers;
 import com.golden_xchange.domain.users.service.GoldenRichesUsersService;
 import com.golden_xchange.domain.utilities.Enums.StatusCodeEnum;
+import com.golden_xchange.domain.utilities.SendEmailMessages;
 import com.golden_xchange.domain.utilities.SendSms;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,9 +120,12 @@ public class ApproveDonationWebserviceEndpoint {
 
                 if(null!=goldenRichesUsers1) {
                     SendSms send = new SendSms();
-                    send.send("sendSms.sh", goldenRichesUsers1.getTelephoneNumber(), "Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+                    SendEmailMessages sendEmailMessages=new SendEmailMessages();
+                    send.send("sendSms.sh", goldenRichesUsers1.getTelephoneNumber(), "MindSet24-7: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+                    sendEmailMessages.sendMessage(goldenRichesUsers.getEmailAddress(),"","MindSet24-7: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+
                 }
-                LOG.info("MSG SENT: Golden-Xchange: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
+                LOG.info("MSG SENT: MindSet24-7: Deposit Confirmed [" + mainListEntity.getUpdatedDate() + "]." + " DepositReference: " + mainListEntity.getDepositReference() + ". AmountPayed: " + mainListEntity.getDonatedAmount() + ". Confirm in Your Account and Update The System");
 
 
                 response.setMessage("Payer Has Approved Payment For Deposit Reference: " + request.getDepositReference());
@@ -168,6 +172,7 @@ public class ApproveDonationWebserviceEndpoint {
                     MainListEntity mainListEntity3 = mainListService.findDonationToStartMaturityProcess(mainListEntity.getPayerUsername(),amountToPay);
                     if (amountToPay - mainListEntity3.getDonatedAmount() == 0.0) {
                         mainListEntity3.setStatus(1);
+                        mainListEntity3.setAdjustedAmount(mainListEntity3.getAmountToReceive());
                         mainListService.saveUser(mainListEntity3);
                     }
 
