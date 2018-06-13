@@ -423,6 +423,42 @@ public class MainListDaoImpl extends AbstractDaoImpl<MainListEntity, Integer> im
 
     }
 
+    @Override
+    public List<MainListEntity> closeCompletedDonations() throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", 1))
+                .add(Restrictions.eq("status", 1))
+                .add(Restrictions.eq("adjustedAmount", 0.0))
+                .add(Restrictions.eq("donationType", 0))
+                .addOrder(Order.asc("id"))
+                .list();
+        if (returnMainList.size() == 0) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        } else {
+            return returnMainList;
+        }
+    }
+
+    @Override
+    public MainListEntity findSponsorDonation(String userName, double donatedAmount) throws MainListNotFoundException {
+        List<MainListEntity> returnMainList = this.getCurrentSession().createCriteria(MainListEntity.class)
+                .add(Restrictions.eq("enabled", 1))
+                .add(Restrictions.eq("donationType", 1))
+                .add(Restrictions.or(Restrictions.eq("status", 2), Restrictions
+                        .or(Restrictions.eq("status", 3))))
+//                .add(Restrictions.gt("adjustedAmount", 0.0))
+                .add(Restrictions.eq("userName", userName))
+                .add(Restrictions.eq("donatedAmount", donatedAmount))
+                .list();
+        if (returnMainList.size() == 0) {
+            throw new MainListNotFoundException("No MainListFound found:");
+        } else if (returnMainList.size() > 1) {
+            throw new MainListNotFoundException("More Than 1 transaction to update to start maturity for user: " + userName);
+        } else {
+            return returnMainList.get(0);
+        }
+    }
+
 
 }
 

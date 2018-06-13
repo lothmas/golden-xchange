@@ -70,6 +70,12 @@ public interface MainListService {
 
     List<MainListEntity> getAllDonations() throws MainListNotFoundException;
 
+    List<MainListEntity> closeCompletedDonations() throws MainListNotFoundException;
+
+    public MainListEntity findSponsorDonation(String userName,double donatedAmount) throws MainListNotFoundException;
+
+
+
 
 }
 

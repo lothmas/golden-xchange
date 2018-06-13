@@ -162,7 +162,15 @@ public class MainListServiceImpl implements MainListService {
         return this.mainListDao.getAllDonations();
     }
 
+    @Override
+    public List<MainListEntity> closeCompletedDonations() throws MainListNotFoundException {
+        return this.mainListDao.closeCompletedDonations();
+    }
 
+    @Override
+    public MainListEntity findSponsorDonation(String userName, double donatedAmount) throws MainListNotFoundException {
+        return this.mainListDao.findSponsorDonation(userName,donatedAmount);
+    }
 
 
 }

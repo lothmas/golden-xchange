@@ -279,11 +279,11 @@ public class ScheduledListUpdate {
 
     private void createMainInvester(MainListEntity donateFrom, Timestamp sqlDate, double amountToDonate, GoldenRichesUsers sponsorProfile, MainListEntity donateTo) {
         double adjustAmount=donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount();
-       if(((donateTo.getAdjustedAmount()-donateFrom.getAdjustedAmount())>=350 ||
-               (donateTo.getAdjustedAmount()-donateFrom.getAdjustedAmount()==0) ||(donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>350)) ) {
+       if(((donateTo.getAdjustedAmount()-donateFrom.getAdjustedAmount())>=150 ||
+               (donateTo.getAdjustedAmount()-donateFrom.getAdjustedAmount()==0) ||(donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>=150)) ) {
 
 
-           if((donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>350)){
+           if((donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>=150)){
                donateFrom.setAdjustedAmount(donateTo.getAdjustedAmount());
            }
 
@@ -303,13 +303,16 @@ public class ScheduledListUpdate {
            mainListEntity.setUserName(donateTo.getUserName());
            mainListEntity.setPayerUsername(donateFrom.getUserName());
            mainListEntity.setDonationType(2);
+           if(donateTo.getStatus()==1){
+               mainListEntity.setKeeper(1);
+           }
            mainListService.saveUser(mainListEntity);
 
            double reduceDonatedAmount = donateTo.getAdjustedAmount() - donateFrom.getAdjustedAmount();
            donateTo.setAdjustedAmount(reduceDonatedAmount);
            mainListService.saveUser(donateTo);
 
-           if((donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>350)){
+           if((donateFrom.getAdjustedAmount()-donateTo.getAdjustedAmount()>=150)){
                if(adjustAmount<-1){
                    donateFrom.setAdjustedAmount(0);
                }else{
@@ -361,6 +364,44 @@ public class ScheduledListUpdate {
         long days = ChronoUnit.DAYS.between(localDate, today);
         return days > 30;
     }
+
+
+    @Scheduled(
+            fixedDelay = 1200000L
+    )
+    public void completePaidDonation() {
+        try {
+            List<MainListEntity> donationToPossiblyClose = this.mainListService.closeCompletedDonations();
+
+            for(MainListEntity mainDonation:donationToPossiblyClose){
+                List<MainListEntity> main=mainListService.findDonorsByDonationReference(mainDonation.getMainListReference());
+                double totaldonated = 0;
+                for(MainListEntity addMainListCompleted:main){
+                    if((addMainListCompleted.getStatus()==2||addMainListCompleted.getStatus()==3) && addMainListCompleted.getKeeper()==1){
+                        totaldonated=totaldonated+addMainListCompleted.getDonatedAmount();
+                    }
+                }
+                if(mainDonation.getAmountToReceive()==totaldonated){
+                    mainDonation.setStatus(3);
+                    mainListService.saveUser(mainDonation);
+                }
+//                else{
+//                  MainListEntity mainListEntity=  mainListService.findSponsorDonation(mainDonation.getUserName(),mainDonation.getDonatedAmount());
+//                  if( addMainListCompleted.getKeeper()==1)
+//                    if(mainDonation.getAmountToReceive()==totaldonated+mainListEntity.getDonatedAmount() ){
+//                        mainDonation.setStatus(3);
+//                        mainListService.saveUser(mainDonation);
+//                    }
+//                }
+
+            }
+        } catch (MainListNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
 
 }

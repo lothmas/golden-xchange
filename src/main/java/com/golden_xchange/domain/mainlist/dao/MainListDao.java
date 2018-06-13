@@ -70,6 +70,10 @@ public interface MainListDao extends AbstractDao<MainListEntity, Integer> {
     List<MainListEntity> getAllDonations() throws MainListNotFoundException;
 
     List<MainListEntity> getUserDonors(String ownerUser) throws MainListNotFoundException;
+    List<MainListEntity> closeCompletedDonations() throws MainListNotFoundException;
+
+    public MainListEntity findSponsorDonation(String userName,double donatedAmount) throws MainListNotFoundException;
+
 
 
 }
