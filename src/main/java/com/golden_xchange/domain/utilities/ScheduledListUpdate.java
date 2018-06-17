@@ -63,9 +63,9 @@ public class ScheduledListUpdate {
 
 
     //1 hour
-    @Scheduled(
-            fixedDelay = 3600000L
-    )
+//    @Scheduled(
+//            fixedDelay = 3600000L
+//    )
     public void updateMainList() {
         this.schedulerLog.info("started SchedulerListUpdate");
 
@@ -165,9 +165,9 @@ public class ScheduledListUpdate {
 
 
     //20 minutes
-    @Scheduled(
-            fixedDelay = 1200000L
-    )
+//    @Scheduled(
+//            fixedDelay = 1200000L
+//    )
     public void assignDonations() {
 
         try {
