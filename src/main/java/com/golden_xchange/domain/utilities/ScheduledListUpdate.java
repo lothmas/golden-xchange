@@ -267,8 +267,8 @@ public class ScheduledListUpdate {
             mainListEntity.setPayerUsername(request.getUserName());
             mainListEntity.setDonationType(1);
             mainListService.saveUser(mainListEntity);
-            createNotificationMessage(request.getPayerUsername(), mainListEntity);
-            sendMessage(mainListEntity);
+//            createNotificationMessage(request.getPayerUsername(), mainListEntity);
+//            sendMessage(mainListEntity);
         }
 
 
