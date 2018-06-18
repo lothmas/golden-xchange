@@ -147,7 +147,8 @@
                                                                                         src="../assets/img/user/user-2.jpg" class="img-rounded height-30"/></div>
                                                                                 <h3 th:if="${result.donationType!=0}" th:text="${'Deposit Ref: '+result.depositReference}"></h3>
 
-                                                                                <h3 th:if="${result.donationType==0}" >Donation to Receive 80%</h3>
+                                                                                <h3 th:if="${result.donationType==0 &amp;&amp; result.status!=6}" >Donation to Receive</h3>
+                                                                                <h3 th:if="${result.donationType==0 &amp;&amp; result.status==6}" >Total Referral Amount</h3>
 
                                                                                 <div class="hot" th:if="${result.donationType==0}"></div>
 
@@ -157,11 +158,23 @@
                                                                                 <!--<div class="hot" th:if="${result.donationType==0}" th:text="${'R'+result.amountToReceive}" >Donation to Receive with 80% Interest</div>-->
 
                                                                             </div>
-                                                                            <div class="entry-content" th:if="${result.donationType==0}">
+                                                                            <div class="entry-content" th:if="${result.donationType==0 &amp;&amp; result.status!=6}">
                                                                                 <ul>
                                                                                     <li><strong>Donated Amount: </strong> <span th:text="${'R'+result.donatedAmount}"/></li>
                                                                                     <li><strong>Main Reference: </strong> <span th:text="${result.mainListReference}"/></li>
                                                                                     <li><strong>Date Created:</strong> <span th:text="${': '+result.createdDate}"/></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="entry-content" th:if="${result.donationType==0 &amp;&amp; result.status==6}">
+                                                                                <ul>
+                                                                                    <li><strong>Referral Amount To Receive</strong> </li>
+                                                                                    <li><strong>By Clicking Below you Transfer Referral Amount To Yourself</strong> </li>
+                                                                                    <!--<button  style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}" th:align="center">Confirm You Want to Receive  </button>-->
+                                                                                    <!--<input name="approver"  type="hidden" th:value="1"/>-->
+                                                                                    <p></p>
+                                                                                    <button  name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-info btn-sm text-left" data-toggle="modal" data-target="#confirmPaymen" th:attr="data-whatever=${result.depositReference},data-whatever1=${result.payerUsername},data-whatever2=${result.amount}">Transfer Amount</button>
+                                                                                    <input name="approver"  type="hidden" th:value="4"/>
+                                                                                    <input name="username"  type="hidden" th:value="${profile.userName}"/>
                                                                                 </ul>
                                                                             </div>
                                                                             <div class="entry-content" th:if="${result.donationType==1 || result.donationType==2}">
@@ -183,7 +196,7 @@
                                                                                     <button disabled="disabled" style="width: 98%" name="depositReference" th:value="${result.depositReference}" type="submit" class="btn btn-default btn-sm text-left">Cancelled / Reversed</button>
                                                                                 </div>
 
-                                                                                <div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp;  result.donationType==0}">
+                                                                                <div class="with-btn" nowrap="nowrap" th:if="${result.payerUsername.equalsIgnoreCase(profile.userName) &amp;&amp;  result.donationType==0   &amp;&amp;  result.status!=6}">
                                                                                     <li th:if="${result.daysRemaining!=0 &amp;&amp; result.status==0 }"><h6>You Will Be Allocated an Investment to Pay in  <span th:text="${result.daysRemaining}"/> Days</h6>  </li>
                                                                                     <li th:if="${result.daysRemaining==0 &amp;&amp; result.status==0}"><h6>You are Next in Line for Donation Assignment.<p>You will receive an sms &amp; email</p> </h6>  </li>
                                                                                     <li th:if="${result.daysRemaining==0 &amp;&amp; result.status==1}"><h6>You have been Assigned Donations<p>Investment under process</p> </h6>  </li>

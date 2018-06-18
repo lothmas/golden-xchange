@@ -63,9 +63,9 @@ public class ScheduledListUpdate {
 
 
     //1 hour
-//    @Scheduled(
-//            fixedDelay = 3600000L
-//    )
+    @Scheduled(
+            fixedDelay = 3600000L
+    )
     public void updateMainList() {
         this.schedulerLog.info("started SchedulerListUpdate");
 
@@ -165,9 +165,9 @@ public class ScheduledListUpdate {
 
 
     //20 minutes
-//    @Scheduled(
-//            fixedDelay = 1200000L
-//    )
+    @Scheduled(
+            fixedDelay = 1200000L
+    )
     public void assignDonations() {
 
         try {
@@ -248,32 +248,38 @@ public class ScheduledListUpdate {
 //    }
 
     private void createInvester(MainListEntity request, Timestamp sqlDate, double sponsorPercentage, GoldenRichesUsers sponsorProfile) {
-        MainListEntity mainListEntity = new MainListEntity();
-        mainListEntity.setStatus(0);
-        mainListEntity.setUpdatedDate(sqlDate);
-        mainListEntity.setAdjustedAmount(sponsorPercentage * request.getDonatedAmount());
-        mainListEntity.setDonatedAmount(sponsorPercentage * request.getDonatedAmount());
-        mainListEntity.setEnabled(1);
-        mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
-        mainListEntity.setAmountToReceive(sponsorPercentage * request.getDonatedAmount());
-        mainListEntity.setDate(sqlDate);
-        mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-        mainListEntity.setDonationReference(request.getMainListReference());
-        mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-        mainListEntity.setUserName(sponsorProfile.getUserName());
-        mainListEntity.setPayerUsername(request.getUserName());
-        mainListEntity.setDonationType(1);
-        mainListService.saveUser(mainListEntity);
+        try {
+            mainListService.updateSponsorToInitiated(sponsorProfile.getUserName(),5,0);
+        } catch (MainListNotFoundException e) {
+            MainListEntity mainListEntity = new MainListEntity();
+            mainListEntity.setStatus(5);
+            mainListEntity.setUpdatedDate(sqlDate);
+            mainListEntity.setAdjustedAmount(sponsorPercentage * request.getDonatedAmount());
+            mainListEntity.setDonatedAmount(sponsorPercentage * request.getDonatedAmount());
+            mainListEntity.setEnabled(0);
+            mainListEntity.setBankAccountNumber(sponsorProfile.getAccountNumber());
+            mainListEntity.setAmountToReceive(sponsorPercentage * request.getDonatedAmount());
+            mainListEntity.setDate(sqlDate);
+            mainListEntity.setMainListReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+            mainListEntity.setDonationReference(request.getMainListReference());
+            mainListEntity.setDepositReference(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
+            mainListEntity.setUserName(sponsorProfile.getUserName());
+            mainListEntity.setPayerUsername(request.getUserName());
+            mainListEntity.setDonationType(1);
+            mainListService.saveUser(mainListEntity);
+            createNotificationMessage(request.getPayerUsername(), mainListEntity);
+            sendMessage(mainListEntity);
+        }
 
 
 
-        double reduceDonatedAmount = request.getAdjustedAmount() - (sponsorPercentage * request.getDonatedAmount());
-        request.setAdjustedAmount(reduceDonatedAmount);
-        mainListService.saveUser(request);
 
+//        double reduceDonatedAmount = request.getAdjustedAmount() - (sponsorPercentage * request.getDonatedAmount());
+//        request.setAdjustedAmount(reduceDonatedAmount);
+//        mainListService.saveUser(request);
+//
+//
 
-        createNotificationMessage(request.getPayerUsername(), mainListEntity);
-        sendMessage(mainListEntity);
     }
 
 
@@ -384,6 +390,9 @@ public class ScheduledListUpdate {
                 if(mainDonation.getAmountToReceive()==totaldonated){
                     mainDonation.setStatus(3);
                     mainListService.saveUser(mainDonation);
+                    List<MainListEntity> sponsorDonationPaid= mainListService.updateSponsorToInitiated(mainDonation.getUserName(),5,0);
+                    sponsorDonationPaid.get(0).setStatus(6);
+                    mainListService.saveUser(sponsorDonationPaid.get(0));
                 }
 //                else{
 //                  MainListEntity mainListEntity=  mainListService.findSponsorDonation(mainDonation.getUserName(),mainDonation.getDonatedAmount());

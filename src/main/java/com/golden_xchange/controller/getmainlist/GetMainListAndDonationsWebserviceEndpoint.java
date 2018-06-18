@@ -99,9 +99,34 @@ public class GetMainListAndDonationsWebserviceEndpoint {
                 return "index";
             }
             if (url.contains("donation_state")) {
+
                 addNew = false;
                 try {
                     List<MainListEntity> payerPendingList = this.mainListService.returnPendingPayerList(goldenRichesUsers.getUserName());
+
+                        double amountYouWillReceive =0;
+                        try {
+                            List<MainListEntity> mainListEntities = mainListService.updateSponsorToInitiated(goldenRichesUsers.getUserName(), 6,1);
+
+                            for (MainListEntity main : mainListEntities) {
+                                amountYouWillReceive=amountYouWillReceive+main.getDonatedAmount();
+                            }
+                            MainList mainLists1 = new MainList();
+                            mainLists1.setAmount(amountYouWillReceive);
+                            mainLists1.setAmountToReceive(amountYouWillReceive);
+                            mainLists1.setDonatedAmount(amountYouWillReceive);
+                            mainLists1.setUsername(goldenRichesUsers.getUserName());
+                            mainLists1.setPayerUsername(goldenRichesUsers.getUserName());
+                            mainLists1.setStatus(6);
+                            mainLists1.setEnabled(1);
+                            if(!mainLists1.getUsername().equals("")){
+                                response.getReturnData().add(mainLists1);
+                            }
+                        } catch (MainListNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+
                     setLists(response, payerPendingList, model, session, goldenRichesUsers, addNew);
                 } catch (Exception exp) {
                     response.setMessage("No Previous Donations Found. Create a New Donation");

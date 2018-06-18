@@ -75,6 +75,8 @@ public interface MainListDao extends AbstractDao<MainListEntity, Integer> {
     public MainListEntity findSponsorDonation(String userName,double donatedAmount) throws MainListNotFoundException;
 
 
+    List<MainListEntity>  updateSponsorToInitiated(String username,int status,int option) throws MainListNotFoundException;
+    MainListEntity  getYourDonationInLine(String username) throws MainListNotFoundException;
 
 }
 

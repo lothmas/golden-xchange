@@ -172,6 +172,16 @@ public class MainListServiceImpl implements MainListService {
         return this.mainListDao.findSponsorDonation(userName,donatedAmount);
     }
 
+    @Override
+    public List<MainListEntity>  updateSponsorToInitiated(String username, int staus,int option) throws MainListNotFoundException {
+        return this.mainListDao.updateSponsorToInitiated(username,staus,option);
+    }
+
+    @Override
+    public MainListEntity getYourDonationInLine(String username) throws MainListNotFoundException {
+        return this.mainListDao.getYourDonationInLine(username);
+    }
+
 
 }
 
